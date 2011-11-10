@@ -64,6 +64,9 @@ def get_issue_priority(priority):
             if t["name"].lower() == priority:
                 return t["id"]
 
+def search_issues ( criteria ):
+    return jiraobj.jira1.getIssuesFromTextSearch(token, criteria )
+
 def check_auth():
     global jiraobj, token, jirabase
 
@@ -176,6 +179,7 @@ here"
     parser.add_option("","--oneline",dest="oneline", help="print only one line of info", action="store_true")
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
+    parser.add_option("-s","--search",dest="search", help="search criteria" )
     
     opts, args = parser.parse_args()
     check_auth()
@@ -201,7 +205,12 @@ here"
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
                 print add_comment(opts.jira_id, opts.comment)
-
+            elif opts.search:
+                issues = search_issues ( opts.search )
+                for issue in issues:
+                    mode = 0 if not opts.verbose else 1
+                    mode = -1 if opts.oneline else mode
+                    print format_issue( issue, mode )
             else:
                 # otherwise we're just showing the jira.
                 if not (opts.jira_id or args):
