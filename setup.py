@@ -9,7 +9,7 @@ import sys
 from setuptools import setup, find_packages, Command
 
 
-setup(name='jiracli',
+setup(name='jira-cli',
      version = "0.1",
      description = "command line utility for interacting with jira",
      long_description = "",
@@ -22,7 +22,7 @@ setup(name='jiracli',
          ],
      entry_points = {
          'console_scripts' : [
-             'jiracli = jiracli.cli:main',
+             'jira-cli = jiracli.cli:main',
              ]
         },
      )
