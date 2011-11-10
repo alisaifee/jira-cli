@@ -18,11 +18,21 @@ Installation
     python setup.py build
     sudo python setup.py install
 
+* after installation, a few configuration steps will be prompted upon invoking jira-cli for the first time::
+    
+    ali@home ~ $ jira-cli
+    base url for your jira instance (e.g http://issues.apache.org/jira):http://jira.yourdomain.com
+    enter username:ali
+    enter password:*********
+
+  The details of your jira instance will be kept in ~/.jira-cli/config and the authentication token will be stored in ~/.jira-cli/auth.
+  Once the authentication token has expired you will be reprompted for your username & password again.
 
 Usage
 =====
-A few examples to get started.
 
+A few examples to get started.
+------------------------------
 create an issue with only a title in project TP with default priority and type Bug::
 
     ali@home ~ $ jira-cli -n Bug -t "Test Bug" --priority=Major -p TP

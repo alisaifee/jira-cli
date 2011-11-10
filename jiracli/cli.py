@@ -51,11 +51,11 @@ def check_auth():
     global jiraobj, token, jirabase
 
     setup_home_dir()
-    if os.path.isfile(os.path.expanduser("~/.jira-cli/base")):
-        jirabase = open(os.path.expanduser("~/.jira-cli/base")).read().strip()
+    if os.path.isfile(os.path.expanduser("~/.jira-cli/config")):
+        jirabase = open(os.path.expanduser("~/.jira-cli/config")).read().strip()
     else:
-        jirabase = raw_input("please enter the base url for your jira instance:")
-        open(os.path.expanduser("~/.jira-cli/base"),"w").write(jirabase)
+        jirabase = raw_input("base url for your jira instance (e.g http://issues.apache.org/jira):")
+        open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
 
     if os.path.isfile(os.path.expanduser("~/.jira-cli/auth")):
         token = open(os.path.expanduser("~/.jira-cli/auth")).read()
