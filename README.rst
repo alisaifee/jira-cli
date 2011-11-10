@@ -74,6 +74,7 @@ list the issues in short form::
     TP-22 Test Bug < http://jira.yourdomain.com/browse/TP-22 > 
 
 add a comment to an existing issue::
+    
     ali@home ~ $ jira-cli -j TP-20 -c "this is a new comment"
     this is a new comment added to TP-20
 
