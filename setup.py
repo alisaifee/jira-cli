@@ -12,7 +12,7 @@ from setuptools import setup, find_packages, Command
 setup(name='jira-cli',
      version = "0.1",
      description = "command line utility for interacting with jira",
-     long_description = "",
+     long_description = open("README.rst").read(),
      packages = find_packages(exclude=['ez_setup']),
      include_package_data = True,
      zip_safe = False,

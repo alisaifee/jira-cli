@@ -17,6 +17,7 @@ def setup_home_dir():
         os.makedirs(os.path.expanduser("~/.jira-cli"))
 
 def get_issue_type(type):
+    type = type.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/types.pkl")):
         issue_types = pickle.load(open(os.path.expanduser("~/.jira-cli/types.pkl"),"rb"))
     else:
@@ -32,6 +33,7 @@ def get_issue_type(type):
 
 
 def get_issue_priority(priority):
+    priority=priority.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/priorities.pkl")):
         issue_priorities = pickle.load(open(os.path.expanduser("~/.jira-cli/priorities.pkl"),"rb"))
     else:
@@ -42,7 +44,7 @@ def get_issue_priority(priority):
         return issue_priorities
     else:
         for t in issue_priorities:
-            if t["name"].lower() == type:
+            if t["name"].lower() == priority:
                 return t["id"]
 
 def check_auth():
@@ -74,29 +76,36 @@ def check_auth():
 
 def format_issue( issue , mode = 0 ):
     fields = {}
-    if mode >= 0:
-        # minimal
-        fields["issue"] = issue["key"]
-        fields["reporter"] = issue["reporter"]
-        fields["assignee"] = issue.setdefault("assignee","")
-        fields["summary"] = issue["summary"]
-        fields["link"] = "%s/browse/%s" % ( jirabase, issue["key"])
-    if mode >= 1:
-        fields["description"] = issue["description"]
-    if mode < 0:
-        global colorfunc
-        if not sys.stdout.isatty():
-            colorfunc = lambda x,y:str(x)
-        return colorfunc(issue["key"],"red") +" "+ issue["summary"] + colorfunc(" < %s/browse/%s > " % (jirabase, issue["key"]), "green")
+    try:
+        if mode >= 0:
+            # minimal
+            fields["issue"] = issue["key"]
+            fields["reporter"] = issue["reporter"]
+            fields["assignee"] = issue.setdefault("assignee","")
+            fields["summary"] = issue["summary"]
+            fields["link"] = "%s/browse/%s" % ( jirabase, issue["key"])
+        if mode >= 1:
+            fields["description"] = issue["description"]
+        if mode < 0:
+            global colorfunc
+            if not sys.stdout.isatty():
+                colorfunc = lambda x,y:str(x)
+            return colorfunc(issue["key"],"red") +" "+ issue["summary"] + colorfunc(" < %s/browse/%s > " % (jirabase, issue["key"]), "green")
 
-    return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
-
+        return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
+    except:
+            return "%s: Not found" % issue["key"]
 
 
 def get_jira( jira_id ):
     """
     """
-    return jiraobj.jira1.getIssue( token, jira_id )
+    try:
+        return jiraobj.jira1.getIssue( token, jira_id )
+    except:
+        return {"key": jira_id }
+
+
 
 def add_comment( jira_id, comment ):
     res = jiraobj.jira1.addComment( token, jira_id, comment )
@@ -128,9 +137,10 @@ here"
     parser.add_option("-c","--comment",dest="comment", help="comment on a jira")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
+    parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
     parser.add_option("-t","--title", dest = "issue_title", help="new issue title")
     parser.add_option("-p","--project",dest="jira_project", help="the jira project to act on")
-    parser.add_option("","--one-line",dest="oneline", help="print only one line of info", action="store_true")
+    parser.add_option("","--oneline",dest="oneline", help="print only one line of info", action="store_true")
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
     
@@ -153,7 +163,7 @@ here"
                     description = args[0]
                 else:
                     description = ""
-                print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description ), 0)
+                print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0)
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")

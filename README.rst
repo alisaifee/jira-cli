@@ -1,0 +1,79 @@
+.. _bitbucket repository: http://hg.indydevs.org/jira-cli
+
+Introduction
+============
+Simple command line utility to interact with your jira instance.
+
+Installation
+============
+* with easy_install or pip::
+   
+    sudo easy_install jira-cli
+    sudo pip install jira-cli
+
+* from source (`bitbucket repository`_)::
+
+    hg clone http://hg.indydevs.org/jira-cli
+    cd jira-cli
+    python setup.py build
+    sudo python setup.py install
+
+
+Usage
+=====
+A few examples to get started.
+
+create an issue with only a title in project TP with default priority and type Bug::
+
+    ali@home ~ $ jira-cli -n Bug -t "Test Bug" --priority=Major -p TP
+    link                 : http://jira.yourdomain.com/browse/TP-24
+    assignee             : 
+    summary              : Test Bug
+    issue                : TP-24
+    reporter             : ali   
+ 
+create an issue with priority Major and a description::
+    
+    ali@home ~ $ jira-cli -n Bug -t "Test Bug" --priority=Major -p TP "the description"
+    link                 : http://jira.yourdomain.com/browse/TP-25
+    assignee             : 
+    summary              : Test Bug
+    issue                : TP-25
+    reporter             : ali
+
+list the issue TP-25::
+    
+    ali@home ~ $ jira-cli TP-25
+    link                 : http://jira.yourdomain.com/browse/TP-25
+    assignee             : 
+    summary              : Test Bug
+    issue                : TP-25
+    reporter             : ali
+
+
+list the issues TP-20 & TP-21::
+    
+    ali@home ~ $ jira-cli TP-20 TP-21
+    link                 : http://jira.yourdomain.com/browse/TP-20
+    assignee             : ali
+    summary              : test
+    issue                : TP-20
+    reporter             : ali
+
+    link                 : http://jira.yourdomain.com/browse/TP-21
+    assignee             : 
+    summary              : Test Bug
+    issue                : TP-21
+    reporter             : ali
+
+list the issues in short form::
+
+    ali@home ~ $ jira-cli TP-20 TP-21 TP-22 --oneline
+    TP-20 test < http://jira.yourdomain.com/browse/TP-20 > 
+    TP-21 Test Bug < http://jira.yourdomain.com/browse/TP-21 > 
+    TP-22 Test Bug < http://jira.yourdomain.com/browse/TP-22 > 
+
+add a comment to an existing issue::
+    ali@home ~ $ jira-cli -j TP-20 -c "this is a new comment"
+    this is a new comment added to TP-20
+
