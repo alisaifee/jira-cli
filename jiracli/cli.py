@@ -61,8 +61,15 @@ def check_auth():
         jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
         jiraobj.jira1.getIssueTypes(token)
     except Exception, e:
-        username = raw_input("enter username:")
-        token = jiraobj.jira1.login(username,  getpass.getpass("enter password:"))
+        def _login():
+
+            username = raw_input("enter username:")
+            try:
+                return jiraobj.jira1.login(username,  getpass.getpass("enter password:"))
+            except:
+                print("username or password incorrect, try again.")
+                return _login()
+        token = _login()
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
 def format_issue( issue , mode = 0 ):
@@ -107,11 +114,14 @@ def main():
     """
     """
     example_usage = """
-view jira: jiracli BE-193
-add a comment: jiracli -j BE-193 -c "i am sam"
-create a new issue: jiracli -n bug -p BE -t "i am sam" "and this is my long description
+------------------------------------------------------------------------------------------
+view jira: jira-cli BE-193
+view multiple jiras: jira-cli XYZ-123 ZZZ-123 ABC-123
+add a comment: jira-cli -j BE-193 -c "i am sam"
+create a new issue: jira-cli -n bug -p BE -t "i am sam" "and this is my long description
 ending
 here"
+------------------------------------------------------------------------------------------
 """
     parser = optparse.OptionParser()
     parser.usage = example_usage
