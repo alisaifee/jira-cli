@@ -16,8 +16,8 @@ def setup_home_dir():
     if not os.path.isdir(os.path.expanduser("~/.jira-cli")):
         os.makedirs(os.path.expanduser("~/.jira-cli"))
 
-def get_issue_type(type):
-    type = type.lower()
+def get_issue_type(issuetype):
+    issuetype = issuetype.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/types.pkl")):
         issue_types = pickle.load(open(os.path.expanduser("~/.jira-cli/types.pkl"),"rb"))
     else:
@@ -28,9 +28,23 @@ def get_issue_type(type):
         return issue_types
     else:
         for t in issue_types:
-            if t["name"].lower() == type:
+            if t["name"].lower() == issuetype:
                 return t["id"]
 
+def get_issue_status(stat):
+    stat = stat.lower()
+    if os.path.isfile(os.path.expanduser("~/.jira-cli/statuses.pkl")):
+        issue_stats = pickle.load(open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"rb"))
+    else:
+        issue_stats = jiraobj.jira1.getStatuses(token)
+        pickle.dump(issue_stats,  open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"wb"))
+
+    if not stat:
+        return issue_stats
+    else:
+        for t in issue_stats:
+            if t["id"].lower() == stat:
+                return t["name"]
 
 def get_issue_priority(priority):
     priority=priority.lower()
@@ -76,24 +90,40 @@ def check_auth():
 
 def format_issue( issue , mode = 0 ):
     fields = {}
+    global colorfunc
+    color=True
+    status_color="blue"
+    status_string = get_issue_status ( issue.setdefault("status","1")).lower()
+    if status_string in ["resolved","closed"]:
+        status_color="green"
+    elif status_string in ["open","unassigned","reopened"]:
+        status_color="red"
+    if not sys.stdout.isatty():
+        colorfunc = lambda *a:str(a[0])
+        color=False
+    
+    
+    
     try:
         if mode >= 0:
             # minimal
             fields["issue"] = issue["key"]
+            fields["status"] = colorfunc( get_issue_status ( issue["status"] )
+                                        , status_color )
             fields["reporter"] = issue["reporter"]
             fields["assignee"] = issue.setdefault("assignee","")
             fields["summary"] = issue["summary"]
-            fields["link"] = "%s/browse/%s" % ( jirabase, issue["key"])
+            fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
         if mode >= 1:
             fields["description"] = issue["description"]
         if mode < 0:
-            global colorfunc
-            if not sys.stdout.isatty():
-                colorfunc = lambda x,y:str(x)
-            return colorfunc(issue["key"],"red") +" "+ issue["summary"] + colorfunc(" < %s/browse/%s > " % (jirabase, issue["key"]), "green")
-
+            url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
+            ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
+            if not color:
+                ret_str += "[%s]" % get_issue_status(issue["status"]) + issue["status"]
+            return ret_str
         return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
-    except:
+    except Exception,e:
             return "%s: Not found" % issue["key"]
 
 

@@ -8,9 +8,15 @@ import os
 import sys
 from setuptools import setup, find_packages, Command
 
+default_version="0.1"
+def get_version_from_tag():
+    is_tag = os.popen("git describe").read().strip()
+    if not is_tag:
+        return default_version
+    return is_tag
 
 setup(name='jira-cli',
-     version = "0.1",
+     version = get_version_from_tag(),
      description = "command line utility for interacting with jira",
      long_description = open("README.rst").read(),
      packages = find_packages(exclude=['ez_setup']),
