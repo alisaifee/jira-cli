@@ -17,14 +17,15 @@ def setup_home_dir():
         os.makedirs(os.path.expanduser("~/.jira-cli"))
 
 def get_issue_type(issuetype):
-    issuetype = issuetype.lower()
+    if issuetype:
+        issuetype = issuetype.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/types.pkl")):
         issue_types = pickle.load(open(os.path.expanduser("~/.jira-cli/types.pkl"),"rb"))
     else:
         issue_types = jiraobj.jira1.getIssueTypes(token)
         pickle.dump(issue_types,  open(os.path.expanduser("~/.jira-cli/types.pkl"),"wb"))
 
-    if not type:
+    if not issuetype:
         return issue_types
     else:
         for t in issue_types:
@@ -32,7 +33,8 @@ def get_issue_type(issuetype):
                 return t["id"]
 
 def get_issue_status(stat):
-    stat = stat.lower()
+    if stat:
+        stat = stat.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/statuses.pkl")):
         issue_stats = pickle.load(open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"rb"))
     else:
@@ -47,7 +49,8 @@ def get_issue_status(stat):
                 return t["name"]
 
 def get_issue_priority(priority):
-    priority=priority.lower()
+    if priority:
+        priority=priority.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/priorities.pkl")):
         issue_priorities = pickle.load(open(os.path.expanduser("~/.jira-cli/priorities.pkl"),"rb"))
     else:
@@ -213,6 +216,8 @@ here"
                     issue = get_jira(opts.jira_id)
                     print format_issue( issue, 0  if not opts.verbose else 1)
     except Exception, e:
+        import traceback
+        traceback.print_exc()
         parser.error(str(e))
 
 if __name__ == "__main__":
