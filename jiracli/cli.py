@@ -62,11 +62,11 @@ def check_auth():
         jiraobj.jira1.getIssueTypes(token)
     except Exception, e:
         username = raw_input("enter username:")
-        token = jiraobj.jira1.login(getpass.getuser(), getpass.getpass("enter password:"))
+        token = jiraobj.jira1.login(username,  getpass.getpass("enter password:"))
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
 def format_issue( issue , mode = 0 ):
-    fields = collections.OrderedDict()
+    fields = {}
     if mode >= 0:
         # minimal
         fields["issue"] = issue["key"]
@@ -80,7 +80,7 @@ def format_issue( issue , mode = 0 ):
         global colorfunc
         if not sys.stdout.isatty():
             colorfunc = lambda x,y:str(x)
-        return colorfunc(issue["key"],"red") +" "+ issue["summary"] + colorfunc(" (%s/browse/%s) " % (jirabase, issue["key"]), "green")
+        return colorfunc(issue["key"],"red") +" "+ issue["summary"] + colorfunc(" < %s/browse/%s > " % (jirabase, issue["key"]), "green")
 
     return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
 
