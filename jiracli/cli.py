@@ -1,6 +1,7 @@
 import getpass
 import os
 import optparse
+import tempfile
 import xmlrpclib
 import collections
 import pickle
@@ -11,6 +12,18 @@ jiraobj = None
 token = None
 type_dict = {}
 jirabase=None
+
+default_editor_text = """-- enter the text for the %s
+-- all lines starting with '--' will be removed"""
+
+
+def get_text_from_editor(def_text):
+    tmp = tempfile.mktemp()
+    open(tmp, "w").write(def_text)
+    editor = os.environ.setdefault("EDITOR","vim")
+    os.system("%s %s" % (editor, tmp))
+    return "\n".join([k for k in open(tmp).read().split("\n") if not k.startswith("--")])
+
 
 def setup_home_dir():
     if not os.path.isdir(os.path.expanduser("~/.jira-cli")):
@@ -144,6 +157,8 @@ def get_jira( jira_id ):
 
 
 def add_comment( jira_id, comment ):
+    if comment == default_editor_text:
+        comment = get_text_from_editor(default_editor_text % ("comment"))
     res = jiraobj.jira1.addComment( token, jira_id, comment )
     if res:
         return "%s added to %s" % (comment, jira_id)
@@ -151,6 +166,9 @@ def add_comment( jira_id, comment ):
         return "failed to add comment to %s" % jira_id
 
 def create_issue ( project, type=0, summary="", description="" , priority="Major"):
+    if description == default_editor_text:
+        description = get_text_from_editor(default_editor_text % ("new issue"))
+    
     issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority)}
     return jiraobj.jira1.createIssue( token, issue )
 
@@ -170,7 +188,7 @@ here"
 """
     parser = optparse.OptionParser()
     parser.usage = example_usage
-    parser.add_option("-c","--comment",dest="comment", help="comment on a jira")
+    parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
     parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
@@ -197,14 +215,14 @@ here"
             if opts.issue_type:
                 project = opts.jira_project
                 if args:
-                    description = args[0]
+                    description = " ".join(args)
                 else:
-                    description = ""
+                    description = default_editor_text
                 print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0)
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
-                print add_comment(opts.jira_id, opts.comment)
+                print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
             elif opts.search:
                 issues = search_issues ( opts.search )
                 for issue in issues:
