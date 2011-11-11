@@ -177,14 +177,7 @@ def main():
     """
     """
     example_usage = """
-------------------------------------------------------------------------------------------
-view jira: jira-cli BE-193
-view multiple jiras: jira-cli XYZ-123 ZZZ-123 ABC-123
-add a comment: jira-cli -j BE-193 -c "i am sam"
-create a new issue: jira-cli -n bug -p BE -t "i am sam" "and this is my long description
-ending
-here"
-------------------------------------------------------------------------------------------
+for documentation see: http://hg.indydevs.org/jira-cli
 """
     parser = optparse.OptionParser()
     parser.usage = example_usage
