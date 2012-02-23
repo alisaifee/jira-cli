@@ -216,8 +216,11 @@ here"
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
     parser.add_option("-s","--search",dest="search", help="search criteria" )
-    parser.add_option("-f","--format",dest="format", default=None, help="format for outputting information" )
-    
+    parser.add_option("-f","--format",dest="format", default=None, help="""format for outputting information.
+    allowed tokens: %status,%priority,%updated,%votes,%components,%project,%reporter,%created,%fixVersions,%summary,%environment,%assignee,%key,%affectsVersions,%type.
+    examples: "%priority,%reporter","(%key) %priority, reported by %reporter"
+    """)
+
     opts, args = parser.parse_args()
     check_auth()
     try:
