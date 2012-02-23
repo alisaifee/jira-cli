@@ -99,7 +99,7 @@ def format_issue( issue , mode = 0 ):
     elif status_string in ["open","unassigned","reopened"]:
         status_color="red"
     if not sys.stdout.isatty():
-        colorfunc = lambda *a:str(a[0])
+        colorfunc = lambda *a,**k:str(a[0])
         color=False
     
     
@@ -115,15 +115,16 @@ def format_issue( issue , mode = 0 ):
             fields["summary"] = issue["summary"]
             fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
         if mode >= 1:
-            fields["description"] = issue["description"]
+            fields["description"] = issue.setdefault("description","")
         if mode < 0:
             url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
             ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
             if not color:
-                ret_str += "[%s]" % get_issue_status(issue["status"]) + issue["status"]
+                ret_str += " [%s] " % get_issue_status(issue["status"])
             return ret_str
         return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
     except Exception,e:
+            print e
             return "%s: Not found" % issue["key"]
 
 
