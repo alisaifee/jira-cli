@@ -122,15 +122,24 @@ def format_issue( issue , mode = 0, formatter=None):
         colorfunc = lambda *a,**k:str(a[0])
         color=False
     
-    
+    special_fields = {"status":get_issue_status,"priority":get_issue_priority,"type":get_issue_type}
     
     if formatter:
         groups = re.compile("(%([\w]+))").findall(formatter)
         ret_str = formatter 
         for k, v in groups:
-            ret_str = ret_str .replace(k, issue.setdefault(v,""))
+            if v.lower() in special_fields.keys():
+                meth = special_fields[v.lower()]
+                key=issue[v.lower()]
+                mappings = meth(None)
+                data = ""
+                for item in mappings:
+                    if item['id'] == key:
+                        data = item['name']
+                ret_str = ret_str.replace(k, data)
+            else:
+                ret_str = ret_str .replace(k, issue.setdefault(v.lower(),""))
         return ret_str
-
 
     if mode >= 0:
         # minimal
@@ -143,6 +152,9 @@ def format_issue( issue , mode = 0, formatter=None):
         fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
     if mode >= 1:
         fields["description"] = issue.setdefault("description","")
+        fields["priority"] = get_issue_priority( issue["priority"] )
+        fields["type"] = get_issue_type( issue["type"] )
+
     if mode < 0:
         url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
         ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
@@ -251,7 +263,7 @@ here"
                     print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
     except Exception, e:
         import traceback
-        #traceback.print_exc()
+        traceback.print_exc()
         parser.error(str(e))
 
 if __name__ == "__main__":
