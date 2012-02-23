@@ -16,11 +16,17 @@ def get_version_from_tag():
     return is_tag
 
 setup(name='jira-cli',
+     author="Ali-Akber Saifee",
+     author_email="ali@indydevs.org",
+     url="http://hg.indydevs.org/jira-cli",
      version = get_version_from_tag(),
      description = "command line utility for interacting with jira",
-     long_description = open("README.rst").read(),
+     long_description = open("README").read(),
      packages = find_packages(exclude=['ez_setup']),
      include_package_data = True,
+     package_data = {
+            '':[ 'README' ],
+         },
      zip_safe = False,
      install_requires =[
          'setuptools',

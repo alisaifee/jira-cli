@@ -1,6 +1,7 @@
 import getpass
 import os
 import optparse
+import tempfile
 import xmlrpclib
 import collections
 import pickle
@@ -12,19 +13,32 @@ token = None
 type_dict = {}
 jirabase=None
 
+default_editor_text = """-- enter the text for the %s
+-- all lines starting with '--' will be removed"""
+
+
+def get_text_from_editor(def_text):
+    tmp = tempfile.mktemp()
+    open(tmp, "w").write(def_text)
+    editor = os.environ.setdefault("EDITOR","vim")
+    os.system("%s %s" % (editor, tmp))
+    return "\n".join([k for k in open(tmp).read().split("\n") if not k.startswith("--")])
+
+
 def setup_home_dir():
     if not os.path.isdir(os.path.expanduser("~/.jira-cli")):
         os.makedirs(os.path.expanduser("~/.jira-cli"))
 
 def get_issue_type(issuetype):
-    issuetype = issuetype.lower()
+    if issuetype:
+        issuetype = issuetype.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/types.pkl")):
         issue_types = pickle.load(open(os.path.expanduser("~/.jira-cli/types.pkl"),"rb"))
     else:
         issue_types = jiraobj.jira1.getIssueTypes(token)
         pickle.dump(issue_types,  open(os.path.expanduser("~/.jira-cli/types.pkl"),"wb"))
 
-    if not type:
+    if not issuetype:
         return issue_types
     else:
         for t in issue_types:
@@ -32,7 +46,8 @@ def get_issue_type(issuetype):
                 return t["id"]
 
 def get_issue_status(stat):
-    stat = stat.lower()
+    if stat:
+        stat = stat.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/statuses.pkl")):
         issue_stats = pickle.load(open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"rb"))
     else:
@@ -47,7 +62,8 @@ def get_issue_status(stat):
                 return t["name"]
 
 def get_issue_priority(priority):
-    priority=priority.lower()
+    if priority:
+        priority=priority.lower()
     if os.path.isfile(os.path.expanduser("~/.jira-cli/priorities.pkl")):
         issue_priorities = pickle.load(open(os.path.expanduser("~/.jira-cli/priorities.pkl"),"rb"))
     else:
@@ -60,6 +76,9 @@ def get_issue_priority(priority):
         for t in issue_priorities:
             if t["name"].lower() == priority:
                 return t["id"]
+
+def search_issues ( criteria ):
+    return jiraobj.jira1.getIssuesFromTextSearch(token, criteria )
 
 def check_auth():
     global jiraobj, token, jirabase
@@ -139,6 +158,8 @@ def get_jira( jira_id ):
 
 
 def add_comment( jira_id, comment ):
+    if comment == default_editor_text:
+        comment = get_text_from_editor(default_editor_text % ("comment"))
     res = jiraobj.jira1.addComment( token, jira_id, comment )
     if res:
         return "%s added to %s" % (comment, jira_id)
@@ -146,6 +167,9 @@ def add_comment( jira_id, comment ):
         return "failed to add comment to %s" % jira_id
 
 def create_issue ( project, type=0, summary="", description="" , priority="Major"):
+    if description == default_editor_text:
+        description = get_text_from_editor(default_editor_text % ("new issue"))
+    
     issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority)}
     return jiraobj.jira1.createIssue( token, issue )
 
@@ -165,7 +189,7 @@ here"
 """
     parser = optparse.OptionParser()
     parser.usage = example_usage
-    parser.add_option("-c","--comment",dest="comment", help="comment on a jira")
+    parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
     parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
@@ -174,6 +198,7 @@ here"
     parser.add_option("","--oneline",dest="oneline", help="print only one line of info", action="store_true")
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
+    parser.add_option("-s","--search",dest="search", help="search criteria" )
     
     opts, args = parser.parse_args()
     check_auth()
@@ -191,15 +216,20 @@ here"
             if opts.issue_type:
                 project = opts.jira_project
                 if args:
-                    description = args[0]
+                    description = " ".join(args)
                 else:
-                    description = ""
+                    description = default_editor_text
                 print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0)
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
-                print add_comment(opts.jira_id, opts.comment)
-
+                print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
+            elif opts.search:
+                issues = search_issues ( opts.search )
+                for issue in issues:
+                    mode = 0 if not opts.verbose else 1
+                    mode = -1 if opts.oneline else mode
+                    print format_issue( issue, mode )
             else:
                 # otherwise we're just showing the jira.
                 if not (opts.jira_id or args):
@@ -214,6 +244,8 @@ here"
                     issue = get_jira(opts.jira_id)
                     print format_issue( issue, 0  if not opts.verbose else 1)
     except Exception, e:
+        import traceback
+        traceback.print_exc()
         parser.error(str(e))
 
 if __name__ == "__main__":

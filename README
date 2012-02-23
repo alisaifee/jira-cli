@@ -44,7 +44,7 @@ create an issue with only a title in project TP with default priority and type B
  
 create an issue with priority Major and a description::
     
-    ali@home ~ $ jira-cli -n Bug -t "Test Bug" --priority=Major -p TP "the description"
+    ali@home ~ $ jira-cli -n Bug -t "Test Bug" --priority=Major -p TP the description
     link                 : http://jira.yourdomain.com/browse/TP-25
     assignee             : 
     summary              : Test Bug
@@ -85,6 +85,6 @@ list the issues in short form::
 
 add a comment to an existing issue::
     
-    ali@home ~ $ jira-cli -j TP-20 -c "this is a new comment"
+    ali@home ~ $ jira-cli -j TP-20 -c this is a new comment
     this is a new comment added to TP-20
 
