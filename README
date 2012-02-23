@@ -88,3 +88,7 @@ add a comment to an existing issue::
     ali@home ~ $ jira-cli -j TP-20 -c this is a new comment
     this is a new comment added to TP-20
 
+provide your own formatting::
+
+    ali@home ~ $ jira-cli TP-20 --format="%reporter, %summary, %status"
+

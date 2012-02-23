@@ -1,4 +1,5 @@
 import getpass
+import re
 import os
 import optparse
 import tempfile
@@ -107,7 +108,7 @@ def check_auth():
         token = _login()
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
-def format_issue( issue , mode = 0 ):
+def format_issue( issue , mode = 0, formatter=None):
     fields = {}
     global colorfunc
     color=True
@@ -123,28 +124,32 @@ def format_issue( issue , mode = 0 ):
     
     
     
-    try:
-        if mode >= 0:
-            # minimal
-            fields["issue"] = issue["key"]
-            fields["status"] = colorfunc( get_issue_status ( issue["status"] )
-                                        , status_color )
-            fields["reporter"] = issue["reporter"]
-            fields["assignee"] = issue.setdefault("assignee","")
-            fields["summary"] = issue["summary"]
-            fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
-        if mode >= 1:
-            fields["description"] = issue.setdefault("description","")
-        if mode < 0:
-            url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
-            ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
-            if not color:
-                ret_str += " [%s] " % get_issue_status(issue["status"])
-            return ret_str
-        return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
-    except Exception,e:
-            print e
-            return "%s: Not found" % issue["key"]
+    if formatter:
+        groups = re.compile("(%([\w]+))").findall(formatter)
+        ret_str = formatter 
+        for k, v in groups:
+            ret_str = ret_str .replace(k, issue.setdefault(v,""))
+        return ret_str
+
+
+    if mode >= 0:
+        # minimal
+        fields["issue"] = issue["key"]
+        fields["status"] = colorfunc( get_issue_status ( issue["status"] )
+                                    , status_color )
+        fields["reporter"] = issue["reporter"]
+        fields["assignee"] = issue.setdefault("assignee","")
+        fields["summary"] = issue["summary"]
+        fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
+    if mode >= 1:
+        fields["description"] = issue.setdefault("description","")
+    if mode < 0:
+        url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
+        ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
+        if not color:
+            ret_str += " [%s] " % get_issue_status(issue["status"])
+        return ret_str
+    return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
 
 
 def get_jira( jira_id ):
@@ -199,6 +204,7 @@ here"
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
     parser.add_option("-s","--search",dest="search", help="search criteria" )
+    parser.add_option("-f","--format",dest="format", default=None, help="format for outputting information" )
     
     opts, args = parser.parse_args()
     check_auth()
@@ -219,7 +225,7 @@ here"
                     description = " ".join(args)
                 else:
                     description = default_editor_text
-                print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0)
+                print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0, opts.format)
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
@@ -229,7 +235,7 @@ here"
                 for issue in issues:
                     mode = 0 if not opts.verbose else 1
                     mode = -1 if opts.oneline else mode
-                    print format_issue( issue, mode )
+                    print format_issue( issue, mode, opts.format )
             else:
                 # otherwise we're just showing the jira.
                 if not (opts.jira_id or args):
@@ -239,13 +245,13 @@ here"
                         issue = get_jira(arg)
                         mode = 0 if not opts.verbose else 1
                         mode = -1 if opts.oneline else mode
-                        print format_issue( issue, mode )
+                        print format_issue( issue, mode , opts.format)
                 if opts.jira_id:
                     issue = get_jira(opts.jira_id)
-                    print format_issue( issue, 0  if not opts.verbose else 1)
+                    print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
     except Exception, e:
         import traceback
-        traceback.print_exc()
+        #traceback.print_exc()
         parser.error(str(e))
 
 if __name__ == "__main__":
