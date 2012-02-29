@@ -81,7 +81,18 @@ def get_issue_priority(priority):
 def search_issues ( criteria ):
     return jiraobj.jira1.getIssuesFromTextSearch(token, criteria )
 
-def check_auth():
+def check_auth(username, password):
+    def _login(u,p):
+        username,password = u,p
+        if not u:
+            username = raw_input("enter username:")
+        if not p:
+            password = getpass.getpass("enter password:")
+        try:
+            return jiraobj.jira1.login(username,  password)
+        except:
+            print("username or password incorrect, try again.")
+            return _login(None,None)
     global jiraobj, token, jirabase
 
     setup_home_dir()
@@ -95,17 +106,11 @@ def check_auth():
         token = open(os.path.expanduser("~/.jira-cli/auth")).read()
     try:
         jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
+        if username:
+            raise Exception("forced login")
         jiraobj.jira1.getIssueTypes(token)
     except Exception, e:
-        def _login():
-
-            username = raw_input("enter username:")
-            try:
-                return jiraobj.jira1.login(username,  getpass.getpass("enter password:"))
-            except:
-                print("username or password incorrect, try again.")
-                return _login()
-        token = _login()
+        token = _login(username,password)
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
 def format_issue( issue , mode = 0, formatter=None):
@@ -220,9 +225,11 @@ here"
     allowed tokens: %status,%priority,%updated,%votes,%components,%project,%reporter,%created,%fixVersions,%summary,%environment,%assignee,%key,%affectsVersions,%type.
     examples: "%priority,%reporter","(%key) %priority, reported by %reporter"
     """)
+    parser.add_option("","--user",dest="username", help="username to login as" , default=None)
+    parser.add_option("","--password",dest="password", help="passowrd", default = None )
 
     opts, args = parser.parse_args()
-    check_auth()
+    check_auth(opts.username, opts.password)
     try:
         if opts.listtypes:
             print "Priorities:"
