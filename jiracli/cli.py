@@ -14,7 +14,10 @@ jiraobj = None
 token = None
 type_dict = {}
 jirabase=None
-
+color = True
+if not sys.stdout.isatty():
+    colorfunc = lambda *a,**k:str(a[0])
+    color = False
 default_editor_text = """-- enter the text for the %s
 -- all lines starting with '--' will be removed"""
 
@@ -132,16 +135,12 @@ def check_auth(username, password):
 def format_issue( issue , mode = 0, formatter=None):
     fields = {}
     global colorfunc
-    color=True
     status_color="blue"
     status_string = get_issue_status ( issue.setdefault("status","1")).lower()
     if status_string in ["resolved","closed"]:
         status_color="green"
     elif status_string in ["open","unassigned","reopened"]:
         status_color="red"
-    if not sys.stdout.isatty():
-        colorfunc = lambda *a,**k:str(a[0])
-        color=False
 
     special_fields = {"status":get_issue_status,"priority":get_issue_priority,"type":get_issue_type}
 
@@ -199,7 +198,6 @@ def get_filters( ):
 
     all_filters = dict( (k["name"], k) for k in saved )
     [all_filters.setdefault(k["name"], k) for k in favorites if k["name"] not in all_filters]
-
     return all_filters.values()
 
 def get_filter_id_from_name ( name ):
@@ -271,7 +269,7 @@ here"
         if opts.listfilters:
             idx=1
             for f in get_filters():
-                print "%d. %s" % (idx,  f["name"])
+                print "%d. %s (Owner: %s)" % (idx,  f["name"], colorfunc(f["author"],"green"))
                 idx+=1
         elif opts.listtypes:
             print "Priorities:"
