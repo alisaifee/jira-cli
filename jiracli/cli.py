@@ -8,6 +8,7 @@ import collections
 import socket
 import pickle
 import sys
+import xml
 from termcolor import colored as colorfunc
 
 jiraobj = None
@@ -95,7 +96,7 @@ def check_auth(username, password):
         try:
             return jiraobj.jira1.login(username,  password)
         except:
-            print("username or password incorrect, try again.")
+            print(colorfunc("username or password incorrect, try again.", "red"))
             return _login(None,None)
     global jiraobj, token, jirabase
 
@@ -110,8 +111,8 @@ def check_auth(username, password):
             jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
             # lame ping method
             jiraobj.getIssueTypes()
-        except (xmlrpclib.ProtocolError,socket.gaierror, IOError),  e:
-            print "invalid url %s. Please provide the correct url for your jira installation" % jirabase
+        except (xml.parsers.expat.ExpatError, xmlrpclib.ProtocolError,socket.gaierror, IOError),  e:
+            print colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
             return _validate_jira_url()
         except Exception, e:
             open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
@@ -321,7 +322,7 @@ here"
                         issue = get_jira(opts.jira_id)
                         print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
     except Exception, e:
-        parser.error(str(e))
+        parser.error(colorfunc(str(e), "red"))
 
 if __name__ == "__main__":
     main()
