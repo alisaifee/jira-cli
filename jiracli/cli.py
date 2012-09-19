@@ -5,6 +5,7 @@ import optparse
 import tempfile
 import xmlrpclib
 import collections
+import socket
 import pickle
 import sys
 from termcolor import colored as colorfunc
@@ -96,12 +97,27 @@ def check_auth(username, password):
     global jiraobj, token, jirabase
 
     setup_home_dir()
+    def _validate_jira_url(url=None):
+        global jiraobj, token, jirabase
+        if not url:
+            jirabase = raw_input("base url for your jira instance (e.g http://issues.apache.org/jira):")
+        else:
+            jirabase = url
+        try:
+            jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
+            # lame ping method
+            jiraobj.getIssueTypes()
+        except (xmlrpclib.ProtocolError,socket.gaierror, IOError),  e:
+            print "invalid url %s. Please provide the correct url for your jira installation" % jirabase
+            return _validate_jira_url()
+        except Exception, e:
+            open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
+        return None
+
+
     if os.path.isfile(os.path.expanduser("~/.jira-cli/config")):
         jirabase = open(os.path.expanduser("~/.jira-cli/config")).read().strip()
-    else:
-        jirabase = raw_input("base url for your jira instance (e.g http://issues.apache.org/jira):")
-        open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
-
+    _validate_jira_url( jirabase )
     if os.path.isfile(os.path.expanduser("~/.jira-cli/auth")):
         token = open(os.path.expanduser("~/.jira-cli/auth")).read()
     try:
@@ -126,12 +142,12 @@ def format_issue( issue , mode = 0, formatter=None):
     if not sys.stdout.isatty():
         colorfunc = lambda *a,**k:str(a[0])
         color=False
-    
+
     special_fields = {"status":get_issue_status,"priority":get_issue_priority,"type":get_issue_type}
-    
+
     if formatter:
         groups = re.compile("(%([\w]+))").findall(formatter)
-        ret_str = formatter 
+        ret_str = formatter
         for k, v in groups:
             if v.lower() in special_fields.keys():
                 meth = special_fields[v.lower()]
@@ -162,7 +178,7 @@ def format_issue( issue , mode = 0, formatter=None):
 
     if mode < 0:
         url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
-        ret_str = colorfunc(issue["key"],status_color) +" "+ issue["summary"] + " " + url_str
+        ret_str = colorfunc(issue["key"],status_color) +" "+ issue.setdefault("summary","") + " " + url_str
         if not color:
             ret_str += " [%s] " % get_issue_status(issue["status"])
         return ret_str
@@ -177,7 +193,26 @@ def get_jira( jira_id ):
     except:
         return {"key": jira_id }
 
+def get_filters( ):
+    saved = jiraobj.jira1.getSavedFilters( token )
+    favorites = jiraobj.jira1.getFavouriteFilters (token)
 
+    all_filters = dict( (k["name"], k) for k in saved )
+    [all_filters.setdefault(k["name"], k) for k in favorites if k["name"] not in all_filters]
+
+    return all_filters.values()
+
+def get_filter_id_from_name ( name ):
+    filters = [k for k in get_filters() if k["name"].lower() == name.lower()]
+    if filters:
+        return filters[0]["id"]
+    else:
+        raise RuntimeError("invalid filter name %s" % name )
+def get_issues_from_filter( filter_name ):
+    fid = get_filter_id_from_name( filter_name )
+    if fid:
+        return jiraobj.jira1.getIssuesFromFilter ( token, fid )
+    return []
 
 def add_comment( jira_id, comment ):
     if comment == default_editor_text:
@@ -191,7 +226,7 @@ def add_comment( jira_id, comment ):
 def create_issue ( project, type=0, summary="", description="" , priority="Major"):
     if description == default_editor_text:
         description = get_text_from_editor(default_editor_text % ("new issue"))
-    
+
     issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority)}
     return jiraobj.jira1.createIssue( token, issue )
 
@@ -213,12 +248,14 @@ here"
     parser.usage = example_usage
     parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
+    parser.add_option("","--filter", dest="filter",help="filter to use for listing jiras")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
     parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
     parser.add_option("-t","--title", dest = "issue_title", help="new issue title")
     parser.add_option("-p","--project",dest="jira_project", help="the jira project to act on")
     parser.add_option("","--oneline",dest="oneline", help="print only one line of info", action="store_true")
     parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
+    parser.add_option("","--list-filters",dest="listfilters", help="print out the different jira filters available", action="store_true")
     parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
     parser.add_option("-s","--search",dest="search", help="search criteria" )
     parser.add_option("-f","--format",dest="format", default=None, help="""format for outputting information.
@@ -231,11 +268,16 @@ here"
     opts, args = parser.parse_args()
     check_auth(opts.username, opts.password)
     try:
-        if opts.listtypes:
+        if opts.listfilters:
+            idx=1
+            for f in get_filters():
+                print "%d. %s" % (idx,  f["name"])
+                idx+=1
+        elif opts.listtypes:
             print "Priorities:"
             for el in  get_issue_priority(None):
                 print el["name"], ":", el["description"]
-            print 
+            print
             print "Issue Types:"
             for el in  get_issue_type(None):
                 print el["name"], ":", el["description"]
@@ -260,20 +302,26 @@ here"
                     print format_issue( issue, mode, opts.format )
             else:
                 # otherwise we're just showing the jira.
-                if not (opts.jira_id or args):
-                    parser.error("jira id must be provided")
-                if args:
-                    for arg in args:
-                        issue = get_jira(arg)
+                # maybe by filter
+                if opts.filter:
+                    issues = get_issues_from_filter(opts.filter)
+                    for issue in issues:
                         mode = 0 if not opts.verbose else 1
                         mode = -1 if opts.oneline else mode
                         print format_issue( issue, mode , opts.format)
-                if opts.jira_id:
-                    issue = get_jira(opts.jira_id)
-                    print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
+                else:
+                    if not (opts.jira_id or args):
+                        parser.error("jira id must be provided")
+                    if args:
+                        for arg in args:
+                            issue = get_jira(arg)
+                            mode = 0 if not opts.verbose else 1
+                            mode = -1 if opts.oneline else mode
+                            print format_issue( issue, mode , opts.format)
+                    if opts.jira_id:
+                        issue = get_jira(opts.jira_id)
+                        print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
     except Exception, e:
-        import traceback
-        traceback.print_exc()
         parser.error(str(e))
 
 if __name__ == "__main__":
