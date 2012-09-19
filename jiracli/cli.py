@@ -248,7 +248,7 @@ here"
     parser.usage = example_usage
     parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
-    parser.add_option("","--filter", dest="filter",help="filter to use for listing jiras")
+    parser.add_option("","--filter", dest="filter",help="filter(s) to use for listing jiras. use a comma to separate multiple filters")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
     parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
     parser.add_option("-t","--title", dest = "issue_title", help="new issue title")
@@ -304,11 +304,12 @@ here"
                 # otherwise we're just showing the jira.
                 # maybe by filter
                 if opts.filter:
-                    issues = get_issues_from_filter(opts.filter)
-                    for issue in issues:
-                        mode = 0 if not opts.verbose else 1
-                        mode = -1 if opts.oneline else mode
-                        print format_issue( issue, mode , opts.format)
+                    for f in opts.filter.split(","):
+                        issues = get_issues_from_filter(f)
+                        for issue in issues:
+                            mode = 0 if not opts.verbose else 1
+                            mode = -1 if opts.oneline else mode
+                            print format_issue( issue, mode , opts.format)
                 else:
                     if not (opts.jira_id or args):
                         parser.error("jira id must be provided")
