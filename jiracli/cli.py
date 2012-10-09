@@ -126,8 +126,6 @@ def check_auth(username, password):
         token = open(os.path.expanduser("~/.jira-cli/auth")).read()
     try:
         jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
-        if username:
-            raise Exception("forced login")
         jiraobj.jira1.getIssueTypes(token)
     except Exception, e:
         token = _login(username,password)
