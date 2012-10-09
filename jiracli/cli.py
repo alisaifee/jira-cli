@@ -90,13 +90,14 @@ def check_auth(username, password):
     def _login(u,p):
         username,password = u,p
         if not u:
-            username = raw_input("enter username:")
+            sys.stderr.write("enter username:")
+            username = sys.stdin.readline().strip()
         if not p:
             password = getpass.getpass("enter password:")
         try:
             return jiraobj.jira1.login(username,  password)
         except:
-            print(colorfunc("username or password incorrect, try again.", "red"))
+            print >> sys.stderr, colorfunc("username or password incorrect, try again.", "red")
             return _login(None,None)
     global jiraobj, token, jirabase
 
@@ -112,7 +113,7 @@ def check_auth(username, password):
             # lame ping method
             jiraobj.getIssueTypes()
         except (xml.parsers.expat.ExpatError, xmlrpclib.ProtocolError,socket.gaierror, IOError),  e:
-            print colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
+            print >> colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
             return _validate_jira_url()
         except Exception, e:
             open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
