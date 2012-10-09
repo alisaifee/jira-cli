@@ -26,7 +26,11 @@ Installation
     enter password:*********
 
   The details of your jira instance will be kept in ~/.jira-cli/config and the authentication token will be stored in ~/.jira-cli/auth.
-  Once the authentication token has expired you will be reprompted for your username & password again.
+  Once the authentication token has expired you will be reprompted for your username & password again. Alternatively you can provide the username and password on the command line as::
+
+    ali@home ~ $ jira-cli --user=ali --password=sekret ...
+
+  
 
 Usage
 =====
