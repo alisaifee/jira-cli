@@ -16,12 +16,9 @@ setup(name='jira-cli',
      url="http://hg.indydevs.org/jira-cli",
      version = version,
      description = "command line utility for interacting with jira",
-     long_description = open("README.md").read(),
+     long_description = open("README.txt").read(),
      packages = find_packages(exclude=['ez_setup']),
      include_package_data = True,
-     package_data = {
-            '':[ 'README.md' ],
-         },
      zip_safe = False,
      install_requires =[
          'setuptools',
