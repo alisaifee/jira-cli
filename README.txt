@@ -1,5 +1,3 @@
-.. _bitbucket repository: http://hg.indydevs.org/jira-cli
-
 Introduction
 ============
 Simple command line utility to interact with your jira instance.
@@ -11,7 +9,7 @@ Installation
     sudo easy_install jira-cli
     sudo pip install jira-cli
 
-* from source (`bitbucket repository`_)::
+* from source 
 
     hg clone http://hg.indydevs.org/jira-cli
     cd jira-cli
