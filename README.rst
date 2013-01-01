@@ -11,7 +11,7 @@ Installation
 
 * from source 
 
-    hg clone http://hg.indydevs.org/jira-cli
+    hg clone http://github.com/alisaifee/jira-cli
     cd jira-cli
     python setup.py build
     sudo python setup.py install
