@@ -9,7 +9,7 @@ Installation
     sudo easy_install jira-cli
     sudo pip install jira-cli
 
-* from source 
+* from source:: 
 
     hg clone http://github.com/alisaifee/jira-cli
     cd jira-cli
