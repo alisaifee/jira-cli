@@ -2,6 +2,10 @@ Introduction
 ============
 Simple command line utility to interact with your jira instance.
 
+Build Status
+============
+![Build Status](https://travis-ci.org/alisaifee/jira-cli.png?branch=master)
+
 Installation
 ============
 * with easy_install or pip::
