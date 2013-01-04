@@ -94,3 +94,6 @@ provide your own formatting::
 
     ali@home ~ $ jira-cli TP-20 --format="%reporter, %summary, %status"
 
+free text search for issues::
+    
+    ali@home ~ $ jira-cli --search some random words 
