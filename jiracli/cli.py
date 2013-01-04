@@ -4,7 +4,6 @@ import os
 import optparse
 import tempfile
 import xmlrpclib
-import collections
 import socket
 import pickle
 import sys
