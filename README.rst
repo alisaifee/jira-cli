@@ -1,10 +1,9 @@
 Introduction
 ============
-Simple command line utility to interact with your jira instance.
+Simple command line utility to interact with your jira instance. 
 
-Build Status
-============
-![Build Status](https://travis-ci.org/alisaifee/jira-cli.png?branch=master)
+![build status](https://api.travis-ci.org/alisaifee/jira-cli.png)
+
 
 Installation
 ============
@@ -101,3 +100,5 @@ provide your own formatting::
 free text search for issues::
     
     ali@home ~ $ jira-cli --search some random words 
+
+
