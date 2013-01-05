@@ -8,7 +8,7 @@ import os
 import sys
 from setuptools import setup, find_packages, Command
 
-version="0.2.9"
+version="0.3"
 
 setup(name='jira-cli',
      author="Ali-Akber Saifee",
