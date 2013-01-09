@@ -2,9 +2,9 @@ Introduction
 ============
 Simple command line utility to interact with your jira instance. 
 
-.. image:: https://api.travis-ci.org/alisaifee/jira-cli.png
+.. image:: https://api.travis-ci.org/mig33/jira-cli.png
    :alt: build status
-   :target: https://travis-ci.org/#!/alisaifee/jira-cli
+   :target: https://travis-ci.org/#!/mig33/jira-cli
 
 Installation
 ============
@@ -15,7 +15,7 @@ Installation
 
 * from source:: 
 
-    hg clone http://github.com/alisaifee/jira-cli
+    git clone http://github.com/mig33/jira-cli
     cd jira-cli
     python setup.py build
     sudo python setup.py install
