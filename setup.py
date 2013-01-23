@@ -10,6 +10,10 @@ import sys
 from setuptools import setup, find_packages, Command
 import jiracli
 
+extra = {}
+if sys.version_info >= (3,):
+    extra['use_2to3'] = True
+
 setup(name='jira-cli',
      author=__author__,
      author_email=__email__,
@@ -30,5 +34,6 @@ setup(name='jira-cli',
              'jira-cli = jiracli.cli:main',
              ]
         },
+    **extra
      )
 
