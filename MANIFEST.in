@@ -1,2 +1,3 @@
+include CLASSIFIERS
 include README.rst
 recursive-include tests *
