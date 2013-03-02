@@ -102,4 +102,12 @@ free text search for issues::
     
     ali@home ~ $ jira-cli --search some random words 
 
+list only the comments for an issue::
+
+    ali@home ~ $ jira-cli --comments-only TP-20 
+    Thu Nov 10 08:42:55 UTC 2011 ali : this is a new comment
+    Fri Dec 02 00:19:40 UTC 2011 ali : another comment 
+    Sat Mar 10 11:08:34 UTC 2012 ali : test comment
+    Sat Mar 10 11:08:51 UTC 2012 ali : another test comment
+
 

@@ -131,7 +131,7 @@ def check_auth(username, password):
         token = _login(username,password)
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
-def format_issue( issue , mode = 0, formatter=None):
+def format_issue( issue , mode = 0, formatter=None, comments_only=False):
     fields = {}
     global colorfunc
     status_color="blue"
@@ -165,21 +165,30 @@ def format_issue( issue , mode = 0, formatter=None):
         fields["issue"] = issue["key"]
         fields["status"] = colorfunc( get_issue_status ( issue["status"] )
                                     , status_color )
-        fields["reporter"] = issue["reporter"]
+        fields["reporter"] = issue.setdefault("reporter","")
         fields["assignee"] = issue.setdefault("assignee","")
-        fields["summary"] = issue["summary"]
+        fields["summary"] = issue.setdefault("summary","")
         fields["link"] = colorfunc( "%s/browse/%s" % ( jirabase, issue["key"]), "white",attrs=["underline"])
-    if mode >= 1:
+    if mode >= 1 or comments_only:
         fields["description"] = issue.setdefault("description","")
-        fields["priority"] = get_issue_priority( issue["priority"] )
-        fields["type"] = get_issue_type( issue["type"] )
-
-    if mode < 0:
+        fields["priority"] = get_issue_priority( issue.setdefault("priority",""))
+        fields["type"] = get_issue_type( issue.setdefault("type","") )
+        comments = get_comments ( issue["key"] )
+        fields["comments"] = "\n"
+        for comment in comments:
+            comment_str =  comment["body"].strip()
+            fields["comments"] += "%s %s : %s\n" % ( colorfunc(comment["created"], "blue"), colorfunc(comment["author"], "green"), comment_str )
+    if comments_only:
+        return fields["comments"].strip()
+    elif mode < 0:
         url_str = colorfunc("%s/browse/%s" % (jirabase, issue["key"]), "white", attrs=["underline"])
         ret_str = colorfunc(issue["key"],status_color) +" "+ issue.setdefault("summary","") + " " + url_str
         if not color:
             ret_str += " [%s] " % get_issue_status(issue["status"])
         return ret_str
+    for k,v in fields.items():
+        if not v:
+            fields[k] = ""
     return "\n".join( " : ".join((k.ljust(20),v)) for k,v in fields.items() ) + "\n"
 
 
@@ -210,6 +219,9 @@ def get_issues_from_filter( filter_name ):
     if fid:
         return jiraobj.jira1.getIssuesFromFilter ( token, fid )
     return []
+
+def get_comments ( jira_id ):
+    return jiraobj.jira1.getComments ( token , jira_id )
 
 def add_comment( jira_id, comment ):
     if comment == default_editor_text:
@@ -244,6 +256,7 @@ here"
     parser = optparse.OptionParser()
     parser.usage = example_usage
     parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
+    parser.add_option("","--comments-only",dest="commentsonly", help="show only the comments for a jira", action="store_true")
     parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
     parser.add_option("","--filter", dest="filter",help="filter(s) to use for listing jiras. use a comma to separate multiple filters")
     parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
@@ -306,7 +319,7 @@ here"
                         for issue in issues:
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( issue, mode , opts.format)
+                            print format_issue( issue, mode , opts.format, opts.commentsonly)
                 else:
                     if not (opts.jira_id or args):
                         parser.error("jira id must be provided")
@@ -315,7 +328,7 @@ here"
                             issue = get_jira(arg)
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( issue, mode , opts.format)
+                            print format_issue( issue, mode , opts.format, opts.commentsonly)
                     if opts.jira_id:
                         issue = get_jira(opts.jira_id)
                         print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
