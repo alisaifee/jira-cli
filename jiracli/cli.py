@@ -85,6 +85,9 @@ def get_issue_priority(priority):
 def search_issues ( criteria ):
     return jiraobj.jira1.getIssuesFromTextSearch(token, criteria )
 
+def search_issues_with_project ( project, criteria, numresult):
+    return jiraobj.jira1.getIssuesFromTextSearchWithProject(token, [project], criteria, numresult)
+
 def check_auth(username, password):
     def _login(u,p):
         username,password = u,p
@@ -305,7 +308,12 @@ here"
                     parser.error("specify the jira to comment on")
                 print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
             elif opts.search:
-                issues = search_issues ( opts.search )
+                project = opts.jira_project
+                if (project is None):
+                    issues = search_issues ( opts.search )
+                else:
+                    jira_max_int = pow(2,31)-1
+                    issues = search_issues_with_project( project, opts.search, jira_max_int)
                 for issue in issues:
                     mode = 0 if not opts.verbose else 1
                     mode = -1 if opts.oneline else mode
