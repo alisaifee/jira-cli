@@ -355,10 +355,10 @@ here"
                             issue = get_jira(arg)
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( issue, mode , opts.format, opts.commentsonly)
+                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
                     if opts.jira_id:
                         issue = get_jira(opts.jira_id)
-                        print format_issue( issue, 0  if not opts.verbose else 1, opts.format)
+                        print format_issue( dict(issue), 0  if not opts.verbose else 1, opts.format)
     except Exception, e:
         parser.error(colorfunc(str(e), "red"))
 
