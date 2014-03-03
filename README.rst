@@ -102,6 +102,11 @@ free text search for issues::
     
     ali@home ~ $ jira-cli --search some random words 
 
+jql search for issues::
+    
+    ali@home ~ $ jira-cli --search-jql 'reporter=ali and type=bug' 
+
+
 list only the comments for an issue::
 
     ali@home ~ $ jira-cli --comments-only TP-20 
