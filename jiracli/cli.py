@@ -1,14 +1,20 @@
 import getpass
+import logging
 import re
 import os
 import optparse
 import tempfile
-import xmlrpclib
 import socket
 import pickle
 import sys
-import xml
+import urllib2
+
+from suds.client import Client
+from suds import WebFault
 from termcolor import colored as colorfunc
+
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('suds.client').setLevel(logging.CRITICAL)
 
 jiraobj = None
 token = None
@@ -40,7 +46,8 @@ def get_issue_type(issuetype):
     if os.path.isfile(os.path.expanduser("~/.jira-cli/types.pkl")):
         issue_types = pickle.load(open(os.path.expanduser("~/.jira-cli/types.pkl"),"rb"))
     else:
-        issue_types = jiraobj.jira1.getIssueTypes(token)
+        issue_types = jiraobj.service.getIssueTypes(token)
+        issue_types = [dict(k) for k in issue_types]
         pickle.dump(issue_types,  open(os.path.expanduser("~/.jira-cli/types.pkl"),"wb"))
 
     if not issuetype:
@@ -56,7 +63,8 @@ def get_issue_status(stat):
     if os.path.isfile(os.path.expanduser("~/.jira-cli/statuses.pkl")):
         issue_stats = pickle.load(open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"rb"))
     else:
-        issue_stats = jiraobj.jira1.getStatuses(token)
+        issue_stats = jiraobj.service.getStatuses(token)
+        issue_stats = [dict(k) for k in issue_stats]
         pickle.dump(issue_stats,  open(os.path.expanduser("~/.jira-cli/statuses.pkl"),"wb"))
 
     if not stat:
@@ -72,7 +80,8 @@ def get_issue_priority(priority):
     if os.path.isfile(os.path.expanduser("~/.jira-cli/priorities.pkl")):
         issue_priorities = pickle.load(open(os.path.expanduser("~/.jira-cli/priorities.pkl"),"rb"))
     else:
-        issue_priorities = jiraobj.jira1.getPriorities(token)
+        issue_priorities = jiraobj.service.getPriorities(token)
+        issue_priorities = [dict(k) for k in issue_priorities]
         pickle.dump(issue_priorities,  open(os.path.expanduser("~/.jira-cli/priorities.pkl"),"wb"))
 
     if not priority:
@@ -83,10 +92,14 @@ def get_issue_priority(priority):
                 return t["id"]
 
 def search_issues ( criteria ):
-    return jiraobj.jira1.getIssuesFromTextSearch(token, criteria )
+    return jiraobj.service.getIssuesFromTextSearch(token, criteria )
+
+def search_issues_jql( query, limit=1024):
+    return jiraobj.service.getIssuesFromJqlSearch(token, query, limit)
 
 def search_issues_with_project ( project, criteria, numresult):
-    return jiraobj.jira1.getIssuesFromTextSearchWithProject(token, [project], criteria, numresult)
+    return jiraobj.service.getIssuesFromTextSearchWithProject(token, [project], criteria, numresult)
+
 
 def check_auth(username, password):
     def _login(u,p):
@@ -97,7 +110,7 @@ def check_auth(username, password):
         if not p:
             password = getpass.getpass("enter password:")
         try:
-            return jiraobj.jira1.login(username,  password)
+            return jiraobj.service.login(username,  password)
         except:
             print >> sys.stderr, colorfunc("username or password incorrect, try again.", "red")
             return _login(None,None)
@@ -111,13 +124,14 @@ def check_auth(username, password):
         else:
             jirabase = url
         try:
-            jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
+            urllib2.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % jirabase)
+            jiraobj = Client('%s/rpc/soap/jirasoapservice-v2?wsdl' % jirabase)
             # lame ping method
-            jiraobj.getIssueTypes()
-        except (xml.parsers.expat.ExpatError, xmlrpclib.ProtocolError,socket.gaierror, IOError),  e:
-            print >> colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
+            jiraobj.service.getIssueTypes()
+        except (socket.gaierror, IOError):
+            print >> sys.stderr, colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
             return _validate_jira_url()
-        except Exception, e:
+        except WebFault,e:
             open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
         return None
 
@@ -128,8 +142,8 @@ def check_auth(username, password):
     if os.path.isfile(os.path.expanduser("~/.jira-cli/auth")):
         token = open(os.path.expanduser("~/.jira-cli/auth")).read()
     try:
-        jiraobj = xmlrpclib.ServerProxy("%s/rpc/xmlrpc" % jirabase )
-        jiraobj.jira1.getIssueTypes(token)
+        jiraobj = Client("%s/rpc/soap/jirasoapservice-v2?wsdl" % jirabase)
+        jiraobj.service.getIssueTypes(token)
     except Exception, e:
         token = _login(username,password)
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
@@ -199,13 +213,13 @@ def get_jira( jira_id ):
     """
     """
     try:
-        return jiraobj.jira1.getIssue( token, jira_id )
+        return jiraobj.service.getIssue( token, jira_id )
     except:
         return {"key": jira_id }
 
 def get_filters( ):
-    saved = jiraobj.jira1.getSavedFilters( token )
-    favorites = jiraobj.jira1.getFavouriteFilters (token)
+    saved = jiraobj.service.getSavedFilters( token )
+    favorites = jiraobj.service.getFavouriteFilters (token)
 
     all_filters = dict( (k["name"], k) for k in saved )
     [all_filters.setdefault(k["name"], k) for k in favorites if k["name"] not in all_filters]
@@ -220,16 +234,16 @@ def get_filter_id_from_name ( name ):
 def get_issues_from_filter( filter_name ):
     fid = get_filter_id_from_name( filter_name )
     if fid:
-        return jiraobj.jira1.getIssuesFromFilter ( token, fid )
+        return jiraobj.service.getIssuesFromFilter ( token, fid )
     return []
 
 def get_comments ( jira_id ):
-    return jiraobj.jira1.getComments ( token , jira_id )
+    return jiraobj.service.getComments ( token , jira_id )
 
 def add_comment( jira_id, comment ):
     if comment == default_editor_text:
         comment = get_text_from_editor(default_editor_text % ("comment"))
-    res = jiraobj.jira1.addComment( token, jira_id, comment )
+    res = jiraobj.service.addComment( token, jira_id, comment )
     if res:
         return "%s added to %s" % (comment, jira_id)
     else:
@@ -240,7 +254,7 @@ def create_issue ( project, type=0, summary="", description="" , priority="Major
         description = get_text_from_editor(default_editor_text % ("new issue"))
 
     issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority)}
-    return jiraobj.jira1.createIssue( token, issue )
+    return jiraobj.service.createIssue( token, issue )
 
 
 def main():
@@ -258,20 +272,25 @@ here"
 """
     parser = optparse.OptionParser()
     parser.usage = example_usage
-    parser.add_option("-c","--comment",dest="comment", help="comment on a jira", action="store_true")
-    parser.add_option("","--comments-only",dest="commentsonly", help="show only the comments for a jira", action="store_true")
-    parser.add_option("-j","--jira-id", dest="jira_id",help="issue id")
-    parser.add_option("","--filter", dest="filter",help="filter(s) to use for listing jiras. use a comma to separate multiple filters")
-    parser.add_option("-n","--new", dest = "issue_type", help="create a new issue with given title")
-    parser.add_option("","--priority", dest = "issue_priority", help="priority of new issue", default="minor")
-    parser.add_option("-t","--title", dest = "issue_title", help="new issue title")
-    parser.add_option("-p","--project",dest="jira_project", help="the jira project to act on")
-    parser.add_option("","--oneline",dest="oneline", help="print only one line of info", action="store_true")
-    parser.add_option("","--list-jira-types",dest="listtypes", help="print out the different jira 'types'", action="store_true")
-    parser.add_option("","--list-filters",dest="listfilters", help="print out the different jira filters available", action="store_true")
-    parser.add_option("-v",dest="verbose", action="store_true", help="print extra information")
-    parser.add_option("-s","--search",dest="search", help="search criteria" )
-    parser.add_option("-f","--format",dest="format", default=None, help="""format for outputting information.
+    parser.add_option("-c", "--comment", dest="comment", help="comment on a jira", action="store_true")
+    parser.add_option("", "--comments-only", dest="commentsonly", help="show only the comments for a jira",
+                      action="store_true")
+    parser.add_option("-j", "--jira-id", dest="jira_id", help="issue id")
+    parser.add_option("", "--filter", dest="filter",
+                      help="filter(s) to use for listing jiras. use a comma to separate multiple filters")
+    parser.add_option("-n", "--new", dest="issue_type", help="create a new issue with given title")
+    parser.add_option("", "--priority", dest="issue_priority", help="priority of new issue", default="minor")
+    parser.add_option("-t", "--title", dest="issue_title", help="new issue title")
+    parser.add_option("-p", "--project", dest="jira_project", help="the jira project to act on")
+    parser.add_option("", "--oneline", dest="oneline", help="print only one line of info", action="store_true")
+    parser.add_option("", "--list-jira-types", dest="listtypes", help="print out the different jira 'types'",
+                      action="store_true")
+    parser.add_option("", "--list-filters", dest="listfilters", help="print out the different jira filters available",
+                      action="store_true")
+    parser.add_option("-v", dest="verbose", action="store_true", help="print extra information")
+    parser.add_option("-s", "--search", dest="search", help="search criteria")
+    parser.add_option("", "--search-jql", dest="search_jql", help="JQL expression")
+    parser.add_option("-f", "--format", dest="format", default=None, help="""format for outputting information.
     allowed tokens: %status,%priority,%updated,%votes,%components,%project,%reporter,%created,%fixVersions,%summary,%environment,%assignee,%key,%affectsVersions,%type.
     examples: "%priority,%reporter","(%key) %priority, reported by %reporter"
     """)
@@ -302,22 +321,22 @@ here"
                     description = " ".join(args)
                 else:
                     description = default_editor_text
-                print format_issue ( create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority ), 0, opts.format)
+                print format_issue ( dict(create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority) ), 0, opts.format)
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
                 print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
-            elif opts.search:
+            elif opts.search or opts.search_jql:
                 project = opts.jira_project
                 if (project is None):
-                    issues = search_issues ( opts.search )
+                    issues = search_issues ( opts.search ) if opts.search else search_issues_jql(opts.search_jql)
                 else:
                     jira_max_int = pow(2,31)-1
                     issues = search_issues_with_project( project, opts.search, jira_max_int)
                 for issue in issues:
                     mode = 0 if not opts.verbose else 1
                     mode = -1 if opts.oneline else mode
-                    print format_issue( issue, mode, opts.format )
+                    print format_issue( dict(issue), mode, opts.format )
             else:
                 # otherwise we're just showing the jira.
                 # maybe by filter
@@ -327,7 +346,7 @@ here"
                         for issue in issues:
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( issue, mode , opts.format, opts.commentsonly)
+                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
                 else:
                     if not (opts.jira_id or args):
                         parser.error("jira id must be provided")
