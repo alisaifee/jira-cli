@@ -1,3 +1,4 @@
 include CLASSIFIERS
 include README.rst
+include requirements.txt
 recursive-include tests *
