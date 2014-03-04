@@ -10,6 +10,8 @@ import sys
 from setuptools import setup, find_packages, Command
 import jiracli
 
+this_dir = os.path.abspath(os.path.dirname(__file__))
+REQUIREMENTS = filter(None, open(os.path.join(this_dir, 'requirements.txt')).read().splitlines())
 extra = {}
 if sys.version_info >= (3,):
     extra['use_2to3'] = True
@@ -26,10 +28,7 @@ setup(name='jira-cli',
      packages = find_packages(exclude=['ez_setup']),
      include_package_data = True,
      zip_safe = False,
-     install_requires =[
-         'setuptools',
-         'termcolor'
-         ],
+    install_requires = REQUIREMENTS,
      entry_points = {
          'console_scripts' : [
              'jira-cli = jiracli.cli:main',
