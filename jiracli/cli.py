@@ -174,7 +174,7 @@ def format_issue( issue , mode = 0, formatter=None, comments_only=False):
                         data = item['name']
                 ret_str = ret_str.replace(k, data)
             else:
-                ret_str = ret_str .replace(k, issue.setdefault(v.lower(),""))
+                ret_str = ret_str.replace(k, str(issue.setdefault(v.lower(),"")))
         return ret_str
 
     if mode >= 0:
