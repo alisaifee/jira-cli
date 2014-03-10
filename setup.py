@@ -31,7 +31,7 @@ setup(name='jira-cli',
     install_requires = REQUIREMENTS,
      entry_points = {
          'console_scripts' : [
-             'jira-cli = jiracli.cli:main',
+             'jira-cli = jiracli.processor:cli',
              ]
         },
     **extra
