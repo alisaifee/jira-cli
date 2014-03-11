@@ -302,7 +302,6 @@ class JiraSoapBridge(JiraBridge):
             self.token = None
             raise JiraAuthenticationError()
         finally:
-            print self.persist
             if self.persist:
                 self.config.add_option('token', self.token)
                 self.config.save()

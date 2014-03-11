@@ -7,8 +7,11 @@ __copyright__ = "Copyright 2014, Ali-Akber Saifee"
 
 import os
 import sys
-from setuptools import setup, find_packages, Command
+
+from setuptools import setup, find_packages
+
 import jiracli
+
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 REQUIREMENTS = filter(None, open(os.path.join(this_dir, 'requirements.txt')).read().splitlines())
@@ -31,7 +34,7 @@ setup(name='jira-cli',
     install_requires = REQUIREMENTS,
      entry_points = {
          'console_scripts' : [
-             'jira-cli = jiracli.processor:cli',
+             'jira-cli = jiracli.interface:cli',
              ]
         },
     **extra
