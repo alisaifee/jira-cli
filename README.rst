@@ -2,9 +2,13 @@ Introduction
 ============
 Simple command line utility to interact with your jira instance. 
 
-.. image:: https://api.travis-ci.org/alisaifee/jira-cli.png
+.. |travis-ci| image:: https://api.travis-ci.org/alisaifee/jira-cli.png
    :alt: build status
    :target: https://travis-ci.org/#!/alisaifee/jira-cli
+.. |coveralls| image:: https://coveralls.io/repos/alisaifee/jira-cli/badge.png?branch=rewrite
+    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=rewrite
+
+|travis-ci| |coveralls| 
 
 Installation
 ============
