@@ -1,3 +1,4 @@
 termcolor
+six 
 jira-python 
 suds
