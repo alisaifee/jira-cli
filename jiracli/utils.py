@@ -144,7 +144,7 @@ WARNING = 1
 
 def print_error(msg, severity=CRITICAL):
     color = 'red' if severity == CRITICAL else 'yellow'
-    print(colorfunc(msg, color), file=sys.stderr)
+    sys.stderr.write(colorfunc(msg, color) + "\n")
 
 def print_output(msg):
     print(msg)
