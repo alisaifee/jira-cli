@@ -23,21 +23,20 @@ DEFAULT_EDITOR_TEXT = """-- enter your text here
 
 
 class Config(object):
-    __slots__ = ['cfg', 'section']
     def __init__(self, path=None):
         """
         manages a the .cfg file
         """
         object.__setattr__(self, 'cfg', ConfigParser.ConfigParser())
         object.__setattr__(self, 'section', 'jira')
-        if path:
-            self.cfg.read(path)
-        else:
-            if os.path.isfile(CONFIG_FILE):
-                self.cfg.read(CONFIG_FILE)
+        object.__setattr__(self, 'cfg_path', path or CONFIG_FILE)
+        if os.path.isfile(self.cfg_path):
+            self.cfg.read(self.cfg_path)
 
     def save(self):
-        self.cfg.write(open(CONFIG_FILE, 'w'))
+        if not os.path.isdir(os.path.split(self.cfg_path)[0]):
+            os.makedirs(os.path.split(self.cfg_path)[0])
+        self.cfg.write(open(self.cfg_path, 'w'))
 
     def __setattr__(self, key, value):
         try:
