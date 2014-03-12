@@ -5,7 +5,8 @@ python:
     - "3.2"
 install:
     - pip install . --use-mirrors
-    - pip install -r requirements.txt --use-mirrors
+    - pip install -r test_requirements.txt --use-mirrors
 
-script: python setup.py nosetests
-
+script: python setup.py nosetests --with-cov
+after_success:
+    - coveralls
