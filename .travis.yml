@@ -7,6 +7,6 @@ install:
     - pip install . --use-mirrors
     - pip install -r test_requirements.txt --use-mirrors
 
-script: python setup.py nosetests --with-cov
+script: nosetests --with-cov
 after_success:
     - coveralls
