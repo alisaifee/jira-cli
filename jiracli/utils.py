@@ -2,13 +2,12 @@
 utility functions
 """
 
-import ConfigParser
 import getpass
 import os
 import tempfile
 import sys
+from six.moves import configparser, input
 from jira import resources
-
 from suds.sudsobject import asdict
 
 import logging
@@ -27,7 +26,7 @@ class Config(object):
         """
         manages a the .cfg file
         """
-        object.__setattr__(self, 'cfg', ConfigParser.ConfigParser())
+        object.__setattr__(self, 'cfg', configparser.ConfigParser())
         object.__setattr__(self, 'section', 'jira')
         object.__setattr__(self, 'cfg_path', path or CONFIG_FILE)
         if os.path.isfile(self.cfg_path):
@@ -66,7 +65,7 @@ def soap_recursive_dict(d):
     a pure python dictionary.
     """
     out = {}
-    for k, v in asdict(d).iteritems():
+    for k, v in asdict(d).items():
         if hasattr(v, '__keylist__'):
             out[k] = soap_recursive_dict(v)
         elif isinstance(v, list):
@@ -145,10 +144,10 @@ WARNING = 1
 
 def print_error(msg, severity=CRITICAL):
     color = 'red' if severity == CRITICAL else 'yellow'
-    print >> sys.stderr, colorfunc(msg, color)
+    print(colorfunc(msg, color), file=sys.stderr)
 
 def print_output(msg):
     print(msg)
 
 def prompt(msg, masked=False):
-    return raw_input(msg) if not masked else getpass.getpass(msg)
+    return input(msg) if not masked else getpass.getpass(msg)

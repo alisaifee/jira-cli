@@ -3,13 +3,12 @@
 """
 import re
 import socket
-import urllib2
 import abc
-from jira import resources
+
 from jira.exceptions import JIRAError
 from jira.resources import Resource
-
 import six
+import six.moves.urllib
 from suds.client import Client
 from suds import WebFault
 from jira.client import JIRA
@@ -17,8 +16,8 @@ from jira.client import JIRA
 from jiracli.cache import cached
 from jiracli.cli import colorfunc
 from jiracli.errors import JiraInitializationError, JiraAuthenticationError, JiraCliError
-from jiracli.utils import soap_recursive_dict, COLOR, map_rest_resource, \
-    rest_recursive_dict
+from jiracli.utils import soap_recursive_dict, COLOR, map_rest_resource
+from jiracli.utils import rest_recursive_dict
 
 
 def get_bridge(protocol):
@@ -231,7 +230,7 @@ class JiraSoapBridge(JiraBridge):
         try:
             self.service.getIssueTypes(self.token)
             return True
-        except WebFault,e:
+        except WebFault:
             self.token = self.config.token = None
             self.config.save()
             return False
@@ -239,7 +238,7 @@ class JiraSoapBridge(JiraBridge):
     def __init__(self, base_url, config, persist=True):
         super(JiraSoapBridge, self).__init__(base_url, config, persist)
         try:
-            urllib2.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
+            six.moves.urllib.request.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
             jiraobj = Client('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
             self.service = jiraobj.service
         except (socket.gaierror, IOError, ValueError):
@@ -273,7 +272,7 @@ class JiraSoapBridge(JiraBridge):
             else:
                 issue['type'] = self.get_issue_types()[type.lower()]['id'],
                 return soap_recursive_dict(self.service.createIssue(self.token, issue))
-        except WebFault, e:
+        except WebFault as e:
             raise JiraCliError(e)
 
     def get_issue_comments(self, issue):
@@ -476,7 +475,7 @@ class JiraRestBridge(JiraBridge):
 
     @cached('components')
     def get_components(self, project):
-        return dict((k.name.lower(), dict(k.raw)) for k in self.jira.components(project))
+        return dict((k.name.lower(), dict(k.raw)) for k in self.jira.project_components(project))
 
     @cached('statuses')
     def get_statuses(self):

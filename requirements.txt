@@ -1,4 +1,4 @@
 termcolor
 six 
 jira-python 
-suds
+suds-jurko

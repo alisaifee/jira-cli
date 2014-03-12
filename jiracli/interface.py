@@ -6,11 +6,13 @@ import argparse
 from suds import WebFault
 
 from jiracli.bridges import get_bridge
+from jiracli.cache import clear_cache
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.errors import  UsageWarning, JiraCliError, UsageError
 from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
 from jiracli.processor import ListCommand
-from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt
+from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
+    print_output
 
 
 def initialize(config, base_url=None, username=None, password=None,
@@ -76,6 +78,12 @@ def build_parser():
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='additional help')
+    parser.add_argument('--clear-cache', dest='clear_cache', action='store_true',
+                        help='clear the jira-cli cache')
+    parser.add_argument('--configure', dest='configure', action='store_true',
+                        help='configure jira-cli')
+
+
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
     base.add_argument('--jira-url', dest='jira_url',
                         help='the base url for the jira instance', default=None)
@@ -167,21 +175,29 @@ def cli():
     args = parser.parse_args()
     config = Config()
     try:
-        jira = initialize(
-            config, args.jira_url, args.username, args.password,
-            persist=not (args.username or args.jira_url),
-            protocol=config.protocol or args.protocol
-        )
-        args.cmd(jira, args).eval()
+        if not (args.configure or args.clear_cache):
+            jira = initialize(
+                config, args.jira_url, args.username, args.password,
+                persist=not (args.username or args.jira_url),
+                protocol=config.protocol or args.protocol
+            )
+            args.cmd(jira, args).eval()
+        else:
+            if args.configure:
+                initialize(config, "", "", "", True)
+            if args.clear_cache:
+                clear_cache()
+                print_output(colorfunc("jira-cli cache cleared", "green"))
+
     except KeyboardInterrupt:
         print_error("aborted", severity=WARNING)
-    except UsageWarning, e:
+    except UsageWarning as e:
         print_error(str(e), severity=WARNING)
-    except (JiraCliError, UsageError), e:
+    except (JiraCliError, UsageError) as e:
         print_error(str(e))
-    except (WebFault), e:
+    except (WebFault) as e:
         print_error(JiraCliError(e))
-    except NotImplementedError,e:
+    except NotImplementedError as e:
         print_error(e)
 if __name__ == "__main__":
     cli()

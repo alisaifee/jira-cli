@@ -7,7 +7,7 @@ import tempfile
 import socket
 import pickle
 import sys
-import urllib2
+from six.moves import urllib
 
 from suds.client import Client
 from suds import WebFault
@@ -124,14 +124,14 @@ def check_auth(username, password):
         else:
             jirabase = url
         try:
-            urllib2.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % jirabase)
+            urllib.request.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % jirabase)
             jiraobj = Client('%s/rpc/soap/jirasoapservice-v2?wsdl' % jirabase)
             # lame ping method
             jiraobj.service.getIssueTypes()
         except (socket.gaierror, IOError):
             print >> sys.stderr, colorfunc("invalid url %s. Please provide the correct url for your jira installation" % jirabase, "red")
             return _validate_jira_url()
-        except WebFault,e:
+        except WebFault:
             open(os.path.expanduser("~/.jira-cli/config"),"w").write(jirabase)
         return None
 
@@ -144,7 +144,7 @@ def check_auth(username, password):
     try:
         jiraobj = Client("%s/rpc/soap/jirasoapservice-v2?wsdl" % jirabase)
         jiraobj.service.getIssueTypes(token)
-    except Exception, e:
+    except Exception:
         token = _login(username,password)
         open(os.path.expanduser("~/.jira-cli/auth"),"w").write(token)
 
@@ -303,16 +303,16 @@ here"
         if opts.listfilters:
             idx=1
             for f in get_filters():
-                print "%d. %s (Owner: %s)" % (idx,  f["name"], colorfunc(f["author"],"green"))
+                print("%d. %s (Owner: %s)" % (idx,  f["name"], colorfunc(f["author"],"green")))
                 idx+=1
         elif opts.listtypes:
-            print "Priorities:"
+            print("Priorities:")
             for el in  get_issue_priority(None):
-                print el["name"], ":", el["description"]
-            print
-            print "Issue Types:"
+                print(el["name"], ":", el["description"])
+            print()
+            print("Issue Types:")
             for el in  get_issue_type(None):
-                print el["name"], ":", el["description"]
+                print(el["name"], ":", el["description"])
         else:
 
             if opts.issue_type:
@@ -321,11 +321,11 @@ here"
                     description = " ".join(args)
                 else:
                     description = default_editor_text
-                print format_issue ( dict(create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority) ), 0, opts.format)
+                print(format_issue ( dict(create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority) ), 0, opts.format))
             elif opts.comment:
                 if not opts.jira_id:
                     parser.error("specify the jira to comment on")
-                print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
+                print(add_comment(opts.jira_id, " ".join(args) if args else default_editor_text))
             elif opts.search or opts.search_jql:
                 project = opts.jira_project
                 if (project is None):
@@ -336,7 +336,7 @@ here"
                 for issue in issues:
                     mode = 0 if not opts.verbose else 1
                     mode = -1 if opts.oneline else mode
-                    print format_issue( dict(issue), mode, opts.format )
+                    print(format_issue( dict(issue), mode, opts.format))
             else:
                 # otherwise we're just showing the jira.
                 # maybe by filter
@@ -346,7 +346,7 @@ here"
                         for issue in issues:
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
+                            print(format_issue( dict(issue), mode , opts.format, opts.commentsonly))
                 else:
                     if not (opts.jira_id or args):
                         parser.error("jira id must be provided")
@@ -355,11 +355,11 @@ here"
                             issue = get_jira(arg)
                             mode = 0 if not opts.verbose else 1
                             mode = -1 if opts.oneline else mode
-                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
+                            print(format_issue( dict(issue), mode , opts.format, opts.commentsonly))
                     if opts.jira_id:
                         issue = get_jira(opts.jira_id)
-                        print format_issue( dict(issue), 0  if not opts.verbose else 1, opts.format)
-    except Exception, e:
+                        print(format_issue( dict(issue), 0  if not opts.verbose else 1, opts.format))
+    except Exception as e:
         parser.error(colorfunc(str(e), "red"))
 
 if __name__ == "__main__":
