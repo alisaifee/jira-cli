@@ -84,7 +84,7 @@ list the issues TP-20 & TP-21::
 
 list the issues in short form::
 
-    ali@home ~ $ jira-cli --oneline view TP-20 TP-21 TP-22
+    ali@home ~ $ jira-cli view TP-20 TP-21 TP-22 --oneline
     TP-20 test < http://jira.yourdomain.com/browse/TP-20 > 
     TP-21 Test Bug < http://jira.yourdomain.com/browse/TP-21 > 
     TP-22 Test Bug < http://jira.yourdomain.com/browse/TP-22 > 
@@ -96,7 +96,7 @@ add a comment to an existing issue::
 
 provide your own formatting::
 
-    ali@home ~ $ jira-cli --format="%reporter, %summary, %status" view TP-20 
+    ali@home ~ $ jira-cli view TP-20 --format="%reporter, %summary, %status" 
 
 free text search for issues::
     
