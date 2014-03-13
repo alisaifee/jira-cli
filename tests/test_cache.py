@@ -11,7 +11,7 @@ class CacheTests(unittest.TestCase):
         jiracli.cache.CACHE_DIR = self.cache_dir
     def test_cache_data_not_exist(self):
         data = jiracli.cache.CachedData("foobar")
-        self.assertIsNone(data.get())
+        self.assertTrue(data.get()==None)
         data.update({"foo":"bar"})
         self.assertEqual(jiracli.cache.CachedData("foobar").get(),
                          {"foo": "bar"})
@@ -20,7 +20,7 @@ class CacheTests(unittest.TestCase):
             data = jiracli.cache.CachedData("foobar")
             data.update({"foo":"bar"})
             timeline.forward(1 + 60*60*24)
-            self.assertIsNone(data.get())
+            self.assertTrue(data.get()==None)
 
     def test_clear_cache(self):
         data = jiracli.cache.CachedData("foobar")
