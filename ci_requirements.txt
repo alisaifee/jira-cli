@@ -1,0 +1,2 @@
+-r test_requirements.txt
+python-coveralls
