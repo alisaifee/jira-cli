@@ -6,6 +6,7 @@ from functools import wraps
 import hashlib
 import os
 import pickle
+import shutil
 import time
 from jiracli.utils import CONFIG_DIR
 
@@ -44,11 +45,12 @@ class CachedData(object):
     def invalidate(self):
         if os.path.isfile(self.path):
             os.unlink(self.path)
+        self.cached = None
 
     def get(self):
         try:
             with closing(open(self.path, 'rb')) as fp:
-                if time.time() - os.stat(self.path).st_mtime > CACHE_DURATION:
+                if (time.time() - os.stat(self.path).st_mtime) >= CACHE_DURATION:
                     self.invalidate()
                 else:
                     self.cached = pickle.loads(fp.read())
@@ -63,7 +65,7 @@ class CachedData(object):
 def clear_cache(*cached_data):
     if not cached_data:
         if os.path.isdir(CACHE_DIR):
-            os.removedirs(CACHE_DIR)
+            shutil.rmtree(CACHE_DIR)
     else:
         for data in cached_data:
             data.invalidate()

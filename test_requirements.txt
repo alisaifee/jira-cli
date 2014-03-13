@@ -1,4 +1,5 @@
--r requirements.txt 
+-r requirements.txt
 mock
 coverage
+hiro
 nose-cov
