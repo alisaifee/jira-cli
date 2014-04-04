@@ -2,6 +2,7 @@
 
 """
 import argparse
+from jira.exceptions import JIRAError
 
 from suds import WebFault
 import sys
@@ -101,7 +102,7 @@ def build_parser():
     base.add_argument('--oneline', dest='oneline',
                         help='built in format to display each ticket on one line',
                         action='store_true')
-    base.add_argument('-v', dest='verbosity', help='amount of detail to show',
+    base.add_argument('-v', dest='verbosity', help='amount of detail to show for issues',
                         action='count')
     base.add_argument('-u', '--username', dest='username',
                         help='username to login as', default=None)
@@ -132,7 +133,7 @@ def build_parser():
     view.add_argument('--comments-only', dest='comments_only',
                       help='displays only the comments assosciated with each issue',
                       action='store_true')
-    view.add_argument('jira_ids', nargs='*')
+    view.add_argument('jira_ids', nargs='*', help='jira issue ids')
 
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
@@ -226,6 +227,8 @@ def cli(args=sys.argv[1:]):
     except (JiraCliError, UsageError) as e:
         print_error(str(e))
     except (WebFault) as e:
+        print_error(JiraCliError(e))
+    except (JIRAError) as e:
         print_error(JiraCliError(e))
     except NotImplementedError as e:
         print_error(e)

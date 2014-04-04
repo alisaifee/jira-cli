@@ -1,3 +1,4 @@
+from jira.exceptions import JIRAError
 from suds import WebFault
 
 
@@ -21,6 +22,8 @@ class JiraCliError(Exception):
         if isinstance(exc, WebFault):
             msg = ":".join(exc.fault.faultstring.split(":")[1:]).strip()
             super(JiraCliError, self).__init__(msg)
+        elif isinstance(exc, JIRAError):
+            super(JiraCliError, self).__init__(exc.text)
         else:
             super(JiraCliError, self).__init__(exc)
 

@@ -71,11 +71,17 @@ class ListCommand(Command):
                     _k[earg[0]] = earg[1]
             else:
                 if not getattr(self.args, earg):
-                    raise UsageError("'%s' is required for listing '%s'" % (earg, self.args.type))
+                    raise UsageError("'--%s' is required for listing '%s'" % (earg, self.args.type))
                 _.append(getattr(self.args, earg))
         found = False
-
-        for item in func(*_, **_k):
+        data = func(*_, **_k)
+        data_dict = {}
+        if type(data) == type([]):
+            for item in data:
+                data_dict[item['name']] = item
+        else:
+            data_dict = data
+        for item in data_dict.values():
             found = True
             val = item
             if type(item) == type({}):
@@ -83,7 +89,7 @@ class ListCommand(Command):
                 if 'key' in item and item['key']:
                     val += " [" + colorfunc(item['key'], 'magenta') + "]"
                 if 'description' in item and item['description']:
-                    val += ":" + colorfunc(item['description'], 'green')
+                    val += " [" + colorfunc(item['description'], 'green') + "]"
             print_output(colorfunc(val, 'white'))
         if not found:
             raise UsageWarning("No %s found." % self.args.type)

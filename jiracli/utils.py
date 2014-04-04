@@ -58,10 +58,10 @@ class Config(object):
         if cfg.has_option(section, item):
             try:
                 return cfg.getboolean(section, item)
-            except ValueError:
+            except (Exception):
                 try:
                     return cfg.getint(section, item)
-                except ValueError:
+                except (Exception):
                     return cfg.get(section, item)
 
         else:
@@ -97,8 +97,6 @@ def rest_recursive_dict(d):
     a pure python dictionary.
     """
     out = {}
-    import bpython
-    bpython.embed(locals_ = locals())
     for k, v in d.iteritems():
         if v.__class__.__name__ == 'PropertyHolder':
             out[k] = v.__dict__
