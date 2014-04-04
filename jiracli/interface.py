@@ -4,6 +4,7 @@
 import argparse
 
 from suds import WebFault
+import sys
 
 from jiracli.bridges import get_bridge
 from jiracli.cache import clear_cache
@@ -13,7 +14,7 @@ from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
 from jiracli.processor import ListCommand
 from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
     print_output
-
+from jiracli.cli import main as old_main
 
 def initialize(config, base_url=None, username=None, password=None,
                persist=True, error=False, protocol='soap'):
@@ -77,11 +78,13 @@ def build_parser():
 
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
-                                       help='additional help')
+                                       help='jira sub commands')
     parser.add_argument('--clear-cache', dest='clear_cache', action='store_true',
                         help='clear the jira-cli cache')
     parser.add_argument('--configure', dest='configure', action='store_true',
-                        help='configure jira-cli')
+                        help='configure jira-cli interactively')
+    parser.add_argument('--v2', dest='v2', action='store_true',
+                        help='use jira-cli v2')
 
 
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
@@ -169,25 +172,52 @@ def build_parser():
                              ' (use list transitions to view available transitions for an issue)')
     return parser
 
+def fake_parse(args):
+    import optparse
+    class FakeParser(optparse.OptionParser):
+        def print_usage(self, file=None):
+            raise SystemExit()
+        def print_help(self, file=None):
+            raise StopIteration()
 
-def cli():
-    parser = build_parser()
-    args = parser.parse_args()
-    config = Config()
+    optparser = FakeParser()
+    optparser.add_option("", "--configure", action='store_true', default=False)
+    optparser.add_option("", "--v2", action='store_true', default=False)
+    optparser.add_option("", "--clear-cache", action='store_true', default=False)
     try:
-        if not (args.configure or args.clear_cache):
+        opts, args = optparser.parse_args(args)
+        return opts
+    except SystemExit, e:
+        return 0
+    except StopIteration:
+        return -1
+
+def cli(args=sys.argv[1:]):
+    parser = build_parser()
+    pre_args = fake_parse(args)
+    try:
+        config = Config()
+        if config.v2:
+            pre_args = None
+        elif not pre_args == 0:
+            if not "--v2" in args:
+                return old_main()
+        if pre_args <=0 or pre_args.v2 and not (pre_args.configure or pre_args.clear_cache):
+            post_args = parser.parse_args(args)
             jira = initialize(
-                config, args.jira_url, args.username, args.password,
-                persist=not (args.username or args.jira_url),
-                protocol=config.protocol or args.protocol
+                config, post_args.jira_url, post_args.username, post_args.password,
+                persist=not (post_args.username or post_args.jira_url),
+                protocol=config.protocol or post_args.protocol
             )
-            args.cmd(jira, args).eval()
+            return post_args.cmd(jira, post_args).execute()
         else:
-            if args.configure:
+            if pre_args.configure:
+                config.reset()
                 initialize(config, "", "", "", True)
-            if args.clear_cache:
+            elif pre_args.clear_cache:
                 clear_cache()
                 print_output(colorfunc("jira-cli cache cleared", "green"))
+            return
 
     except KeyboardInterrupt:
         print_error("aborted", severity=WARNING)

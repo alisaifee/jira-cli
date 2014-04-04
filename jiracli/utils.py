@@ -37,6 +37,11 @@ class Config(object):
             os.makedirs(os.path.split(self.cfg_path)[0])
         self.cfg.write(open(self.cfg_path, 'w'))
 
+    def reset(self):
+        for section in self.cfg.sections():
+            self.cfg.remove_section(section)
+        self.save()
+
     def __setattr__(self, key, value):
         try:
             object.__getattribute__(self, key)
@@ -51,7 +56,14 @@ class Config(object):
         cfg = super(Config, self).__getattribute__('cfg')
         section = super(Config, self).__getattribute__('section')
         if cfg.has_option(section, item):
-            return cfg.get(section, item)
+            try:
+                return cfg.getboolean(section, item)
+            except ValueError:
+                try:
+                    return cfg.getint(section, item)
+                except ValueError:
+                    return cfg.get(section, item)
+
         else:
             try:
                 return super(Config, self).__getattribute__(item)

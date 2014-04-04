@@ -1,11 +1,13 @@
 import tempfile
 import unittest
+import jiracli
 import mock
+from nose.plugins.attrib import attr
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.interface import build_parser, initialize
 from jiracli.processor import ViewCommand
 from jiracli.utils import Config
-
+from jiracli.interface import cli
 
 class CliParsingTests(unittest.TestCase):
     def setUp(self):
@@ -126,4 +128,35 @@ class CliInitParsing(unittest.TestCase):
             bridge.return_value.ping.return_value = True
             bridge.return_value.ping.assert_call_count(1)
             self.assertEqual(bridge.return_value, initialize(self.cfg))
+
+
+class BackwardCompatibilityTests(unittest.TestCase):
+    def setUp(self):
+        tmp_config = tempfile.mktemp()
+        self.cfg = Config(tmp_config)
+        jiracli.utils.CONFIG_FILE = tmp_config
+
+    def test_jira_cli_v1_invoked(self):
+        with mock.patch("jiracli.interface.old_main") as old_main:
+            cli(['--help'])
+            self.assertTrue(old_main.call_count==1)
+            self.cfg.v2 = 0
+            self.cfg.save()
+            cli(['--help'])
+            self.assertTrue(old_main.call_count==2)
+            self.cfg.v2 = "False"
+            self.cfg.save()
+            cli(['--help'])
+            self.assertTrue(old_main.call_count==3)
+
+    def test_jira_cli_v2_invoked(self):
+        with mock.patch("sys.stdout") as stdout:
+            with mock.patch("jiracli.interface.old_main") as old_main:
+                with mock.patch("jiracli.processor.Command.execute") as execute:
+                    self.assertRaises(SystemExit, cli, ['--help', '--v2'])
+                    self.cfg.v2 = True
+                    self.cfg.save()
+                    self.assertRaises(SystemExit, cli, ['--help'])
+                    self.cfg.v2 = 1
+                    self.assertRaises(SystemExit, cli, ['--help'])
 

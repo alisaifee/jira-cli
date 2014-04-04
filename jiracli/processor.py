@@ -19,6 +19,8 @@ class Command(object):
     def eval(self):
         raise NotImplementedError
 
+    def execute(self):
+        return self.eval()
 
 class ViewCommand(Command):
     def eval(self):
