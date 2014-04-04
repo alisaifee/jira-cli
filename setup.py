@@ -14,7 +14,13 @@ import jiracli
 
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
-REQUIREMENTS = filter(None, open(os.path.join(this_dir, 'requirements.txt')).read().splitlines())
+REQUIREMENTS = [k for k in open(
+    os.path.join(this_dir, 'requirements.txt')
+                ).read().splitlines() if k
+]
+if sys.version < (2,7):
+    REQUIREMENTS.append('argparse')
+
 extra = {}
 if sys.version_info >= (3,):
     extra['use_2to3'] = True

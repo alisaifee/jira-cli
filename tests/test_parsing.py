@@ -140,7 +140,7 @@ class BackwardCompatibilityTests(unittest.TestCase):
         with mock.patch("jiracli.interface.old_main") as old_main:
             cli(['--help'])
             self.assertTrue(old_main.call_count==1)
-            self.cfg.v2 = 0
+            self.cfg.v2 = "0"
             self.cfg.save()
             cli(['--help'])
             self.assertTrue(old_main.call_count==2)
@@ -154,9 +154,9 @@ class BackwardCompatibilityTests(unittest.TestCase):
             with mock.patch("jiracli.interface.old_main") as old_main:
                 with mock.patch("jiracli.processor.Command.execute") as execute:
                     self.assertRaises(SystemExit, cli, ['--help', '--v2'])
-                    self.cfg.v2 = True
+                    self.cfg.v2 = "True"
                     self.cfg.save()
                     self.assertRaises(SystemExit, cli, ['--help'])
-                    self.cfg.v2 = 1
+                    self.cfg.v2 = "1"
                     self.assertRaises(SystemExit, cli, ['--help'])
 

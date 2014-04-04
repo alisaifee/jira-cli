@@ -185,25 +185,27 @@ def fake_parse(args):
     optparser.add_option("", "--configure", action='store_true', default=False)
     optparser.add_option("", "--v2", action='store_true', default=False)
     optparser.add_option("", "--clear-cache", action='store_true', default=False)
-    try:
-        opts, args = optparser.parse_args(args)
-        return opts
-    except SystemExit, e:
-        return 0
-    except StopIteration:
-        return -1
+    opts, args = optparser.parse_args(args)
+    return opts
 
 def cli(args=sys.argv[1:]):
     parser = build_parser()
-    pre_args = fake_parse(args)
+
     try:
         config = Config()
         if config.v2:
             pre_args = None
-        elif not pre_args == 0:
-            if not "--v2" in args:
-                return old_main()
-        if pre_args <=0 or pre_args.v2 and not (pre_args.configure or pre_args.clear_cache):
+        else:
+            try:
+                pre_args = fake_parse(args)
+            except StopIteration:
+                pre_args = None
+                if not "--v2" in args:
+                    return old_main()
+            except SystemExit:
+                pass
+
+        if not pre_args or (pre_args and pre_args.v2) and not (pre_args and (pre_args.configure or pre_args.clear_cache)):
             post_args = parser.parse_args(args)
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
