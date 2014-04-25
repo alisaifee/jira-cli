@@ -299,68 +299,65 @@ here"
 
     opts, args = parser.parse_args()
     check_auth(opts.username, opts.password)
-    try:
-        if opts.listfilters:
-            idx=1
-            for f in get_filters():
-                print "%d. %s (Owner: %s)" % (idx,  f["name"], colorfunc(f["author"],"green"))
-                idx+=1
-        elif opts.listtypes:
-            print "Priorities:"
-            for el in  get_issue_priority(None):
-                print el["name"], ":", el["description"]
-            print
-            print "Issue Types:"
-            for el in  get_issue_type(None):
-                print el["name"], ":", el["description"]
-        else:
+    if opts.listfilters:
+        idx=1
+        for f in get_filters():
+            print "%d. %s (Owner: %s)" % (idx,  f["name"], colorfunc(f["author"],"green"))
+            idx+=1
+    elif opts.listtypes:
+        print "Priorities:"
+        for el in  get_issue_priority(None):
+            print el["name"], ":", el["description"]
+        print
+        print "Issue Types:"
+        for el in  get_issue_type(None):
+            print el["name"], ":", el["description"]
+    else:
 
-            if opts.issue_type:
-                project = opts.jira_project
-                if args:
-                    description = " ".join(args)
-                else:
-                    description = default_editor_text
-                print format_issue ( dict(create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority) ), 0, opts.format)
-            elif opts.comment:
-                if not opts.jira_id:
-                    parser.error("specify the jira to comment on")
-                print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
-            elif opts.search or opts.search_jql:
-                project = opts.jira_project
-                if (project is None):
-                    issues = search_issues ( opts.search ) if opts.search else search_issues_jql(opts.search_jql)
-                else:
-                    jira_max_int = pow(2,31)-1
-                    issues = search_issues_with_project( project, opts.search, jira_max_int)
-                for issue in issues:
-                    mode = 0 if not opts.verbose else 1
-                    mode = -1 if opts.oneline else mode
-                    print format_issue( dict(issue), mode, opts.format )
+        if opts.issue_type:
+            project = opts.jira_project
+            if args:
+                description = " ".join(args)
             else:
-                # otherwise we're just showing the jira.
-                # maybe by filter
-                if opts.filter:
-                    for f in opts.filter.split(","):
-                        issues = get_issues_from_filter(f)
-                        for issue in issues:
-                            mode = 0 if not opts.verbose else 1
-                            mode = -1 if opts.oneline else mode
-                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
-                else:
-                    if not (opts.jira_id or args):
-                        parser.error("jira id must be provided")
-                    if args:
-                        for arg in args:
-                            issue = get_jira(arg)
-                            mode = 0 if not opts.verbose else 1
-                            mode = -1 if opts.oneline else mode
-                            print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
-                    if opts.jira_id:
-                        issue = get_jira(opts.jira_id)
-                        print format_issue( dict(issue), 0  if not opts.verbose else 1, opts.format)
-    except Exception, e:
-        parser.error(colorfunc(str(e), "red"))
+                description = default_editor_text
+            print format_issue ( dict(create_issue ( project, opts.issue_type, opts.issue_title,  description, opts.issue_priority) ), 0, opts.format)
+        elif opts.comment:
+            if not opts.jira_id:
+                parser.error("specify the jira to comment on")
+            print add_comment(opts.jira_id, " ".join(args) if args else default_editor_text)
+        elif opts.search or opts.search_jql:
+            project = opts.jira_project
+            if (project is None):
+                issues = search_issues ( opts.search ) if opts.search else search_issues_jql(opts.search_jql)
+            else:
+                jira_max_int = pow(2,31)-1
+                issues = search_issues_with_project( project, opts.search, jira_max_int)
+            for issue in issues:
+                mode = 0 if not opts.verbose else 1
+                mode = -1 if opts.oneline else mode
+                print format_issue( dict(issue), mode, opts.format )
+        else:
+            # otherwise we're just showing the jira.
+            # maybe by filter
+            if opts.filter:
+                for f in opts.filter.split(","):
+                    issues = get_issues_from_filter(f)
+                    for issue in issues:
+                        mode = 0 if not opts.verbose else 1
+                        mode = -1 if opts.oneline else mode
+                        print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
+            else:
+                if not (opts.jira_id or args):
+                    parser.error("jira id must be provided")
+                if args:
+                    for arg in args:
+                        issue = get_jira(arg)
+                        mode = 0 if not opts.verbose else 1
+                        mode = -1 if opts.oneline else mode
+                        print format_issue( dict(issue), mode , opts.format, opts.commentsonly)
+                if opts.jira_id:
+                    issue = get_jira(opts.jira_id)
+                    print format_issue( dict(issue), 0  if not opts.verbose else 1, opts.format)
 
 if __name__ == "__main__":
     main()
