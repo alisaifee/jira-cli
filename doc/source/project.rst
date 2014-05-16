@@ -1,5 +1,8 @@
+Development
+===========
+
 Project resources
-=================
+-----------------
 
 .. only:: html
 
@@ -38,7 +41,7 @@ Project resources
 .. _rewrite:
 
 Rewrite
-=======
+-------
 
 The project was originally written against a ``3.x`` version of jira which only
 required support for the original ``soap rpc`` interface. With subsequent releases
