@@ -37,7 +37,7 @@ class ViewCommand(Command):
         elif self.args.filter:
             issues = self.jira.get_issues_by_filter(*self.args.filter)
         else:
-            issues = filter(lambda issue:issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids[0]])
+            issues = filter(lambda issue:issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids])
 
         for issue in issues:
             print_output(self.jira.format_issue(

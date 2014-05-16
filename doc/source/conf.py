@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'jira-cli'
-copyright = u'2013, Ali-Akber Saifee'
+copyright = u'2014, Ali-Akber Saifee'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -1,5 +1,8 @@
+Setup
+=====
+
 Installation
-============
+------------
 * with easy_install or pip::
 
     sudo easy_install jira-cli
@@ -12,25 +15,53 @@ Installation
     python setup.py build
     sudo python setup.py install
 
-* after installation, a few configuration steps will be prompted upon invoking jira-cli for the first time::
-
-    ali@home ~ $ jira-cli
-    Base url for the jira instance: http://jira.yourdomain.com
-    username:ali
-    password:*********
-
-  The details of your jira instance will be kept in ~/.jira-cli/config and the authentication token will be stored in ~/.jira-cli/auth.
-  Once the authentication token has expired you will be reprompted for your username & password again. Alternatively you can provide the username and password on the command line as::
-
-    ali@home ~ $ jira-cli --username=ali --password=sekret --jira-url=http://...
 
 
+Configuration
+-------------
+
+After installation, a few configuration steps will be needed before you can
+start interacting with jira. You can either do this manually by populating
+the ``~/.jira-cli/config.cfg`` file or interactively by issuing the command::
+
+    jira-cli --configure
+    Base url for the jira instance: http://my.atlassian.net
+    username: johndoe
+    password: *******
+    would you like to persist the credentials to ~/.jira_cli/config.cfg?
+    [WARNING: this will store credentials in plaintext [y/n]:y
+
+
+Sample ``~/.jira-cli/config.cfg`` file::
+
+    [jira]
+    base_url = http://my.atlassian.net
+    username = johndoe
+    password = mysekret
+    protocol = rest    # either rest or soap
+
+
+For subsequent invocations, you can always override the configuration values by passing
+in the appropriate value on the command line. For example
+
+
+the user::
+
+    jira-cli -u janedoe -p hersekret view TP-01
+
+the jira installation::
+
+    jira-cli --jira-url=http://her.atlassian.net view TP-01
+
+the protocol::
+
+    jira-cli --protocol=soap TP-01
 
 Usage
 =====
 
-A few examples to get started.
-------------------------------
+Examples
+--------
 create an issue with only a title in project TP with default priority and type Bug::
 
     ali@home ~ $ jira-cli new --type=bug --priority=Major --project TP 'Test Bug'
@@ -42,7 +73,7 @@ create an issue with only a title in project TP with default priority and type B
 
 create an issue with priority Major and a description::
 
-    ali@home ~ $ jira-cli --type Bug "Test Bug" --priority=Major --project TP --description='the description'
+    ali@home ~ $ jira-cli new --type Bug "Test Bug" --priority=Major --project TP --description='the description'
     link                 : http://jira.yourdomain.com/browse/TP-25
     assignee             :
     summary              : Test Bug

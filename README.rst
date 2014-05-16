@@ -23,7 +23,7 @@ Deprecation warning
 ===================
 jira-cli, as of version ``2.0.0-pre`` has been completely rewritten (including the command line interface).
 The command line interface presented by versions up to ``0.4.2`` will be maintained (and presented
-by default) until the release of version ``2.0``.
+by default) until the official release of version ``2.0``.
 
 If you'd like to try out the new interface, add the ``--v2`` command line argument or add the following
 snippet to your ``~/.jira-cli/config.cfg`` file::
