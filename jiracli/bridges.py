@@ -7,6 +7,7 @@ import abc
 
 from jira.exceptions import JIRAError
 from jira.resources import Resource
+import requests
 import six
 import six.moves.urllib
 from suds.client import Client
@@ -33,9 +34,15 @@ def get_bridge(protocol):
 class JiraBridge(object):
 
     def __init__(self, base_url, config, persist=True):
-        self.base_url = base_url
+        self.base_url = self._check_redirect(base_url)
         self.config = config
         self.persist = persist
+
+    def _check_redirect(self, url):
+        resp = requests.get( url, allow_redirects = False )
+        if resp.status_code in [301,302]:
+            return resp.headers['location']
+        return url
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.base_url)
@@ -363,7 +370,7 @@ class JiraSoapBridge(JiraBridge):
 class JiraRestBridge(JiraBridge):
     def __init__(self, base_url, config, persist=False):
         super(JiraRestBridge, self).__init__(base_url, config, persist)
-        self.jira = JIRA(options={'server': self.base_url})
+        self.jira = None
 
     @cached('resolutions')
     def get_resolutions(self):
