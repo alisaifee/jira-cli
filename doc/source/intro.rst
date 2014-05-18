@@ -47,21 +47,21 @@ in the appropriate value on the command line. For example
 
 the user::
 
-    jira-cli -u janedoe -p hersekret view TP-01
+    jira-cli view TP-01 -u janedoe -p hersekret
 
 the jira installation::
 
-    jira-cli --jira-url=http://her.atlassian.net view TP-01
+    jira-cli view TP-01 --jira-url=http://her.atlassian.net
 
 the protocol::
 
-    jira-cli --protocol=soap TP-01
+    jira-cli view TP-01 --protocol=soap
 
 Usage
 =====
 
-Examples
---------
+Interacting with issues
+-----------------------
 create an issue with only a title in project TP with default priority and type Bug::
 
     ali@home ~ $ jira-cli new --type=bug --priority=Major --project TP 'Test Bug'
@@ -117,6 +117,11 @@ add a comment to an existing issue::
     ali@home ~ $ jira-cli update TP-20 --comment # opens up the editor
     this is a new comment added to TP-20
 
+transition the issue to a new state::
+
+    ali@home ~ $  jira-cli update TP-20 --transition='Done'
+    TP-20 transitioned to "Done"
+
 provide your own formatting::
 
     ali@home ~ $ jira-cli view TP-20 --format="%reporter, %summary, %status"
@@ -139,3 +144,48 @@ list only the comments for an issue::
     Sat Mar 10 11:08:51 UTC 2012 ali : another test comment
 
 
+
+Listing types
+-------------
+
+Often you have to use certain jira specific values for specifying things such as
+issue type, priority, status, resolution etc. The sub-command ``list`` can be
+used to list the acceptable values.
+
+
+available projects::
+
+    jira-cli list projects
+
+available filters::
+
+    jira-cli list filters
+
+acceptable issue types::
+
+    jira-cli list issue_types
+
+acceptable sub task types::
+
+    jira-cli list subtask_types
+
+issue priorities::
+
+    jira-cli list priorities
+
+issue statuses::
+
+    jira-cli list statuses
+
+issue resolutions::
+
+    jira-cli list resolutions
+
+project components::
+
+    jira-cli list components --project=MYPROJ
+
+
+Possible transitions for an issue::
+
+    jira-cli list transitions --issue=TP-20
