@@ -489,4 +489,10 @@ class JiraRestBridge(JiraBridge):
         return dict((k.name.lower(), dict(k.raw)) for k in self.jira.statuses())
 
     def get_issue_comments(self, issue):
-        return [dict(k.raw) for k in self.jira.comments(issue)]
+        return [
+            dict(author=comment.author.name
+                 , body=comment.body
+                 , created=comment.created
+            )
+            for comment in self.jira.comments(issue)
+        ]
