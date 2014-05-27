@@ -9,7 +9,7 @@ from jira.exceptions import JIRAError
 from jira.resources import Resource
 import requests
 import six
-import six.moves.urllib
+from six.moves.urllib import parse, request
 from suds.client import Client
 from suds import WebFault
 from jira.client import JIRA
@@ -85,7 +85,7 @@ class JiraBridge(object):
             fields["reporter"] = issue.setdefault("reporter","")
             fields["assignee"] = issue.setdefault("assignee","")
             fields["summary"] = issue.setdefault("summary","")
-            fields["link"] = colorfunc( "%s/browse/%s" % ( self.base_url, issue["key"]), "white",attrs=["underline"])
+            fields["link"] = colorfunc( parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white",attrs=["underline"])
         if mode == 1 or comments_only:
             fields["description"] = issue.setdefault("description","") or ""
             if not issue.get("priority", ""):
@@ -114,7 +114,7 @@ class JiraBridge(object):
         if comments_only:
             return fields["comments"].strip()
         elif mode < 0:
-            url_str = colorfunc("%s/browse/%s" % (self.base_url, issue["key"]), "white", attrs=["underline"])
+            url_str = colorfunc(parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white", attrs=["underline"])
             ret_str = colorfunc(issue["key"], status_color) + " " + issue.setdefault("summary", "") + " " + url_str
             if not COLOR:
                 ret_str += " [%s] " % self.get_statuses()[issue["status"]]
@@ -245,7 +245,7 @@ class JiraSoapBridge(JiraBridge):
     def __init__(self, base_url, config, persist=True):
         super(JiraSoapBridge, self).__init__(base_url, config, persist)
         try:
-            six.moves.urllib.request.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
+            request.urlopen('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
             jiraobj = Client('%s/rpc/soap/jirasoapservice-v2?wsdl' % self.base_url)
             self.service = jiraobj.service
         except (socket.gaierror, IOError, ValueError):
@@ -272,6 +272,8 @@ class JiraSoapBridge(JiraBridge):
             "description": description,
             "priority": self.get_priorities()[priority.lower()]["id"]
         }
+        if type == 'epic':
+            issue['customfield_11401'] = summary
         try:
             if parent:
                 issue['type'] = self.get_subtask_issue_types()[type.lower()]['id'],
@@ -402,7 +404,7 @@ class JiraRestBridge(JiraBridge):
         query = '(summary~"%s" or description~"%s")' % (free_text, free_text)
         if project:
             query += ' and project=%s' % project
-        query+= 'order by key'
+        query += ' order by key'
         return [self.clean_issue(issue) for issue in self.jira.search_issues(query,maxResults=100)]
 
     def search_issues_jql(self, query, limit=100, project=None):
@@ -435,6 +437,8 @@ class JiraRestBridge(JiraBridge):
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]}
         }
+        if type == 'epic':
+            issue['customfield_11401'] = summary
         if parent:
             issue['issuetype'] = {'id':self.get_subtask_issue_types()[type.lower()]['id']}
             issue['parent'] = {'key':parent}

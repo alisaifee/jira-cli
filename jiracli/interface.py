@@ -80,10 +80,6 @@ def build_parser():
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='jira sub commands')
-    parser.add_argument('--clear-cache', dest='clear_cache', action='store_true',
-                        help='clear the jira-cli cache')
-    parser.add_argument('--configure', dest='configure', action='store_true',
-                        help='configure jira-cli interactively')
     parser.add_argument('--v2', dest='v2', action='store_true',
                         help='use jira-cli v2')
 
@@ -112,13 +108,13 @@ def build_parser():
                         choices = ['soap','rest'], help='the protocol to use to communicate with jira',
                         default='soap')
 
-    view = subparsers.add_parser('view', parents=[base])
+    view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
-    add = subparsers.add_parser('new', parents=[base])
+    add = subparsers.add_parser('new', parents=[base], help='create a new issue')
     add.set_defaults(cmd=AddCommand)
-    update = subparsers.add_parser('update', parents=[base])
+    update = subparsers.add_parser('update', parents=[base], help='update existing issues')
     update.set_defaults(cmd=UpdateCommand)
-    list = subparsers.add_parser('list', parents=[base])
+    list = subparsers.add_parser('list', parents=[base], help='list jira types and properties')
     list.set_defaults(cmd=ListCommand)
 
     search_args = view.add_mutually_exclusive_group(required=False)
@@ -171,6 +167,10 @@ def build_parser():
     update.add_argument('--transition', dest='issue_transition',
                         help='transition the issue to a new state'
                              ' (use list transitions to view available transitions for an issue)')
+
+    subparsers.add_parser("configure", help='configure jira-cli interactively')
+    subparsers.add_parser("clear_cache", help='clear the jira-cli cache')
+
     return parser
 
 def fake_parse(args):
@@ -180,32 +180,29 @@ def fake_parse(args):
             raise SystemExit()
         def print_help(self, file=None):
             raise StopIteration()
-
     optparser = FakeParser()
-    optparser.add_option("", "--configure", action='store_true', default=False)
     optparser.add_option("", "--v2", action='store_true', default=False)
-    optparser.add_option("", "--clear-cache", action='store_true', default=False)
     opts, args = optparser.parse_args(args)
-    return opts
+    return opts, args
 
 def cli(args=sys.argv[1:]):
     parser = build_parser()
 
     try:
         config = Config()
-        if config.v2:
-            pre_args = None
-        else:
-            try:
-                pre_args = fake_parse(args)
-            except StopIteration:
-                pre_args = None
-                if not "--v2" in args:
-                    return old_main()
-            except SystemExit:
-                pass
-
-        if not pre_args or (pre_args and pre_args.v2) and not (pre_args and (pre_args.configure or pre_args.clear_cache)):
+        pre_opts, pre_args = None, None
+        try:
+            pre_opts, pre_args = fake_parse(args)
+        except StopIteration:
+            pre_opts, pre_args = None, None
+            if not ("--v2" in args or config.v2):
+                return old_main()
+        except SystemExit:
+            pass
+        if (
+            not (pre_opts or pre_args) or (pre_opts and pre_opts.v2)
+            and not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
+        ):
             post_args = parser.parse_args(args)
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
@@ -214,10 +211,10 @@ def cli(args=sys.argv[1:]):
             )
             return post_args.cmd(jira, post_args).execute()
         else:
-            if pre_args.configure:
+            if "configure" in pre_args:
                 config.reset()
                 initialize(config, "", "", "", True)
-            elif pre_args.clear_cache:
+            elif "clear_cache" in pre_args:
                 clear_cache()
                 print_output(colorfunc("jira-cli cache cleared", "green"))
             return

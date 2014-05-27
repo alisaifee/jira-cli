@@ -24,6 +24,23 @@ class CliParsingTests(unittest.TestCase):
     def test_no_subcommand(self):
         parser = build_parser()
         self.assertRaises(SystemExit, parser.parse_args, "--jira-url=http://foo.bar -u testuser -p testpass".split(" "))
+
+    def test_configure_argument(self):
+        with mock.patch("jiracli.interface.print_output"):
+            with mock.patch("jiracli.interface.prompt") as prompt:
+                with mock.patch("jiracli.interface.initialize") as init:
+                    cli(["--v2", "configure"])
+                    cli(["configure"])
+                    self.assertEqual(init.call_count, 2)
+
+    def test_clear_cache_argument(self):
+        with mock.patch("jiracli.interface.print_output"):
+            with mock.patch("jiracli.interface.prompt") as prompt:
+                with mock.patch("jiracli.interface.clear_cache") as clear_cache:
+                    cli(["--v2" , "clear_cache"])
+                    cli(["clear_cache"])
+                    self.assertEqual(clear_cache.call_count, 2)
+
     def test_view_subcommand(self):
         parser = build_parser()
         args = parser.parse_args(

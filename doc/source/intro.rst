@@ -24,7 +24,7 @@ After installation, a few configuration steps will be needed before you can
 start interacting with jira. You can either do this manually by populating
 the ``~/.jira-cli/config.cfg`` file or interactively by issuing the command::
 
-    jira-cli --configure
+    jira-cli configure
     Base url for the jira instance: http://my.atlassian.net
     username: johndoe
     password: *******
