@@ -458,6 +458,8 @@ class JiraRestBridge(JiraBridge):
             )
         except JIRAError:
             raise JiraAuthenticationError('failure to authenticate')
+        except RequestException:
+            raise JiraInitializationError('failure to communicate with jira')
 
     def get_available_transitions(self, issue):
         return dict((t['name'].lower(), t) for t in self.jira.transitions(issue))

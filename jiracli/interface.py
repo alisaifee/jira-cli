@@ -33,7 +33,7 @@ def initialize(config, base_url=None, username=None, password=None,
             or (not error and config.password)
             or prompt("password: ", True)
         )
-        jira = get_bridge(protocol)(url, config, persist)
+        jira = not error and bridge or get_bridge(protocol)(url, config, persist)
         persist_warning = "would you like to persist the credentials to ~/.jira-cli/config.cfg?\n{0} [y/n]:"
         persist_warning = persist_warning.format(colorfunc('[WARNING: this will '
                                                   'store credentials in plaintext', 'red'))
