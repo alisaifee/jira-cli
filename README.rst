@@ -5,8 +5,8 @@ Simple command line utility to interact with your jira instance.
 .. |travis-ci| image:: https://api.travis-ci.org/alisaifee/jira-cli.png
    :alt: build status
    :target: https://travis-ci.org/#!/alisaifee/jira-cli
-.. |coveralls| image:: https://coveralls.io/repos/alisaifee/jira-cli/badge.png?branch=rewrite
-    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=rewrite
+.. |coveralls| image:: https://coveralls.io/repos/alisaifee/jira-cli/badge.png?branch=master
+    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=master
 .. |pypi| image:: https://pypip.in/v/jira-cli/badge.png
     :target: https://crate.io/packages/jira-cli/
 .. |license| image:: https://pypip.in/license/jira-cli/badge.png
