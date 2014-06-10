@@ -69,7 +69,7 @@ def initialize(config, base_url=None, username=None, password=None,
             return initialize(config, base_url=url, error=True, protocol=protocol, persist=persist)
         except JiraInitializationError:
             print_error("invalid jira location", severity=WARNING)
-            config.base_url = None
+            config.base_url = ""
             return initialize(config, error=True, protocol=protocol, persist=persist)
     else:
         return bridge
