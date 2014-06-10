@@ -1,0 +1,7 @@
+*.pyc
+*.log
+cover/*
+.coverage*
+.idea
+htmlcov
+*egg-info*

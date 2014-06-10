@@ -1,2 +1,4 @@
 termcolor
-suds
+six 
+jira
+suds-jurko
