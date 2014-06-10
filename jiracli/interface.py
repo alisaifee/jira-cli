@@ -34,7 +34,7 @@ def initialize(config, base_url=None, username=None, password=None,
             or prompt("password: ", True)
         )
         jira = get_bridge(protocol)(url, config, persist)
-        persist_warning = "would you like to persist the credentials to ~/.jira_cli/config.cfg?\n{0} [y/n]:"
+        persist_warning = "would you like to persist the credentials to ~/.jira-cli/config.cfg?\n{0} [y/n]:"
         persist_warning = persist_warning.format(colorfunc('[WARNING: this will '
                                                   'store credentials in plaintext', 'red'))
         first_run = (
@@ -69,6 +69,7 @@ def initialize(config, base_url=None, username=None, password=None,
             return initialize(config, base_url=url, error=True, protocol=protocol, persist=persist)
         except JiraInitializationError:
             print_error("invalid jira location", severity=WARNING)
+            config.base_url = None
             return initialize(config, error=True, protocol=protocol, persist=persist)
     else:
         return bridge

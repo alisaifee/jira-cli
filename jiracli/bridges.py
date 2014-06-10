@@ -8,6 +8,7 @@ import abc
 from jira.exceptions import JIRAError
 from jira.resources import Resource
 import requests
+from requests.exceptions import RequestException
 import six
 from six.moves.urllib import parse, request
 from suds.client import Client
@@ -39,10 +40,14 @@ class JiraBridge(object):
         self.persist = persist
 
     def _check_redirect(self, url):
-        resp = requests.get( url, allow_redirects = False )
-        if resp.status_code in [301,302]:
-            return resp.headers['location']
-        return url
+        try:
+            resp = requests.get( url, allow_redirects = False )
+            if resp.status_code in [301,302]:
+                return resp.headers['location']
+        except RequestException:
+            return None
+        finally:
+            return url
 
     def __repr__(self):
         return "%s(%s)" % (self.__class__.__name__, self.base_url)
