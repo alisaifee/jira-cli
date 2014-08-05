@@ -188,7 +188,6 @@ def fake_parse(args):
 
 def cli(args=sys.argv[1:]):
     parser = build_parser()
-
     try:
         config = Config()
         pre_opts, pre_args = None, None
@@ -201,7 +200,7 @@ def cli(args=sys.argv[1:]):
         except SystemExit:
             pass
         if (
-            not (pre_opts or pre_args) or (pre_opts and pre_opts.v2)
+            not (pre_opts or pre_args) or (pre_opts and (pre_opts.v2 or config.v2))
             and not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
         ):
             post_args = parser.parse_args(args)
