@@ -260,7 +260,7 @@ class JiraSoapBridge(JiraBridge):
     def transition_issue(self, issue, transition, comment=""):
         transitions = self.get_available_transitions(issue)
         try:
-            return self.service.progressWorkflowAction(self.token, issue, transitions[transition])
+            return self.service.progressWorkflowAction(self.token, issue, transitions[transition]['id'])
         except KeyError:
             raise JiraCliError("Invalid transition '%s'. Use one of [%s]" % (transition, ",".join(transitions)))
 
@@ -268,7 +268,7 @@ class JiraSoapBridge(JiraBridge):
         transitions = self.service.getAvailableActions(self.token, issue)
         if not transitions:
             raise JiraCliError("No transitions found for issue %s" % issue)
-        return dict((k.name.lower(), k.id) for k in transitions)
+        return dict((k.name.lower(), soap_recursive_dict(k)) for k in transitions)
 
     def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None):
         issue = {
