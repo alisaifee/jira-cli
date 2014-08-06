@@ -6,7 +6,7 @@ from jira.exceptions import JIRAError
 
 from suds import WebFault
 import sys
-
+from jiracli import __version__
 from jiracli.bridge import get_bridge
 from jiracli.cache import clear_cache
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
@@ -77,7 +77,8 @@ def initialize(config, base_url=None, username=None, password=None,
 
 def build_parser():
     parser = argparse.ArgumentParser(description='jira-cli')
-
+    parser.add_argument("--version", action="store_true",
+                        help="print the version of jira-cli")
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='jira sub commands')
@@ -183,6 +184,7 @@ def fake_parse(args):
             raise StopIteration()
     optparser = FakeParser()
     optparser.add_option("", "--v2", action='store_true', default=False)
+    optparser.add_option("", "--version", action='store_true', default=False)
     opts, args = optparser.parse_args(args)
     return opts, args
 
@@ -199,6 +201,9 @@ def cli(args=sys.argv[1:]):
                 return old_main()
         except SystemExit:
             pass
+        if pre_opts.version:
+            print __version__
+            return
         if (
             not (pre_opts or pre_args) or (pre_opts and (pre_opts.v2 or config.v2))
             and not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))

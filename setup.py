@@ -12,6 +12,12 @@ from setuptools import setup, find_packages
 
 import jiracli
 
+import versioneer
+
+versioneer.versionfile_source = "jiracli/_version.py"
+versioneer.versionfile_build = "jiracli/version.py"
+versioneer.tag_prefix = ""
+versioneer.parentdir_prefix = "jiracli-"
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 REQUIREMENTS = [k for k in open(
@@ -30,14 +36,15 @@ setup(name='jira-cli',
      author_email=__email__,
      url="http://github.com/alisaifee/jira-cli",
      license="MIT",
-     version = jiracli.__version__,
      description = "command line utility for interacting with jira",
      long_description = open("README.rst").read(),
      classifiers = [k for k in open("CLASSIFIERS").read().split("\n") if k],
      packages = find_packages(exclude=['ez_setup']),
      include_package_data = True,
      zip_safe = False,
-    install_requires = REQUIREMENTS,
+     version=versioneer.get_version(),
+     cmdclass=versioneer.get_cmdclass(),
+     install_requires = REQUIREMENTS,
      entry_points = {
          'console_scripts' : [
              'jira-cli = jiracli.interface:cli',
