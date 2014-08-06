@@ -1,13 +1,15 @@
 import tempfile
 import unittest
-import jiracli
+
 import mock
-from nose.plugins.attrib import attr
+
+import jiracli
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.interface import build_parser, initialize
 from jiracli.processor import ViewCommand
 from jiracli.utils import Config
 from jiracli.interface import cli
+
 
 class CliParsingTests(unittest.TestCase):
     def setUp(self):
@@ -81,7 +83,7 @@ class CliInitParsing(unittest.TestCase):
 
     def test_first_run(self):
         with mock.patch("jiracli.interface.prompt") as prompt:
-            with mock.patch("jiracli.bridges.JiraSoapBridge") as bridge:
+            with mock.patch("jiracli.bridge.JiraSoapBridge") as bridge:
                 def prompt_response(msg, *a):
                     if msg.startswith('username'):
                         return 'testuser'
@@ -97,7 +99,7 @@ class CliInitParsing(unittest.TestCase):
 
     def test_first_run_with_error_and_persist(self):
         with mock.patch("jiracli.interface.prompt") as prompt:
-            with mock.patch("jiracli.bridges.JiraSoapBridge") as bridge:
+            with mock.patch("jiracli.bridge.JiraSoapBridge") as bridge:
                 def prompt_response(msg, *a):
                     if msg.startswith('username'):
                         return 'testuser'
@@ -130,7 +132,7 @@ class CliInitParsing(unittest.TestCase):
         self.cfg.password = 'testpass'
         self.cfg.base_url = 'http://www.foobar.com'
         with mock.patch("jiracli.interface.prompt") as prompt:
-            with mock.patch("jiracli.bridges.JiraSoapBridge") as bridge:
+            with mock.patch("jiracli.bridge.JiraSoapBridge") as bridge:
                 prompt.assert_call_count(0)
                 bridge.assert_call_args('testuser', 'testpass')
                 bridge.return_value.login.assert_call_args('testuser', 'testpass')
@@ -140,7 +142,7 @@ class CliInitParsing(unittest.TestCase):
                 self.assertEqual(bridge.return_value, initialize(self.cfg))
 
     def test_soap_token(self):
-        with mock.patch("jiracli.bridges.JiraSoapBridge") as bridge:
+        with mock.patch("jiracli.bridge.JiraSoapBridge") as bridge:
             self.cfg.base_url = 'http://www.foobar.com'
             bridge.return_value.ping.return_value = True
             bridge.return_value.ping.assert_call_count(1)

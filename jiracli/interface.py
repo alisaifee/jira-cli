@@ -7,7 +7,7 @@ from jira.exceptions import JIRAError
 from suds import WebFault
 import sys
 
-from jiracli.bridges import get_bridge
+from jiracli.bridge import get_bridge
 from jiracli.cache import clear_cache
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.errors import  UsageWarning, JiraCliError, UsageError
