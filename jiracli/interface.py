@@ -202,7 +202,7 @@ def cli(args=sys.argv[1:]):
         except SystemExit:
             pass
         if pre_opts and pre_opts.version:
-            print __version__
+            print(__version__)
             return
         if (
             not (pre_opts or pre_args) or (pre_opts and (pre_opts.v2 or config.v2))
