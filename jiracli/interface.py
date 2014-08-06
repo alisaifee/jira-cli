@@ -201,7 +201,7 @@ def cli(args=sys.argv[1:]):
                 return old_main()
         except SystemExit:
             pass
-        if pre_opts.version:
+        if pre_opts and pre_opts.version:
             print __version__
             return
         if (
