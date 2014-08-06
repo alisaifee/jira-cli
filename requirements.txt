@@ -1,4 +1,5 @@
 termcolor
-six 
+six
 jira
+requests
 suds-jurko
