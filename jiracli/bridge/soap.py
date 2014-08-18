@@ -9,7 +9,7 @@ from jiracli.cache import cached
 from jiracli.errors import JiraCliError, JiraInitializationError, \
     JiraAuthenticationError
 from jiracli.utils import soap_recursive_dict
-
+from six.moves.urllib import request
 
 class JiraSoapBridge(JiraBridge):
 

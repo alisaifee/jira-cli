@@ -6,6 +6,7 @@ import re
 import requests
 from requests import RequestException
 import six
+from six.moves.urllib import parse
 from jiracli.cli import colorfunc
 from jiracli.utils import COLOR
 
