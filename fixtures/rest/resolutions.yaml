@@ -1,0 +1,47 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
+      Cache-Control: [!!python/unicode no-cache]
+      Cookie: [studio.crowd.tokenkey=xt0Gca03yl6T01WTVjHWIQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
+          JSESSIONID=40B2299CDE81A7F6BCEB2857E471EEE4]
+      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+      X-Atlassian-Token: [!!python/unicode no-check]
+    method: GET
+    uri: https://indydevs.atlassian.net:443/rest/api/2/resolution
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA6WTMW/cMAyF/wrhpcvBbpJ2yRY0KJA1KJCh6KCT6JiILAkSfb5D0f/ep9wZ8Q3t
+        Yg8GZYnkx6fnn7+bwr5v7ptBNZX7rpPgTo4PpTXqTSliQhtYu8xFO5Oku61h9JNKDN1Ns2vEIbsG
+        jovNkuoGvjxQL0fqYyYdpJCUMjHeZAe2b+xIgkZsMWlmJhMcKVqwa1EpmJFR4rsc2TV/dtsYbxfG
+        Glwz/kD7lOPe80jnnX0lK8C5AM+D2IFm8Z4CHzjTnutcV5gvMXxSAuxm1LsFtQb/Rq2A5KbkxRpl
+        in3l5aMUlfB6Bl+p+Lgc3Iz3ZcGrwX/xQlSycUyelf3pQ9sV1lNYDmzm+rpw1eCa6wEXZ1R5TArR
+        lDLjvt1kq1ArX/ZGPLsdwa0VnUOcXgdYFPYdTTU0zQb5BxwzcAvBukslLOCid3u39MzGnUsz5nfv
+        7kI3LihL1k8IUAfZ83A699/zYA6CvnOcvKNo7ZRbeuppjBllVwQmJTa5kMed5x1BW1MYGDFxWDFA
+        gsvv882EOszzZWTerPPNZzyL1sviWu+P7o8xoOOvvxaszy9hBAAA
+    headers:
+      cache-control: ['no-cache, no-store, no-transform']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-type: [application/json;charset=UTF-8]
+      date: ['Mon, 18 Aug 2014 02:55:42 GMT']
+      server: [nginx]
+      set-cookie: [JSESSIONID=E0F26B4F40091D565BF6E700EF53CBFF; Path=/; Secure; HttpOnly,
+        'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
+          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=DyWmbE8vlOOquCTYHS4r2A00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      transfer-encoding: [chunked]
+      vary: [Accept-Encoding]
+      x-arequestid: [1195x325x1]
+      x-asen: [SEN-3295567]
+      x-asessionid: [3hgdh5]
+      x-ausername: [ali]
+      x-content-type-options: [nosniff]
+      x-seraph-loginreason: [OUT, OK]
+    status: {code: 200, message: OK}
+version: 1

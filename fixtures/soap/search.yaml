@@ -1,0 +1,72 @@
+interactions:
+- request:
+    body: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:ns3="http://www.w3.org/2001/XMLSchema"
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="http://schemas.xmlsoap.org/soap/encoding/"
+      xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getIssuesFromTextSearch><in0
+      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0><in1 xsi:type="ns3:string">test
+      jira-cli</in1></ns1:getIssuesFromTextSearch></ns2:Body></SOAP-ENV:Envelope>
+    headers:
+      Connection: [close]
+      Content-Length: ['733']
+      Content-Type: [text/xml; charset=utf-8]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Host: [indydevs.atlassian.net]
+      Soapaction: ['""']
+      User-Agent: [Python-urllib/2.7]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:getIssuesFromTextSearchResponse
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.rpc.jira.atlassian.com"><getIssuesFromTextSearchReturn
+        soapenc:arrayType="ns2:RemoteIssue[1]" xsi:type="soapenc:Array" xmlns:ns2="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><getIssuesFromTextSearchReturn
+        href="#id0"/></getIssuesFromTextSearchReturn></ns1:getIssuesFromTextSearchResponse><multiRef
+        id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns3:RemoteIssue" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns3="http://beans.soap.rpc.jira.atlassian.com"><affectsVersions soapenc:arrayType="ns3:RemoteVersion[0]"
+        xsi:type="soapenc:Array"/><assignee xsi:type="xsd:string" xsi:nil="true"/><attachmentNames
+        soapenc:arrayType="xsd:string[0]" xsi:type="soapenc:Array"/><components soapenc:arrayType="ns3:RemoteComponent[0]"
+        xsi:type="soapenc:Array"/><created xsi:type="xsd:dateTime">2014-08-18T03:05:07.000Z</created><customFieldValues
+        soapenc:arrayType="ns3:RemoteCustomFieldValue[3]" xsi:type="soapenc:Array"><customFieldValues
+        href="#id1"/><customFieldValues href="#id2"/><customFieldValues href="#id3"/></customFieldValues><description
+        xsi:type="xsd:string" xsi:nil="true"/><duedate xsi:type="xsd:dateTime" xsi:nil="true"/><environment
+        xsi:type="xsd:string" xsi:nil="true"/><fixVersions soapenc:arrayType="ns3:RemoteVersion[0]"
+        xsi:type="soapenc:Array"/><id xsi:type="xsd:string">10700</id><key xsi:type="xsd:string">TP-10</key><priority
+        xsi:type="xsd:string">3</priority><project xsi:type="xsd:string">TP</project><reporter
+        xsi:type="xsd:string">ali</reporter><resolution xsi:type="xsd:string" xsi:nil="true"/><status
+        xsi:type="xsd:string">10002</status><summary xsi:type="xsd:string">test jira-cli</summary><type
+        xsi:type="xsd:string">1</type><updated xsi:type="xsd:dateTime">2014-08-18T03:05:07.000Z</updated><votes
+        xsi:type="xsd:long">0</votes></multiRef><multiRef id="id2" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns4:RemoteCustomFieldValue"
+        xmlns:ns4="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><customfieldId
+        xsi:type="xsd:string">customfield_10006</customfieldId><key xsi:type="xsd:string"
+        xsi:nil="true"/><values soapenc:arrayType="xsd:string[1]" xsi:type="soapenc:Array"><values
+        xsi:type="xsd:string">9223372036854775807</values></values></multiRef><multiRef
+        id="id3" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns5:RemoteCustomFieldValue" xmlns:ns5="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><customfieldId xsi:type="xsd:string">customfield_10021</customfieldId><key
+        xsi:type="xsd:string" xsi:nil="true"/><values soapenc:arrayType="xsd:string[1]"
+        xsi:type="soapenc:Array"><values xsi:type="xsd:string" xsi:nil="true"/></values></multiRef><multiRef
+        id="id1" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns6:RemoteCustomFieldValue" xmlns:ns6="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><customfieldId xsi:type="xsd:string">customfield_10100</customfieldId><key
+        xsi:type="xsd:string" xsi:nil="true"/><values soapenc:arrayType="xsd:string[1]"
+        xsi:type="soapenc:Array"><values xsi:type="xsd:string">0|1000g0:</values></values></multiRef></soapenv:Body></soapenv:Envelope>'}
+    headers:
+      connection: [close]
+      content-length: ['3779']
+      content-type: [text/xml;charset=utf-8]
+      date: ['Mon, 18 Aug 2014 03:06:14 GMT']
+      server: [nginx]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      vary: [Accept-Encoding]
+      x-arequestid: [1206x502x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 200, message: OK}
+version: 1

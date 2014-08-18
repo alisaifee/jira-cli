@@ -1,0 +1,100 @@
+interactions:
+- request:
+    body: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:ns3="http://www.w3.org/2001/XMLSchema"
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="http://schemas.xmlsoap.org/soap/encoding/"
+      xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getStatuses><in0
+      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getStatuses></ns2:Body></SOAP-ENV:Envelope>
+    headers:
+      Connection: [close]
+      Content-Length: ['663']
+      Content-Type: [text/xml; charset=utf-8]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Host: [indydevs.atlassian.net]
+      Soapaction: ['""']
+      User-Agent: [Python-urllib/2.7]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:getStatusesResponse
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.rpc.jira.atlassian.com"><getStatusesReturn
+        soapenc:arrayType="ns2:RemoteStatus[10]" xsi:type="soapenc:Array" xmlns:ns2="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><getStatusesReturn
+        href="#id0"/><getStatusesReturn href="#id1"/><getStatusesReturn href="#id2"/><getStatusesReturn
+        href="#id3"/><getStatusesReturn href="#id4"/><getStatusesReturn href="#id5"/><getStatusesReturn
+        href="#id6"/><getStatusesReturn href="#id7"/><getStatusesReturn href="#id8"/><getStatusesReturn
+        href="#id9"/></getStatusesReturn></ns1:getStatusesResponse><multiRef id="id3"
+        soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns3:RemoteStatus" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns3="http://beans.soap.rpc.jira.atlassian.com"><description xsi:type="xsd:string">A
+        resolution has been taken, and it is awaiting verification by reporter. From
+        here issues are either reopened, or are closed.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/resolved.png</icon><id
+        xsi:type="xsd:string">5</id><name xsi:type="xsd:string">Resolved</name></multiRef><multiRef
+        id="id8" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns4:RemoteStatus" xmlns:ns4="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"
+        xsi:nil="true"/><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/information.png</icon><id
+        xsi:type="xsd:string">10001</id><name xsi:type="xsd:string">In Review</name></multiRef><multiRef
+        id="id4" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns5:RemoteStatus" xmlns:ns5="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">The
+        issue is considered finished, the resolution is correct. Issues which are
+        closed can be reopened.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/closed.png</icon><id
+        xsi:type="xsd:string">6</id><name xsi:type="xsd:string">Closed</name></multiRef><multiRef
+        id="id7" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns6:RemoteStatus" xmlns:ns6="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"
+        xsi:nil="true"/><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/closed.png</icon><id
+        xsi:type="xsd:string">10000</id><name xsi:type="xsd:string">Done</name></multiRef><multiRef
+        id="id9" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns7:RemoteStatus" xmlns:ns7="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"
+        xsi:nil="true"/><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/open.png</icon><id
+        xsi:type="xsd:string">10002</id><name xsi:type="xsd:string">To Do</name></multiRef><multiRef
+        id="id2" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns8:RemoteStatus" xmlns:ns8="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">This
+        issue was once resolved, but the resolution was deemed incorrect. From here
+        issues are either marked assigned or resolved.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/reopened.png</icon><id
+        xsi:type="xsd:string">4</id><name xsi:type="xsd:string">Reopened</name></multiRef><multiRef
+        id="id5" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns9:RemoteStatus" xmlns:ns9="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">Source
+        code has been committed, and JIRA is waiting for the code to be built before
+        moving to the next status.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/bamboo.png</icon><id
+        xsi:type="xsd:string">400</id><name xsi:type="xsd:string">Building</name></multiRef><multiRef
+        id="id6" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns10:RemoteStatus" xmlns:ns10="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">The
+        source code committed for this issue has possibly broken the build.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/bamboo-fail.png</icon><id
+        xsi:type="xsd:string">401</id><name xsi:type="xsd:string">Build Broken</name></multiRef><multiRef
+        id="id1" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns11:RemoteStatus" xmlns:ns11="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">This
+        issue is being actively worked on at the moment by the assignee.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/inprogress.png</icon><id
+        xsi:type="xsd:string">3</id><name xsi:type="xsd:string">In Progress</name></multiRef><multiRef
+        id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns12:RemoteStatus" xmlns:ns12="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string">The
+        issue is open and ready for the assignee to start work on it.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/statuses/open.png</icon><id
+        xsi:type="xsd:string">1</id><name xsi:type="xsd:string">Open</name></multiRef></soapenv:Body></soapenv:Envelope>'}
+    headers:
+      connection: [close]
+      content-length: ['6389']
+      content-type: [text/xml;charset=utf-8]
+      date: ['Mon, 18 Aug 2014 02:59:19 GMT']
+      server: [nginx]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      vary: [Accept-Encoding]
+      x-arequestid: [1199x342x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 200, message: OK}
+version: 1

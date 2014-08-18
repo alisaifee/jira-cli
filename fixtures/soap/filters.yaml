@@ -1,0 +1,76 @@
+interactions:
+- request:
+    body: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:ns3="http://www.w3.org/2001/XMLSchema"
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="http://schemas.xmlsoap.org/soap/encoding/"
+      xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getSavedFilters><in0
+      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getSavedFilters></ns2:Body></SOAP-ENV:Envelope>
+    headers:
+      Connection: [close]
+      Content-Length: ['671']
+      Content-Type: [text/xml; charset=utf-8]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Host: [indydevs.atlassian.net]
+      Soapaction: ['""']
+      User-Agent: [Python-urllib/2.7]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:getSavedFiltersResponse
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.rpc.jira.atlassian.com"><getSavedFiltersReturn
+        soapenc:arrayType="ns2:RemoteFilter[0]" xsi:type="soapenc:Array" xmlns:ns2="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/></ns1:getSavedFiltersResponse></soapenv:Body></soapenv:Envelope>'}
+    headers:
+      connection: [close]
+      content-length: ['633']
+      content-type: [text/xml;charset=utf-8]
+      date: ['Mon, 18 Aug 2014 02:58:56 GMT']
+      server: [nginx]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      vary: [Accept-Encoding]
+      x-arequestid: [1198x334x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 200, message: OK}
+- request:
+    body: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:ns3="http://www.w3.org/2001/XMLSchema"
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="http://schemas.xmlsoap.org/soap/encoding/"
+      xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getFavouriteFilters><in0
+      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getFavouriteFilters></ns2:Body></SOAP-ENV:Envelope>
+    headers:
+      Connection: [close]
+      Content-Length: ['679']
+      Content-Type: [text/xml; charset=utf-8]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Host: [indydevs.atlassian.net]
+      Soapaction: ['""']
+      User-Agent: [Python-urllib/2.7]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:getFavouriteFiltersResponse
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.rpc.jira.atlassian.com"><getFavouriteFiltersReturn
+        soapenc:arrayType="ns2:RemoteFilter[0]" xsi:type="soapenc:Array" xmlns:ns2="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"/></ns1:getFavouriteFiltersResponse></soapenv:Body></soapenv:Envelope>'}
+    headers:
+      connection: [close]
+      content-length: ['645']
+      content-type: [text/xml;charset=utf-8]
+      date: ['Mon, 18 Aug 2014 02:58:58 GMT']
+      server: [nginx]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      vary: [Accept-Encoding]
+      x-arequestid: [1198x335x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 200, message: OK}
+version: 1

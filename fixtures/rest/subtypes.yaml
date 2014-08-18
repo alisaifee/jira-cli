@@ -1,0 +1,49 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
+      Cache-Control: [!!python/unicode no-cache]
+      Cookie: [studio.crowd.tokenkey=xt0Gca03yl6T01WTVjHWIQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
+          JSESSIONID=40B2299CDE81A7F6BCEB2857E471EEE4]
+      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+      X-Atlassian-Token: [!!python/unicode no-check]
+    method: GET
+    uri: https://indydevs.atlassian.net:443/rest/api/2/issuetype
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA61VTY/TMBD9K6Ocu013gUtvAYFUDhxgOSG0cuJJYm06juxJS4X478y0TYu3SEgk
+        l8gf8XjemzfP335mEbs6W2ctcx/Xee7IHizu4tJwZ2J0hpaEnAeMnJve5Q+5i3FAPvSYv84WmbNy
+        WAcWYxVcz86TrBQEbtsHv8MtEoMPgNQaqk5T9mAI8IeL7KiBGg0PAfUvNvF5qWErT19D9+/E3NY0
+        GHP9X75jajK83r7sqZGQZLYo8TbXDVmMQ6lXZuvadBF/LSbxcb9are41eeVknKS8/D+0yj9F9uGQ
+        ovmiS3PjeDVi0EGaf3GsEHBrGAjRRpBalgjWE85St6MAkoI9an1mrtSbEaEOUoSPLYKo4k4TAV8L
+        VISjrvTIVFWe5fZkOsZAhvFFNc/3/gmXwzCHLh9GxKpLnaSo3wXpQbRQHuDj5nMBReM6hDupK5Bn
+        QOuOTWyxQ0kaNtpooCYAtXStAcaqJVeZbmoHi8z/IoEk+tzsXJi5YaUAsbCywy3sW1e1amnGhahG
+        1QfcibOJ/kUf9UCVGp/snAQjx+xQ8SwdUQ5NqpK3g9rZ7M61uvAgCtHJvAopXQNDxABHF7t1kDL4
+        ZyQR3J4m0Cbywd5VKWHvZWVuxi79dNtLhTjj/vqoJYpYnJXUmggH5NE9RUud79FOQH59+uT284ua
+        0vBJsvpwempv2fj+G0LvRlULCAAA
+    headers:
+      cache-control: ['no-cache, no-store, no-transform']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-type: [application/json;charset=UTF-8]
+      date: ['Mon, 18 Aug 2014 03:34:06 GMT']
+      server: [nginx]
+      set-cookie: [JSESSIONID=CBAE6FFB3FD31D65E4F74D9946527FA1; Path=/; Secure; HttpOnly,
+        'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
+          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=DvV1GyHCouo6v2TwRpUiJg00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      transfer-encoding: [chunked]
+      vary: [Accept-Encoding]
+      x-arequestid: [1234x574x1]
+      x-asen: [SEN-3295567]
+      x-asessionid: [1mhofik]
+      x-ausername: [ali]
+      x-content-type-options: [nosniff]
+      x-seraph-loginreason: [OUT, OK]
+    status: {code: 200, message: OK}
+version: 1

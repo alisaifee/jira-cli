@@ -1,0 +1,109 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+    method: GET
+    uri: https://indydevs.atlassian.net:443/
+  response:
+    body: {string: !!python/unicode ''}
+    headers:
+      connection: [keep-alive]
+      content-length: ['0']
+      content-type: [text/html;charset=UTF-8]
+      date: ['Mon, 18 Aug 2014 02:55:30 GMT']
+      location: ['https://indydevs.atlassian.net/secure/MyJiraHome.jspa']
+      server: [nginx]
+      set-cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|0aed30661ffacfd321da790fe9b01a9e8ae90454|lout;
+          Path=/; Secure]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      x-arequestid: [1195x316x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 302, message: Moved Temporarily}
+- request:
+    body: '{"username": "ali", "password": "!@#$"}'
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
+      Content-Length: ['47']
+      Content-type: [!!python/unicode application/json]
+      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rest/auth/1/session
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22OQQ6CMBRE7/LXQH5pS6E7pDbBGF3gBUgE0wRbY4EN4e4CkrhxOS/zJjOBb7w3
+        zoKcwNbPBiScqmNVlddLqSCAse6GFWaJYIoogvrAuIoLnWsWC5orjTlRKGAOoHMPY0vbunWsrU3X
+        3M8rKtxge5Bkb+yRU7qA2vf617yZ7UGMhIWYhkTcSCpZLJFHPEtCFIjLp9e7GY0b/Db+R8kk55KS
+        KE3xq8zzB602397oAAAA
+    headers:
+      cache-control: ['no-cache, no-store, no-transform']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-type: [application/json;charset=UTF-8]
+      date: ['Mon, 18 Aug 2014 02:55:32 GMT']
+      server: [nginx]
+      set-cookie: [JSESSIONID=9674D1D10FB45D2CFAF4273ADF0A1D07; Path=/; Secure; HttpOnly,
+        'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
+          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=5Lyayotd00aLloNkvrYTxQ00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
+          Path=/; Secure, 'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net;
+          Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly']
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      transfer-encoding: [chunked]
+      vary: [Accept-Encoding]
+      x-arequestid: [1195x317x1]
+      x-asen: [SEN-3295567]
+      x-asessionid: [1lbw4z3]
+      x-ausername: [ali]
+      x-content-type-options: [nosniff]
+      x-seraph-loginreason: [OUT, OK, OK]
+    status: {code: 200, message: OK}
+- request:
+    body: null
+    headers:
+      Accept: ['*/*']
+      Accept-Encoding: ['gzip, deflate']
+      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
+      Cache-Control: [!!python/unicode no-cache]
+      Cookie: [studio.crowd.tokenkey=5Lyayotd00aLloNkvrYTxQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
+          JSESSIONID=9674D1D10FB45D2CFAF4273ADF0A1D07]
+      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+      X-Atlassian-Token: [!!python/unicode no-check]
+    method: GET
+    uri: https://indydevs.atlassian.net:443/rest/api/2/serverInfo
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA02NwWrEIBRF/8V1dK6JMdFdYTbTRQslXZUuNCojJE6JzkAp/fc67UAH3uq+c8/9
+        ItZk/7otRJNjKR9Z73YxuU/nL5mZspico0ks+UIacvFbjqdUUckEfd5TdBQc/5+n82orQ/SbbESD
+        94bYc1zcX0y0FAC/ZXtTfBW14IJipJAToH+PAaAYcPVmv9XRKa73LB8mrnTf665lw1jrN3ZeDymc
+        qtT5MJg2iH4UovWQxvaY22CVgVIudLPjapytvRsoy3Xh8fDyQL5/AE/xeDcUAQAA
+    headers:
+      cache-control: ['no-cache, no-store, no-transform']
+      connection: [keep-alive]
+      content-encoding: [gzip]
+      content-type: [application/json;charset=UTF-8]
+      date: ['Mon, 18 Aug 2014 02:55:32 GMT']
+      server: [nginx]
+      set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
+          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=xt0Gca03yl6T01WTVjHWIQ00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=40B2299CDE81A7F6BCEB2857E471EEE4;
+          Path=/; Secure; HttpOnly]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      transfer-encoding: [chunked]
+      vary: [Accept-Encoding]
+      x-arequestid: [1195x318x1]
+      x-asen: [SEN-3295567]
+      x-asessionid: [1lbw4z3]
+      x-ausername: [ali]
+      x-content-type-options: [nosniff]
+      x-seraph-loginreason: [OUT, OK]
+    status: {code: 200, message: OK}
+version: 1

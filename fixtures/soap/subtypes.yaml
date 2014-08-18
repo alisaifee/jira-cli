@@ -1,0 +1,78 @@
+interactions:
+- request:
+    body: <?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:ns3="http://www.w3.org/2001/XMLSchema"
+      xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns0="http://schemas.xmlsoap.org/soap/encoding/"
+      xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+      SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getIssueTypes><in0
+      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getIssueTypes></ns2:Body></SOAP-ENV:Envelope>
+    headers:
+      Connection: [close]
+      Content-Length: ['667']
+      Content-Type: [text/xml; charset=utf-8]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Host: [indydevs.atlassian.net]
+      Soapaction: ['""']
+      User-Agent: [Python-urllib/2.7]
+    method: POST
+    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+  response:
+    body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
+        xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><ns1:getIssueTypesResponse
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:ns1="http://soap.rpc.jira.atlassian.com"><getIssueTypesReturn
+        soapenc:arrayType="ns2:RemoteIssueType[6]" xsi:type="soapenc:Array" xmlns:ns2="http://beans.soap.rpc.jira.atlassian.com"
+        xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><getIssueTypesReturn
+        href="#id0"/><getIssueTypesReturn href="#id1"/><getIssueTypesReturn href="#id2"/><getIssueTypesReturn
+        href="#id3"/><getIssueTypesReturn href="#id4"/><getIssueTypesReturn href="#id5"/></getIssueTypesReturn></ns1:getIssueTypesResponse><multiRef
+        id="id2" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="ns3:RemoteIssueType" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:ns3="http://beans.soap.rpc.jira.atlassian.com"><description xsi:type="xsd:string">An
+        improvement or enhancement to an existing feature or task.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/improvement.png</icon><id
+        xsi:type="xsd:string">4</id><name xsi:type="xsd:string">Improvement</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id0" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns4:RemoteIssueType"
+        xmlns:ns4="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">A problem which impairs or prevents the functions of
+        the product.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/bug.png</icon><id
+        xsi:type="xsd:string">1</id><name xsi:type="xsd:string">Bug</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id1" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns5:RemoteIssueType"
+        xmlns:ns5="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">Created by JIRA Agile - do not edit or delete. Issue
+        type for a big user story that needs to be broken down.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/ico_epic.png</icon><id
+        xsi:type="xsd:string">10000</id><name xsi:type="xsd:string">Epic</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id3" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns6:RemoteIssueType"
+        xmlns:ns6="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">A new feature of the product, which has yet to be developed.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/newfeature.png</icon><id
+        xsi:type="xsd:string">2</id><name xsi:type="xsd:string">New Feature</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id5" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns7:RemoteIssueType"
+        xmlns:ns7="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">A task that needs to be done.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/task.png</icon><id
+        xsi:type="xsd:string">3</id><name xsi:type="xsd:string">Task</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id4" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns8:RemoteIssueType"
+        xmlns:ns8="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">Created by JIRA Agile - do not edit or delete. Issue
+        type for a user story.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/ico_story.png</icon><id
+        xsi:type="xsd:string">10001</id><name xsi:type="xsd:string">Story</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef></soapenv:Body></soapenv:Envelope>'}
+    headers:
+      connection: [close]
+      content-length: ['4394']
+      content-type: [text/xml;charset=utf-8]
+      date: ['Mon, 18 Aug 2014 03:34:34 GMT']
+      server: [nginx]
+      strict-transport-security: [max-age=315360000;includeSubdomains]
+      vary: [Accept-Encoding]
+      x-arequestid: [1234x577x1]
+      x-asen: [SEN-3295567]
+      x-ausername: [anonymous]
+      x-content-type-options: [nosniff]
+    status: {code: 200, message: OK}
+version: 1
