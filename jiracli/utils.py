@@ -97,7 +97,7 @@ def rest_recursive_dict(d):
     a pure python dictionary.
     """
     out = {}
-    for k, v in d.iteritems():
+    for k, v in d.items():
         if v.__class__.__name__ == 'PropertyHolder':
             out[k] = v.__dict__
         else:

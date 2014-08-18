@@ -5,14 +5,14 @@ import os
 import tempfile
 import unittest
 
-import vcr
-
 import jiracli
 from jiracli.bridge import JiraRestBridge
 from jiracli.utils import Config
-from common_bridge_cases import BridgeTests
+from .common_bridge_cases import BridgeTests, jiravcr
+from tests import skip_if_3
 
 
+@skip_if_3
 class RestBridgeTests(unittest.TestCase, BridgeTests):
     def setUp(self):
         tmp_config = tempfile.mktemp()
@@ -23,7 +23,7 @@ class RestBridgeTests(unittest.TestCase, BridgeTests):
         self.config.username = "testuser"
         self.config.password = "!@#$"
         self.vcr_directory = "fixtures/rest"
-        with vcr.use_cassette(os.path.join(self.vcr_directory, "login.yaml")):
+        with jiravcr.use_cassette(os.path.join(self.vcr_directory, "login.yaml")):
             self.bridge = JiraRestBridge("https://indydevs.atlassian.net",
                                          self.config)
             self.bridge.login(self.config.username, self.config.password)
