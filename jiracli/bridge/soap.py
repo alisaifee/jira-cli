@@ -7,7 +7,7 @@ from suds.client import Client
 from jiracli.bridge import JiraBridge
 from jiracli.cache import cached
 from jiracli.errors import JiraCliError, JiraInitializationError, \
-    JiraAuthenticationError
+    JiraAuthenticationError, UsageError
 from jiracli.utils import soap_recursive_dict
 from six.moves.urllib import request
 
@@ -149,9 +149,11 @@ class JiraSoapBridge(JiraBridge):
     def get_issues_by_filter(self, *filters):
         issues = []
         for filter in filters:
-            fid = self.get_filters()[filter]["id"]
-            if fid:
-                return issues.extend(self.service.getIssuesFromFilter(self.token, fid))
+            try:
+                fid = self.get_filters()[filter]["id"]
+                issues.extend(self.service.getIssuesFromFilter(self.token, fid))
+            except KeyError:
+                raise UsageError("filter %s not found" % filter)
         return [soap_recursive_dict(k) for k in issues]
 
     @cached('resolutions')

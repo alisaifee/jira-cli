@@ -54,10 +54,9 @@ class JiraRestBridge(JiraBridge):
         return [self.clean_issue(issue) for issue in self.jira.search_issues(query, maxResults=100)]
 
     def get_issues_by_filter(self, *filters):
-        issues = []
-        for filter in filters:
-            issues.extend([issue for issue in self.search_issues_jql('filter=%s' % filter)])
-        return issues
+        return self.search_issues_jql(
+            "filter in (%s)" % ",".join(['"%s"' % f for f in filters])
+        )
 
     def add_comment(self, issue, comment):
         self.jira.add_comment(issue, comment)
