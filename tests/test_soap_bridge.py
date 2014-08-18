@@ -10,10 +10,8 @@ import jiracli
 from jiracli.bridge import JiraSoapBridge
 from jiracli.utils import Config
 from .common_bridge_cases import BridgeTests, jiravcr
-from tests import skip_if_3
 
 
-@skip_if_3
 class SoapBridgeTests(unittest.TestCase, BridgeTests):
     def setUp(self):
         tmp_config = tempfile.mktemp()
