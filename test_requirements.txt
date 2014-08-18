@@ -3,4 +3,4 @@ mock
 coverage
 hiro
 nose-cov
-vcr
+vcrpy
