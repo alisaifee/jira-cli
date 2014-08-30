@@ -65,7 +65,7 @@ class JiraSoapBridge(JiraBridge):
             "description": description,
             "priority": self.get_priorities()[priority.lower()]["id"]
         }
-        if type == 'epic':
+        if type.lower() == 'epic':
             issue['customfield_11401'] = summary
         try:
             if parent:

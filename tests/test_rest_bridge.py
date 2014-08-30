@@ -19,7 +19,7 @@ class RestBridgeTests(unittest.TestCase, BridgeTests):
         self.cache_dir = tempfile.mkdtemp()
         jiracli.cache.CACHE_DIR = self.cache_dir
         self.config.username = "testuser"
-        self.config.password = "!@#$"
+        self.config.password = "testpassword"
         self.vcr_directory = "fixtures/rest"
         with jiravcr.use_cassette(os.path.join(self.vcr_directory, "login.yaml")):
             self.bridge = JiraRestBridge("https://indydevs.atlassian.net",
