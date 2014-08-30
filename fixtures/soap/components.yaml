@@ -5,12 +5,12 @@ interactions:
       xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getComponents><in0
-      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0><in1 xsi:type="ns3:string">TP</in1></ns1:getComponents></ns2:Body></SOAP-ENV:Envelope>
+      xsi:type="ns3:string">d53e2769899df4419004f060ab57485a93fe0e22</in0><in1 xsi:type="ns3:string">TP</in1></ns1:getComponents></ns2:Body></SOAP-ENV:Envelope>
     headers:
       Connection: [close]
       Content-Length: ['702']
       Content-Type: [text/xml; charset=utf-8]
-      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|8f48b5b19dc9b49bf69378d3bf9651cd57ac4402|lout]
       Host: [indydevs.atlassian.net]
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
@@ -32,11 +32,11 @@ interactions:
       connection: [close]
       content-length: ['1018']
       content-type: [text/xml;charset=utf-8]
-      date: ['Mon, 18 Aug 2014 02:59:10 GMT']
+      date: ['Sat, 30 Aug 2014 03:26:27 GMT']
       server: [nginx]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       vary: [Accept-Encoding]
-      x-arequestid: [1199x339x1]
+      x-arequestid: [1226x764x1]
       x-asen: [SEN-3295567]
       x-ausername: [anonymous]
       x-content-type-options: [nosniff]

@@ -6,8 +6,8 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
       Cache-Control: [!!python/unicode no-cache]
-      Cookie: [studio.crowd.tokenkey=xt0Gca03yl6T01WTVjHWIQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
-          JSESSIONID=40B2299CDE81A7F6BCEB2857E471EEE4]
+      Cookie: [studio.crowd.tokenkey=pnFqLJHA84hdVnsPWQ2Jag00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
+          JSESSIONID=E31D37137032A148E037C6F8944BFA93]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
@@ -27,18 +27,18 @@ interactions:
       connection: [keep-alive]
       content-encoding: [gzip]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 18 Aug 2014 02:55:45 GMT']
+      date: ['Sat, 30 Aug 2014 03:25:40 GMT']
       server: [nginx]
-      set-cookie: [JSESSIONID=B6BBEEA7E51E60F47A2E404FC8DF6D16; Path=/; Secure; HttpOnly,
+      set-cookie: [JSESSIONID=9DD887868DE164679C9BF610195B25B9; Path=/; Secure; HttpOnly,
         'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
-          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=DyWmbE8vlOOquCTYHS4r2A00;
+          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=Tf31AgFjAgJUwIR9Et0i4A00;
           Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]
-      x-arequestid: [1195x327x1]
+      x-arequestid: [1225x742x1]
       x-asen: [SEN-3295567]
-      x-asessionid: [1k3khau]
+      x-asessionid: [o48pok]
       x-ausername: [ali]
       x-content-type-options: [nosniff]
       x-seraph-loginreason: [OUT, OK]

@@ -6,8 +6,8 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
       Cache-Control: [!!python/unicode no-cache]
-      Cookie: [studio.crowd.tokenkey=xt0Gca03yl6T01WTVjHWIQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
-          JSESSIONID=40B2299CDE81A7F6BCEB2857E471EEE4]
+      Cookie: [studio.crowd.tokenkey=pnFqLJHA84hdVnsPWQ2Jag00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
+          JSESSIONID=E31D37137032A148E037C6F8944BFA93]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
@@ -28,18 +28,18 @@ interactions:
       connection: [keep-alive]
       content-encoding: [gzip]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 18 Aug 2014 03:37:17 GMT']
+      date: ['Sat, 30 Aug 2014 03:25:16 GMT']
       server: [nginx]
-      set-cookie: [JSESSIONID=1F507F2A594749E4B85BEA9F7DD190DB; Path=/; Secure; HttpOnly,
-        'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
-          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=SS30GWJZ3WY7GeTBYueMcw00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly]
+      set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
+          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=rbMeXSU0l2TMr1qm0nLD9g00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=819B92FAA88E9F17744D25F240C48A7F;
+          Path=/; Secure; HttpOnly]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]
-      x-arequestid: [1237x618x1]
+      x-arequestid: [1225x724x1]
       x-asen: [SEN-3295567]
-      x-asessionid: [ugp3e8]
+      x-asessionid: [1n7y9qa]
       x-ausername: [ali]
       x-content-type-options: [nosniff]
       x-seraph-loginreason: [OUT, OK]
@@ -51,8 +51,8 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
       Cache-Control: [!!python/unicode no-cache]
-      Cookie: [studio.crowd.tokenkey=SS30GWJZ3WY7GeTBYueMcw00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
-          JSESSIONID=1F507F2A594749E4B85BEA9F7DD190DB]
+      Cookie: [studio.crowd.tokenkey=rbMeXSU0l2TMr1qm0nLD9g00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
+          JSESSIONID=819B92FAA88E9F17744D25F240C48A7F]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
@@ -75,18 +75,18 @@ interactions:
       connection: [keep-alive]
       content-encoding: [gzip]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 18 Aug 2014 03:37:18 GMT']
+      date: ['Sat, 30 Aug 2014 03:25:17 GMT']
       server: [nginx]
       set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
-          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=YAtUUh0GghMmVGkW3CMT9Q00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=8D51ED01D2396EEBFFC2C0D711667D1B;
+          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=jChMrJ8JGCmv023OmfqPVQ00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=F212A73BB42BA9C32A0353C78C6F2571;
           Path=/; Secure; HttpOnly]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]
-      x-arequestid: [1237x619x1]
+      x-arequestid: [1225x725x1]
       x-asen: [SEN-3295567]
-      x-asessionid: [ugp3e8]
+      x-asessionid: [1wzio7f]
       x-ausername: [ali]
       x-content-type-options: [nosniff]
       x-seraph-loginreason: [OUT, OK]
@@ -100,29 +100,29 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
       Content-Length: ['168']
-      Cookie: [studio.crowd.tokenkey=YAtUUh0GghMmVGkW3CMT9Q00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
-          JSESSIONID=8D51ED01D2396EEBFFC2C0D711667D1B]
+      Cookie: [studio.crowd.tokenkey=jChMrJ8JGCmv023OmfqPVQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
+          JSESSIONID=F212A73BB42BA9C32A0353C78C6F2571]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       content-type: [!!python/unicode application/json]
     method: POST
     uri: https://indydevs.atlassian.net:443/rest/api/2/issue
   response:
-    body: {string: !!python/unicode '{"id":"10703","key":"TP-13","self":"https://indydevs.atlassian.net/rest/api/2/issue/10703"}'}
+    body: {string: !!python/unicode '{"id":"10800","key":"TP-20","self":"https://indydevs.atlassian.net/rest/api/2/issue/10800"}'}
     headers:
       cache-control: ['no-cache, no-store, no-transform']
       connection: [keep-alive]
       content-length: ['91']
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 18 Aug 2014 03:37:19 GMT']
+      date: ['Sat, 30 Aug 2014 03:25:19 GMT']
       server: [nginx]
       set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
-          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=f1rdLoA1B0OLO1xPNB539Q00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=E6015F10DE4A2BA909A50A6138B5BB98;
+          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=7x5NL4z0Cr4q0u7CoKtZMQ00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=FFA934ED1B40CB89394753A059DCFB51;
           Path=/; Secure; HttpOnly]
       strict-transport-security: [max-age=315360000;includeSubdomains]
-      x-arequestid: [1237x620x1]
+      x-arequestid: [1225x726x1]
       x-asen: [SEN-3295567]
-      x-asessionid: [1ik1u13]
+      x-asessionid: [v2md1j]
       x-ausername: [ali]
       x-content-type-options: [nosniff]
       x-seraph-loginreason: [OUT, OK]
@@ -132,56 +132,56 @@ interactions:
     headers:
       Accept-Encoding: ['gzip, deflate']
       Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
-      Cookie: [studio.crowd.tokenkey=f1rdLoA1B0OLO1xPNB539Q00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|857fc823937fb614f850f0e3b4fa4d37fc1a1631|lin;
-          JSESSIONID=E6015F10DE4A2BA909A50A6138B5BB98]
+      Cookie: [studio.crowd.tokenkey=7x5NL4z0Cr4q0u7CoKtZMQ00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
+          JSESSIONID=FFA934ED1B40CB89394753A059DCFB51]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       accept: [!!python/unicode application/json]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/issue/TP-13
+    uri: https://indydevs.atlassian.net:443/rest/api/2/issue/TP-20
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAAA+1YTW/jNhD9K4IOPdnRh53YayDYulsU6KGLoklToIvFgpFomYlECiTlOLvNf+8b
-        UVIix05q5VRgfTAkkfOh4byZN/rm823JZOovfM1lyjVPfxE8T81IsoKbkUnWvGAjq5k0wgolzUiV
-        XDN3yVNhC27ZKFkzmfFcZf7IF6QsCmfhBDeG5yvcrq0tzSIIhEzvU74xJ8zmzBjB5InkNtDc2ICV
-        IogDYUzFg1b8lt9D+vL3cUTKVrVn/uKbb6qiYJrWLETHiebM8nEti32lVhlUGtr5eB2OfKssy/1F
-        +IBLAcc1S26FzLAPT2ppe1/y2sAgv0k6OG1jQBcpN4kWJYWLXmTNPVNdjy0zt55aeRb3rdMiUfJP
-        De9eC5YoWMZNQPvxT+EisyaAYtL7heWWa4l4nJR4tZFPBwmtF41dPGl2+gurK97EwpRcWn8hqzwf
-        IRVKpaFlUCQqw/V7+iPD5ywXjz64GySUyJdp6o7Ix8Mfu7xQmlxmG2aZRjTqI4zOttHZ63ExPKk0
-        D8iyk39vxFd+vjUFy/Mf3KNf0/MojOIYNuLpNp4O1npA6STeTuLBSgvgqSqeuzqdb6fzIVp3XhpH
-        nQpT5uz+o8uJZS685e01194FEyvOvU/LtBBSGCDDKv2ZjiKxYoP8oVRxqPlbScqnJdAbXBDu10z4
-        UO1AmGIpDqPpOJyPo9llHC4ms0U0P5nNT8eoCSFUVmWK7PwPG0stlBYWMAfijwVkKxxMYXIYuBoV
-        AuBCVJTuA+o3ekS66U2mFIEe2B2SkspYVdSF60sUhmHUQmx3AVmzX2LSLtRQz4W8BSg+fUa8d1SH
-        7cYG3ge2IZH2G5q1C8YyW9XIOzroThTlOwwJY72A+IPPwWnFKaD1yP4hXCrvZ9UeQmvW7f+AJMsU
-        NYkB2eNUJI2KIGpMRCPftaQKvXIlJLIYB6FypRtEOQiPM83usdKU3o/K65x5IKTsnBwVt3dxPJnM
-        4nByNj+dzman83AGBTm75lQE6bxLhg5t6W26DktoemyRdHf0idVZVfdbEj/UYb0bodk4qWu5C80b
-        ovo9PV5Oj7ZyDQpxKxwQYXp72WM3z8oePSLdVPYmVPY6DjLI4U66A5lPaOuXjqUHHned88K7W4tk
-        7YmiZEIbT2ks8A1wYWoytaok+hWIUcuuIJZWiT0ZHIzOPRNcV1m/+PxUEVnp2NSK5YY/EMDvlL6t
-        ObK/GKNkwIkbntTQPRqfjWyNGUJog30UWNy02MdlU2os6DDFqrb3NiLVaNnDpUpBNAq/p1QljOjY
-        jmNVe0w4YvWCheMo1h4LDct6wcRxfKtv4qBaygsuN0IrWTyh2ju9IJq2XXh34bRdwOBkrwS/Iwbl
-        OjnLMO5k6FVw5dXBZ1fvI/FQRQlqByjt5ReYwFrioAr3BuiroOl2iczGcFWw7R/cVDnJP5m1qD/W
-        +2u1CAJNXqB1mZAsR7ZinLHgk3s5SdRxkl2v0TL3S7w7tNDxno0CSIaXqqCeRgOnZeQ32vDCa2au
-        oBqn4goBddPtFdeG6pELKSYelVduGHTuPz4hTtz5TvMsquwQ5vJ9/Hp1gj4wKf6/x6+uCLyEr7Ti
-        vTzrE9G4GyF24BZjbPE/KutdEN5r0nvHLD4NvR1HTo826B315QdVEclF1xTmL7JRf59pPlRQX6WP
-        TISLA5Un7pWeRqAtPf3XQgvDa4X/UCvL1AIeMHySyiTvcMisZcnaFbvnI1dM8jsVmIK/W9Q2vRqw
-        b0fv7J58iXl4+Be8NBD7oBMAAA==
+        H4sIAAAAAAAAA+1YTW/jNhD9K4IOPdnRh+3EMRBs3S0K9NCgaNIU6GKxYCTaZiyRAkk5zm7z3/tG
+        lJTIsZNaORXYHAJZ5HxwOG/mjb75fFswmfozX3OZcs3TXwTPUjOQLOdmYJIVz9nAaiaNsEJJM1AF
+        18w98lTYnFs2SFZMLnmmlv7AF6QsCqdhiB+GZwv8XFlbmFkQCJk+pHxjTpjNmDGCyRPJbaC5sQEr
+        RBAHwpiSB434mj9A+vr3YUzKFpVn/uybb8o8Z5rWLESHiebM8mEli32FVkuoNLTz6Tkc+FZZlvmz
+        8BGPAo5rlqyFXGIf3lTS9qHglYFefpN0MGliQA8pN4kWBYWLDrLinilvh5aZtacWnsXvxmmRKPmn
+        hndvBUvkbMlNQPvxn8JFZk0AxaT3C8ss1xLxOClwtIFPFwmtV7VdvKl3+jOrS17HwhRcWn8myywb
+        IBUKpaGlVyRKw/UH+keGL1gmnnxwP5BQIpunqbsiHy9/bPNCaXKZbZhlGtGorjA63Uanb8fF8KTU
+        PCDLTv6DEV/5xdbkLMt+cK9+TS+iMIpj2IjH23jcW+sBpaN4O4p7K82BpzJ/6ep4uh1P+2jdOTSu
+        OhWmyNjDpcuJeSa8+fqWa++KiQXn3qd5mgspDJBhlf5MV5FYsUH+UKo41PytJOXTHOgNrgj3KyZ8
+        qHYgTLEUh9F4GE6H8fl1HM7iySyankzC02F4VtWEskiRnf9hY6GF0sIC5kD8sYBshIMxTtEPXLUK
+        AXAhKkp3AfUbvSLddJIxRaADdoekpDRW5VXh+hKFYRg1ENtdQNbslxg1CxXUMyHXAMWnz4j3juqw
+        2VjD+8A2JNJ+Q2fNgrHMlhXyjg66E0X5DkPCWCcgfu97cFpxC2g9snsJ18r7WTWX0Jh1+z8iyZaK
+        mkSP7HEqklpFENUmooHvWlKJXrkQElmMi1CZ0jWiHISHS80esFKX3kvltc48ElJ2bo6K23kcj0Zn
+        cTg6nU7GZ2eTaXgGBRm75VQE6b4Lhg5t6TR1h3Voaltk9K5+65Qd6rDendBsmFS13IXmHVH9nh6v
+        p0dTuXqFuBEORpSyvTjF87LH7l6UPXpFuqnsjajstRykl8OtdAsyn9DWLR1zDzzuNuO5d78SycoT
+        ecGENp7SWOAb4MJUZGpRSvQrEKOGXUEsLRN70jsYrXsmuC2X3eLzU0lkpWVTC5YZ/kgAv1d6XXFk
+        fzZEyYATdzypoHt0Ra1lK8wQwGvso8DiR4N9PNalxoIOU6wqe+8jUrWWPVyqEESj8PecqoQRXdtx
+        rGqPCUesXrFwHMXaY6FmWa+YOI5vdU0cVEt5weVGaCXzZ1R7pxdE46YL7y5MmgUMTvZG8HtiUK6T
+        syXGnSV6FVx5c/DZ1XuIeESjRn2i8gKcDxiriYfK3QnQV0HT7RyZjeEqZ9s/uCkz2vZs1qL+WO2v
+        pBEEmrxA65ZCsgzZinHGgk/u5SRRy0l2vUbL3C9xfmih5T0bBZD0L1VBNY0GTsvAr7XhwCtmbqAa
+        t+IKAY1RRmWlm/2ctwuxveHaUIVysXzaQpy49Z3mWVTZPszl+/j15gR9YFL8f49fbRF4DV9pyTt5
+        1iWi+MiyH1Uxxhb/UlnvivBekd57ZvFp6P04cnq0Qe+oHj+qkkguuqYwf5GN6vtM/aGC+ip9ZCJc
+        HKg8caf01AJN6elWEbQwHCv8h1qZmM7gAcMnqaXkLQ6ZtSxZuWL3cuSKSX6nAlPwd4vapoP4fTs6
+        d/fsS8zj478/K1fHoBMAAA==
     headers:
       cache-control: ['no-cache, no-store, no-transform']
       connection: [keep-alive]
       content-encoding: [gzip]
       content-type: [application/json;charset=UTF-8]
-      date: ['Mon, 18 Aug 2014 03:37:19 GMT']
+      date: ['Sat, 30 Aug 2014 03:25:20 GMT']
       server: [nginx]
       set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
-          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=3ZS6JIfcDcPdgG1yYFDwpQ00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=50CEE113B0B8C0E0FFEB2BAA5F9F0C1F;
+          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=K2kpFqTfEa7C5YBccenA0g00;
+          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=D99F202194F9CCF253FD127FE337C508;
           Path=/; Secure; HttpOnly]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       transfer-encoding: [chunked]
       vary: [Accept-Encoding]
-      x-arequestid: [1237x621x1]
+      x-arequestid: [1225x727x1]
       x-asen: [SEN-3295567]
-      x-asessionid: [1yx2vi2]
+      x-asessionid: [j0xdf8]
       x-ausername: [ali]
       x-content-type-options: [nosniff]
       x-seraph-loginreason: [OUT, OK]

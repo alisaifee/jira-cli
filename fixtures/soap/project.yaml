@@ -5,12 +5,12 @@ interactions:
       xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getProjectsNoSchemes><in0
-      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getProjectsNoSchemes></ns2:Body></SOAP-ENV:Envelope>
+      xsi:type="ns3:string">d53e2769899df4419004f060ab57485a93fe0e22</in0></ns1:getProjectsNoSchemes></ns2:Body></SOAP-ENV:Envelope>
     headers:
       Connection: [close]
       Content-Length: ['681']
       Content-Type: [text/xml; charset=utf-8]
-      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|8f48b5b19dc9b49bf69378d3bf9651cd57ac4402|lout]
       Host: [indydevs.atlassian.net]
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
@@ -42,39 +42,39 @@ interactions:
         xsi:type="xsd:string">test project</name><notificationScheme xsi:type="ns4:RemoteScheme"
         xsi:nil="true"/><permissionScheme xsi:type="ns4:RemotePermissionScheme" xsi:nil="true"/><projectUrl
         xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/TP</url></multiRef><multiRef
-        id="id2" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        id="id1" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
         xsi:type="ns5:RemoteProject" xmlns:ns5="http://beans.soap.rpc.jira.atlassian.com"
         xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"></description><id
-        xsi:type="xsd:string">10103</id><issueSecurityScheme xsi:type="ns5:RemoteScheme"
-        xsi:nil="true"/><key xsi:type="xsd:string">PM</key><lead xsi:type="xsd:string">ali</lead><name
-        xsi:type="xsd:string">Project Management</name><notificationScheme xsi:type="ns5:RemoteScheme"
+        xsi:type="xsd:string">10101</id><issueSecurityScheme xsi:type="ns5:RemoteScheme"
+        xsi:nil="true"/><key xsi:type="xsd:string">MES</key><lead xsi:type="xsd:string">ali</lead><name
+        xsi:type="xsd:string">Meshim</name><notificationScheme xsi:type="ns5:RemoteScheme"
         xsi:nil="true"/><permissionScheme xsi:type="ns5:RemotePermissionScheme" xsi:nil="true"/><projectUrl
-        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/PM</url></multiRef><multiRef
-        id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/MES</url></multiRef><multiRef
+        id="id2" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
         xsi:type="ns6:RemoteProject" xmlns:ns6="http://beans.soap.rpc.jira.atlassian.com"
         xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"></description><id
-        xsi:type="xsd:string">10100</id><issueSecurityScheme xsi:type="ns6:RemoteScheme"
-        xsi:nil="true"/><key xsi:type="xsd:string">LC</key><lead xsi:type="xsd:string">ali</lead><name
-        xsi:type="xsd:string">Live Chat</name><notificationScheme xsi:type="ns6:RemoteScheme"
+        xsi:type="xsd:string">10103</id><issueSecurityScheme xsi:type="ns6:RemoteScheme"
+        xsi:nil="true"/><key xsi:type="xsd:string">PM</key><lead xsi:type="xsd:string">ali</lead><name
+        xsi:type="xsd:string">Project Management</name><notificationScheme xsi:type="ns6:RemoteScheme"
         xsi:nil="true"/><permissionScheme xsi:type="ns6:RemotePermissionScheme" xsi:nil="true"/><projectUrl
-        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/LC</url></multiRef><multiRef
-        id="id1" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/PM</url></multiRef><multiRef
+        id="id0" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
         xsi:type="ns7:RemoteProject" xmlns:ns7="http://beans.soap.rpc.jira.atlassian.com"
         xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description xsi:type="xsd:string"></description><id
-        xsi:type="xsd:string">10101</id><issueSecurityScheme xsi:type="ns7:RemoteScheme"
-        xsi:nil="true"/><key xsi:type="xsd:string">MES</key><lead xsi:type="xsd:string">ali</lead><name
-        xsi:type="xsd:string">Meshim</name><notificationScheme xsi:type="ns7:RemoteScheme"
+        xsi:type="xsd:string">10100</id><issueSecurityScheme xsi:type="ns7:RemoteScheme"
+        xsi:nil="true"/><key xsi:type="xsd:string">LC</key><lead xsi:type="xsd:string">ali</lead><name
+        xsi:type="xsd:string">Live Chat</name><notificationScheme xsi:type="ns7:RemoteScheme"
         xsi:nil="true"/><permissionScheme xsi:type="ns7:RemotePermissionScheme" xsi:nil="true"/><projectUrl
-        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/MES</url></multiRef></soapenv:Body></soapenv:Envelope>'}
+        xsi:type="xsd:string"></projectUrl><url xsi:type="xsd:string">https://indydevs.atlassian.net/browse/LC</url></multiRef></soapenv:Body></soapenv:Envelope>'}
     headers:
       connection: [close]
       content-length: ['4772']
       content-type: [text/xml;charset=utf-8]
-      date: ['Mon, 18 Aug 2014 02:59:13 GMT']
+      date: ['Sat, 30 Aug 2014 03:26:30 GMT']
       server: [nginx]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       vary: [Accept-Encoding]
-      x-arequestid: [1199x340x1]
+      x-arequestid: [1226x765x1]
       x-asen: [SEN-3295567]
       x-ausername: [anonymous]
       x-content-type-options: [nosniff]

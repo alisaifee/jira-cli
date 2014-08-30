@@ -5,12 +5,12 @@ interactions:
       xmlns:ns1="http://soap.rpc.jira.atlassian.com" xmlns:ns2="http://schemas.xmlsoap.org/soap/envelope/"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><SOAP-ENV:Header/><ns2:Body><ns1:getIssueTypes><in0
-      xsi:type="ns3:string">b1f3548685800f04b60a85a725a0747265c60de9</in0></ns1:getIssueTypes></ns2:Body></SOAP-ENV:Envelope>
+      xsi:type="ns3:string">d53e2769899df4419004f060ab57485a93fe0e22</in0></ns1:getIssueTypes></ns2:Body></SOAP-ENV:Envelope>
     headers:
       Connection: [close]
       Content-Length: ['667']
       Content-Type: [text/xml; charset=utf-8]
-      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|98f80e30cc8c21e5cd128b4a88e7af771a22d287|lout]
+      Cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|8f48b5b19dc9b49bf69378d3bf9651cd57ac4402|lout]
       Host: [indydevs.atlassian.net]
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
@@ -25,36 +25,36 @@ interactions:
         xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><getIssueTypesReturn
         href="#id0"/><getIssueTypesReturn href="#id1"/><getIssueTypesReturn href="#id2"/><getIssueTypesReturn
         href="#id3"/><getIssueTypesReturn href="#id4"/><getIssueTypesReturn href="#id5"/></getIssueTypesReturn></ns1:getIssueTypesResponse><multiRef
-        id="id5" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        id="id4" soapenc:root="0" soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
         xsi:type="ns3:RemoteIssueType" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-        xmlns:ns3="http://beans.soap.rpc.jira.atlassian.com"><description xsi:type="xsd:string">A
-        task that needs to be done.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/task.png</icon><id
-        xsi:type="xsd:string">3</id><name xsi:type="xsd:string">Task</name><subTask
+        xmlns:ns3="http://beans.soap.rpc.jira.atlassian.com"><description xsi:type="xsd:string">Created
+        by JIRA Agile - do not edit or delete. Issue type for a user story.</description><icon
+        xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/ico_story.png</icon><id
+        xsi:type="xsd:string">10001</id><name xsi:type="xsd:string">Story</name><subTask
         xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id3" soapenc:root="0"
         soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns4:RemoteIssueType"
         xmlns:ns4="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
         xsi:type="xsd:string">A new feature of the product, which has yet to be developed.</description><icon
         xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/newfeature.png</icon><id
         xsi:type="xsd:string">2</id><name xsi:type="xsd:string">New Feature</name><subTask
-        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id4" soapenc:root="0"
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id5" soapenc:root="0"
         soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns5:RemoteIssueType"
         xmlns:ns5="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
-        xsi:type="xsd:string">Created by JIRA Agile - do not edit or delete. Issue
-        type for a user story.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/ico_story.png</icon><id
-        xsi:type="xsd:string">10001</id><name xsi:type="xsd:string">Story</name><subTask
-        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id0" soapenc:root="0"
+        xsi:type="xsd:string">A task that needs to be done.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/task.png</icon><id
+        xsi:type="xsd:string">3</id><name xsi:type="xsd:string">Task</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id1" soapenc:root="0"
         soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns6:RemoteIssueType"
         xmlns:ns6="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
-        xsi:type="xsd:string">A problem which impairs or prevents the functions of
-        the product.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/bug.png</icon><id
-        xsi:type="xsd:string">1</id><name xsi:type="xsd:string">Bug</name><subTask
-        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id1" soapenc:root="0"
-        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns7:RemoteIssueType"
-        xmlns:ns7="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
         xsi:type="xsd:string">Created by JIRA Agile - do not edit or delete. Issue
         type for a big user story that needs to be broken down.</description><icon
         xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/ico_epic.png</icon><id
         xsi:type="xsd:string">10000</id><name xsi:type="xsd:string">Epic</name><subTask
+        xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id0" soapenc:root="0"
+        soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns7:RemoteIssueType"
+        xmlns:ns7="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
+        xsi:type="xsd:string">A problem which impairs or prevents the functions of
+        the product.</description><icon xsi:type="xsd:string">https://indydevs.atlassian.net/images/icons/issuetypes/bug.png</icon><id
+        xsi:type="xsd:string">1</id><name xsi:type="xsd:string">Bug</name><subTask
         xsi:type="xsd:boolean">false</subTask></multiRef><multiRef id="id2" soapenc:root="0"
         soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xsi:type="ns8:RemoteIssueType"
         xmlns:ns8="http://beans.soap.rpc.jira.atlassian.com" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"><description
@@ -66,11 +66,11 @@ interactions:
       connection: [close]
       content-length: ['4394']
       content-type: [text/xml;charset=utf-8]
-      date: ['Mon, 18 Aug 2014 02:59:04 GMT']
+      date: ['Sat, 30 Aug 2014 03:26:22 GMT']
       server: [nginx]
       strict-transport-security: [max-age=315360000;includeSubdomains]
       vary: [Accept-Encoding]
-      x-arequestid: [1199x337x1]
+      x-arequestid: [1226x762x1]
       x-asen: [SEN-3295567]
       x-ausername: [anonymous]
       x-content-type-options: [nosniff]
