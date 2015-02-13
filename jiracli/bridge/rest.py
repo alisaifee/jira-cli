@@ -2,7 +2,7 @@
 
 """
 from jira.client import JIRA
-from jira.exceptions import JIRAError
+from jira.utils import JIRAError
 from jira.resources import Resource
 from requests import RequestException
 from jiracli.bridge import JiraBridge

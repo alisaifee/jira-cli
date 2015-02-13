@@ -2,7 +2,7 @@
 
 """
 import argparse
-from jira.exceptions import JIRAError
+from jira.utils import JIRAError
 
 from suds import WebFault
 import sys
