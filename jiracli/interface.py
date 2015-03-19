@@ -2,6 +2,7 @@
 
 """
 import argparse
+import keyring
 from jira.utils import JIRAError
 
 from suds import WebFault
@@ -30,23 +31,23 @@ def initialize(config, base_url=None, username=None, password=None,
         )
         password = (
             password
-            or (not error and config.password)
+            or (not error and keyring.get_password('jira-cli',username))
             or prompt("password: ", True)
         )
         jira = not error and bridge or get_bridge(protocol)(url, config, persist)
-        persist_warning = "would you like to persist the credentials to ~/.jira-cli/config.cfg?\n{0} [y/n]:"
-        persist_warning = persist_warning.format(colorfunc('[WARNING: this will '
-                                                  'store credentials in plaintext', 'red'))
+        persist_warning = "would you like to persist the credentials to the local keyring? [y/n]:"
+
         first_run = (
             not(
                 config.base_url
                 or config.username
-                or config.password
+                or keyring.get_password('jira-cli',username)
             )
         )
         if persist or first_run:
             config.base_url = url
             config.save()
+            keyring.set_password('jira-cli',username,password)
         try:
             jira.login(username, password)
             if (
@@ -60,7 +61,7 @@ def initialize(config, base_url=None, username=None, password=None,
                 and "y" == prompt(persist_warning)
             ):
                 config.username = username
-                config.password = password
+                keyring.set_password('jira-cli',username,password)
                 config.save()
             config.save()
             return jira

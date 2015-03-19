@@ -4,3 +4,4 @@ jira
 requests
 argparse
 suds-jurko
+keyring
