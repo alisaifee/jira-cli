@@ -158,8 +158,17 @@ def build_parser():
                      help='parent of new issue')
 
     update.add_argument('issue', help='the jira issue to act on')
-    update.add_argument('--comment', dest='issue_comment',
-                        action='store_true', help='add a comment to an existing issue')
+
+    # ridiculous hack to allow for passing in --comment or --comment="....".
+    # when no string is passed in the text editor will be launched to enter the comment
+    class CommentAction(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string):
+            setattr(namespace, self.dest, values or True)
+
+    update.add_argument(
+        '--comment', dest='issue_comment', nargs='?', help='add a comment to an existing issue',
+        action=CommentAction
+    )
     update.add_argument('--priority', '--priority', dest='issue_priority',
                         help='change the priority of an issue')
     update.add_argument('--component', dest='issue_components',
@@ -237,5 +246,6 @@ def cli(args=sys.argv[1:]):
         print_error(JiraCliError(e))
     except NotImplementedError as e:
         print_error(e)
+
 if __name__ == "__main__":
     cli()
