@@ -11,7 +11,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/priority
+    uri: https://indydevs.atlassian.net/rest/api/2/priority
   response:
     body:
       string: !!binary |
@@ -56,7 +56,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/issuetype
+    uri: https://indydevs.atlassian.net/rest/api/2/issuetype
   response:
     body:
       string: !!binary |
@@ -105,7 +105,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       content-type: [!!python/unicode application/json]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rest/api/2/issue
+    uri: https://indydevs.atlassian.net/rest/api/2/issue
   response:
     body: {string: !!python/unicode '{"id":"10800","key":"TP-20","self":"https://indydevs.atlassian.net/rest/api/2/issue/10800"}'}
     headers:
@@ -137,7 +137,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       accept: [!!python/unicode application/json]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/issue/TP-20
+    uri: https://indydevs.atlassian.net/rest/api/2/issue/TP-20
   response:
     body:
       string: !!binary |

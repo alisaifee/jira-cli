@@ -11,7 +11,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/search?jql=summary~jira-cli&validateQuery=True&startAt=0&maxResults=100
+    uri: https://indydevs.atlassian.net/rest/api/2/search?jql=summary~jira-cli&validateQuery=True&startAt=0&maxResults=100
   response:
     body:
       string: !!binary |

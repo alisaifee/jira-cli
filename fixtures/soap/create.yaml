@@ -15,7 +15,7 @@ interactions:
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -83,7 +83,7 @@ interactions:
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -161,7 +161,7 @@ interactions:
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"

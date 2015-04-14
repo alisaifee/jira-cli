@@ -6,7 +6,7 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
     method: GET
-    uri: https://indydevs.atlassian.net:443/
+    uri: https://indydevs.atlassian.net/
   response:
     body: {string: !!python/unicode ''}
     headers:
@@ -31,7 +31,7 @@ interactions:
       Host: [indydevs.atlassian.net]
       User-Agent: [Python-urllib/2.7]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2?wsdl
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2?wsdl
   response:
     body: {string: !!python/unicode "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsdl:definitions
         targetNamespace=\"https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2\"
@@ -3394,7 +3394,7 @@ interactions:
       Host: [indydevs.atlassian.net]
       User-Agent: [Python-urllib/2.7]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2?wsdl
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2?wsdl
   response:
     body: {string: !!python/unicode "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<wsdl:definitions
         targetNamespace=\"https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2\"
@@ -6765,7 +6765,7 @@ interactions:
       Soapaction: ['""']
       User-Agent: [Python-urllib/2.7]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rpc/soap/jirasoapservice-v2
+    uri: https://indydevs.atlassian.net/rpc/soap/jirasoapservice-v2
   response:
     body: {string: !!python/unicode '<?xml version="1.0" encoding="utf-8"?><soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"

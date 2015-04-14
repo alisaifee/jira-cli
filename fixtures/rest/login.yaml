@@ -6,7 +6,7 @@ interactions:
       Accept-Encoding: ['gzip, deflate']
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
     method: GET
-    uri: https://indydevs.atlassian.net:443/
+    uri: https://indydevs.atlassian.net/
   response:
     body: {string: !!python/unicode ''}
     headers:
@@ -34,7 +34,7 @@ interactions:
       Content-type: [!!python/unicode application/json]
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
     method: POST
-    uri: https://indydevs.atlassian.net:443/rest/auth/1/session
+    uri: https://indydevs.atlassian.net/rest/auth/1/session
   response:
     body:
       string: !!binary |
@@ -77,7 +77,7 @@ interactions:
       User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
       X-Atlassian-Token: [!!python/unicode no-check]
     method: GET
-    uri: https://indydevs.atlassian.net:443/rest/api/2/serverInfo
+    uri: https://indydevs.atlassian.net/rest/api/2/serverInfo
   response:
     body:
       string: !!binary |
