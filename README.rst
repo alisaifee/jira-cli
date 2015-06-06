@@ -7,13 +7,15 @@ Simple command line utility to interact with your jira instance.
    :target: https://travis-ci.org/#!/alisaifee/jira-cli
 .. |coveralls| image:: https://img.shields.io/coveralls/alisaifee/jira-cli/master.svg?style=flat-square
     :target: https://coveralls.io/r/alisaifee/jira-cli?branch=master
+.. |license| image:: https://img.shields.io/pypi/l/jira-cli.svg?style=flat-square
+    :target: https://pypi.python.org/pypi/jira-cli
 .. |pypi| image:: https://img.shields.io/pypi/v/jira-cli.svg?style=flat-square
     :target: https://pypi.python.org/pypi/jira-cli
 
 .. _read the docs: https://jira-cli.readthedocs.org
 
 
-|travis-ci| |coveralls| |pypi|
+|travis-ci| |coveralls| |pypi| |license|
 
 Documentation at `read the docs`_
 
