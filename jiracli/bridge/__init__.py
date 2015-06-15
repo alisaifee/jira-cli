@@ -77,7 +77,10 @@ class JiraBridge(object):
                 self.fields["priority"] = ""
             else:
                 fields["priority"] = JiraBridge.object_from_key(issue["priority"], self.get_priorities)["name"]
-            fields["type"] = JiraBridge.object_from_key(issue["type"], self.get_issue_types)["name"]
+            fields["type"] = JiraBridge.object_from_key(
+                issue["type"],
+                self.get_issue_types if 'parent' not in issue else self.get_subtask_issue_types
+            )["name"]
             fields["comments"] = "\n"
             comments = self.get_issue_comments(issue["key"])
             for comment in comments:
