@@ -249,11 +249,11 @@ def add_comment( jira_id, comment ):
     else:
         return "failed to add comment to %s" % jira_id
 
-def create_issue ( project, type=0, summary="", description="" , priority="Major"):
+def create_issue ( project, type=0, summary="", description="" , priority="Major", assignee="", reporter=""):
     if description == default_editor_text:
         description = get_text_from_editor(default_editor_text % ("new issue"))
 
-    issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority)}
+    issue =  {"project":project.upper(), "type": get_issue_type(type), "summary":summary, "description":description, "priority": get_issue_priority(priority), "assignee": assignee, "reporter": reporter}
     return jiraobj.service.createIssue( token, issue )
 
 
