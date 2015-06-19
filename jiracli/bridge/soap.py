@@ -58,12 +58,14 @@ class JiraSoapBridge(JiraBridge):
             raise JiraCliError("No transitions found for issue %s" % issue)
         return dict((k.name.lower(), soap_recursive_dict(k)) for k in transitions)
 
-    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None):
+    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None, assignee="", reporter=""):
         issue = {
             "project": project.upper(),
             "summary": summary,
             "description": description,
-            "priority": self.get_priorities()[priority.lower()]["id"]
+            "priority": self.get_priorities()[priority.lower()]["id"],
+            "assignee": assignee,
+            "reporter": reporter
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary

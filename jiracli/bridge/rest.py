@@ -72,12 +72,14 @@ class JiraRestBridge(JiraBridge):
     def ping(self):
         return False
 
-    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None):
+    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None, assignee="", reporter=""):
         issue = {
             "project": {'key':project.upper()},
             "summary": summary,
             "description": description,
-            "priority": {'id':self.get_priorities()[priority.lower()]["id"]}
+            "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
+            "assignee": assignee,
+            "reporter": reporter
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary

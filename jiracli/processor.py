@@ -157,7 +157,7 @@ class AddCommand(Command):
         description = self.args.issue_description or get_text_from_editor()
         print_output(self.jira.format_issue(
             self.jira.create_issue(self.args.issue_project, self.args.issue_type, self.args.title, description,
-                               self.args.issue_priority, self.args.issue_parent)
+                               self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee, self.args.issue_reporter)
         ))
 
 

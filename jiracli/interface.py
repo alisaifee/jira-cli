@@ -156,6 +156,8 @@ def build_parser():
     add.add_argument('--type', dest='issue_type', help='new issue priority')
     add.add_argument('--parent', dest='issue_parent',
                      help='parent of new issue')
+    add.add_argument('--assignee', dest='issue_assignee', help='new issue assignee')
+    add.add_argument('--reporter', dest='issue_reporter', help='new issue reporter')
 
     update.add_argument('issue', help='the jira issue to act on')
 
