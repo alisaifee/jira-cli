@@ -208,6 +208,10 @@ class JiraBridge(object):
     def assign_issue(self, issue, assignee):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def change_reporter(self, issue, reporter):
+        raise NotImplementedError
+
 from .rest import JiraRestBridge
 from .soap import JiraSoapBridge
 

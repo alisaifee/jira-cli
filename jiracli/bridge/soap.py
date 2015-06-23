@@ -72,10 +72,16 @@ class JiraSoapBridge(JiraBridge):
         try:
             if parent:
                 issue['type'] = self.get_subtask_issue_types()[type.lower()]['id'],
-                return soap_recursive_dict(self.service.createIssueWithParent(self.token, issue, parent))
+                created_issue =  soap_recursive_dict(self.service.createIssueWithParent(self.token, issue, parent))
             else:
                 issue['type'] = self.get_issue_types()[type.lower()]['id'],
-                return soap_recursive_dict(self.service.createIssue(self.token, issue))
+                created_issue = soap_recursive_dict(self.service.createIssue(self.token, issue))
+            if assignee:
+                created_issue = self.assign_issue(created_issue['key'], assignee)
+            if reporter:
+                created_issue = self.change_reporter(created_issue['key'], reporter)
+            return soap_recursive_dict(created_issue)
+
         except WebFault as e:
             raise JiraCliError(e)
 
@@ -91,6 +97,9 @@ class JiraSoapBridge(JiraBridge):
 
     def assign_issue(self, issue_id, assignee):
         return self.update_issue(issue_id, assignee = assignee)
+
+    def change_reporter(self, issue_id, reporter):
+        return self.update_issue(issue_id, reporter = reporter)
 
     @cached('filters')
     def get_filters(self):

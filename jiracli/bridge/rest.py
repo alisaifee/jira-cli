@@ -78,8 +78,6 @@ class JiraRestBridge(JiraBridge):
             "summary": summary,
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
-            "assignee": assignee,
-            "reporter": reporter
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary
@@ -88,7 +86,16 @@ class JiraRestBridge(JiraBridge):
             issue['parent'] = {'key':parent}
         else:
             issue['issuetype'] = {'id':self.get_issue_types()[type.lower()]['id']}
-        return self.clean_issue(self.jira.create_issue(issue))
+        issue = self.jira.create_issue(issue)
+        if not (assignee or reporter):
+            return self.clean_issue(issue)
+        else:
+            key = issue.key
+            if assignee:
+                issue = self.clean_issue(self.assign_issue(key, assignee))
+            if reporter:
+                issue = self.clean_issue(self.change_reporter(key, reporter))
+            return issue
 
     def login(self, username, password):
         try:
@@ -120,11 +127,18 @@ class JiraRestBridge(JiraBridge):
         return types
 
     def update_issue(self, issue_id, **kwargs):
-        return self.jira.issue(issue_id).update(**kwargs)
+        issue =  self.jira.issue(issue_id)
+        issue.update(**kwargs)
+        return self.jira.issue(issue_id)
 
     def assign_issue(self, issue_id, assignee):
         return self.update_issue(
             issue_id, assignee={"name": assignee}
+        )
+
+    def change_reporter(self, issue_id, reporter):
+        return self.update_issue(
+            issue_id, reporter={"name": reporter}
         )
 
     @cached('projects')
