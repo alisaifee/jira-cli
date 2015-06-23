@@ -117,6 +117,11 @@ add a comment to an existing issue::
     ali@home ~ $ jira-cli update TP-20 --comment # opens up the editor
     this is a new comment added to TP-20
 
+Update the assignee of an issue::
+
+    ali@home ~ $ jira-cli update TP-20 --assign ali
+    ali assigned to TP-20
+
 transition the issue to a new state::
 
     ali@home ~ $  jira-cli update TP-20 --transition='Done'

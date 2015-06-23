@@ -90,7 +90,7 @@ class JiraSoapBridge(JiraBridge):
         return self.service.updateIssue(self.token, issue_id, mapped)
 
     def assign_issue(self, issue_id, assignee):
-        return self.update_issue(issue_id, {"assignee": assignee})
+        return self.update_issue(issue_id, assignee = assignee)
 
     @cached('filters')
     def get_filters(self):

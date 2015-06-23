@@ -124,7 +124,7 @@ class JiraRestBridge(JiraBridge):
 
     def assign_issue(self, issue_id, assignee):
         return self.update_issue(
-            {"assignee": {"name": assignee}}
+            issue_id, assignee={"name": assignee}
         )
 
     @cached('projects')
