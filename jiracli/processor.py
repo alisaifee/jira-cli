@@ -132,7 +132,7 @@ class UpdateCommand(Command):
                 '%s transitioned to "%s"' % (self.args.issue, self.args.issue_transition), 'green'
             ))
         elif self.args.issue_assignee:
-            self.jira.update_issue(self.args.issue, assignee=self.args.issue_assignee)
+            self.jira.assign_issue(self.args.issue, self.args.issue_assignee)
             print_output(colorfunc(
                 '%s assigned to %s' % (self.args.issue, self.args.issue_assignee), 'green'
             ))

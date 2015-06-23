@@ -85,10 +85,12 @@ class JiraSoapBridge(JiraBridge):
     def add_comment(self, issue, comment):
         return self.service.addComment(self.token, issue, {'body':comment})
 
-
     def update_issue(self, issue_id, **kwargs):
         mapped = [{"id":k, "values":[kwargs[k]]} for k in kwargs]
         return self.service.updateIssue(self.token, issue_id, mapped)
+
+    def assign_issue(self, issue_id, assignee):
+        return self.update_issue(issue_id, {"assignee": assignee})
 
     @cached('filters')
     def get_filters(self):

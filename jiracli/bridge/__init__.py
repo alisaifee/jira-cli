@@ -204,6 +204,10 @@ class JiraBridge(object):
     def transition_issue(self, issue, transition, comment=""):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def assign_issue(self, issue, assignee):
+        raise NotImplementedError
+
 from .rest import JiraRestBridge
 from .soap import JiraSoapBridge
 

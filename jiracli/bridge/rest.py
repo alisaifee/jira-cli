@@ -120,7 +120,12 @@ class JiraRestBridge(JiraBridge):
         return types
 
     def update_issue(self, issue_id, **kwargs):
-        pass
+        return self.jira.issue(issue_id).update(**kwargs)
+
+    def assign_issue(self, issue_id, assignee):
+        return self.update_issue(
+            {"assignee": {"name": assignee}}
+        )
 
     @cached('projects')
     def get_projects(self):
