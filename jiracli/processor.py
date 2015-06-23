@@ -96,6 +96,24 @@ class ListCommand(Command):
 
 class UpdateCommand(Command):
     def eval(self):
+        extras = {}
+        if self.args.extra_fields:
+            try:
+                for item in self.args.extra_fields:
+                    key, value = item.split("=")
+                    if key in extras:
+                        if not isinstance(extras[key], list):
+                            v = [extras[key]]
+                            extras[key] = v
+                        extras[key].append(value)
+                    else:
+                        extras[key] = value
+            except Exception:
+                raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
+            self.jira.update_issue(
+                self.args.issue,
+                **extras
+            )
         if self.args.issue_comment:
             self.jira.add_comment(
                 self.args.issue, self.args.issue_comment if isinstance(self.args.issue_comment, basestring) else get_text_from_editor()

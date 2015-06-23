@@ -181,6 +181,9 @@ def build_parser():
     update.add_argument('--transition', dest='issue_transition',
                         help='transition the issue to a new state'
                              ' (use list transitions to view available transitions for an issue)')
+    update.add_argument('--extra', dest='extra_fields',
+                        nargs='?', action='append',
+                        help='extra fields to update in the ticket')
 
     subparsers.add_parser("configure", help='configure jira-cli interactively')
     subparsers.add_parser("clear_cache", help='clear the jira-cli cache')
