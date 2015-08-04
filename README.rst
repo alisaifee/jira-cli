@@ -20,10 +20,9 @@ Simple command line utility to interact with your jira instance.
 Documentation at `read the docs`_
 
 
-Notice
-======
-I no longer use jira myself and am looking for members of the community to help with the development / maintenenance of this project! It could even be something as simple as giving me access to a jira instance when you have a feature request or bug as that would give me a way to verify the change...
-
+**ADOPT ME: The author of this project is unable to continue maintaining it 
+and is looking for volunteers to adopt it. Please email me at ali@indydevs.org
+if you feel you could give this project a new home**
 
 Deprecation warning
 ===================
