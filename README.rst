@@ -20,10 +20,6 @@ Simple command line utility to interact with your jira instance.
 Documentation at `read the docs`_
 
 
-**ADOPT ME: The author of this project is unable to continue maintaining it 
-and is looking for volunteers to adopt it. Please email me at ali@indydevs.org
-if you feel you could give this project a new home**
-
 Deprecation warning
 ===================
 jira-cli, as of version ``2.0.0-pre`` has been completely rewritten (including the command line interface).
