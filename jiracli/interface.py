@@ -156,6 +156,9 @@ def build_parser():
     add.add_argument('--type', dest='issue_type', help='new issue priority')
     add.add_argument('--parent', dest='issue_parent',
                      help='parent of new issue')
+    add.add_argument('--label', dest='labels',
+                        nargs='?', action='append',
+                        help='label to add to the ticket')
     add.add_argument('--assignee', dest='issue_assignee', help='new issue assignee')
     add.add_argument('--reporter', dest='issue_reporter', help='new issue reporter')
 
@@ -181,6 +184,9 @@ def build_parser():
     update.add_argument('--transition', dest='issue_transition',
                         help='transition the issue to a new state'
                              ' (use list transitions to view available transitions for an issue)')
+    update.add_argument('--label', dest='labels',
+                        nargs='?', action='append',
+                        help='label to add to the ticket')
     update.add_argument('--extra', dest='extra_fields',
                         nargs='?', action='append',
                         help='extra fields to update in the ticket')

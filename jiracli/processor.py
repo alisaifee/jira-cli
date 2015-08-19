@@ -154,6 +154,12 @@ class UpdateCommand(Command):
             print_output(colorfunc(
                 '%s assigned to %s' % (self.args.issue, self.args.issue_assignee), 'green'
             ))
+        elif self.args.labels:
+            self.jira.add_labels(self.args.issue, self.args.labels, True)
+            print_output(colorfunc(
+                '%s labelled with %s' % (self.args.issue, ",".join(self.args.labels)), 'green'
+            ))
+
 class AddCommand(Command):
     def eval(self):
         if not self.args.issue_project:
@@ -175,7 +181,8 @@ class AddCommand(Command):
         description = self.args.issue_description or get_text_from_editor()
         print_output(self.jira.format_issue(
             self.jira.create_issue(self.args.issue_project, self.args.issue_type, self.args.title, description,
-                               self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee, self.args.issue_reporter)
+                               self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee,
+                               self.args.issue_reporter, self.args.labels)
         ))
 
 

@@ -58,7 +58,9 @@ class JiraSoapBridge(JiraBridge):
             raise JiraCliError("No transitions found for issue %s" % issue)
         return dict((k.name.lower(), soap_recursive_dict(k)) for k in transitions)
 
-    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None, assignee="", reporter=""):
+    def create_issue(self, project, type='bug', summary="", description="",
+                     priority="minor", parent=None, assignee="", reporter="",
+                     labels=[]):
         issue = {
             "project": project.upper(),
             "summary": summary,
@@ -80,6 +82,8 @@ class JiraSoapBridge(JiraBridge):
                 created_issue = self.assign_issue(created_issue['key'], assignee)
             if reporter:
                 created_issue = self.change_reporter(created_issue['key'], reporter)
+            if labels:
+                created_issue = self.add_labels(created_issue['key'], labels)
             return soap_recursive_dict(created_issue)
 
         except WebFault as e:
@@ -100,6 +104,11 @@ class JiraSoapBridge(JiraBridge):
 
     def change_reporter(self, issue_id, reporter):
         return self.update_issue(issue_id, reporter = reporter)
+
+    def add_labels(self, issue_id, labels, merge=False):
+        if merge:
+            raise JiraCliError("updating labels via the soap protocol is not supported")
+        return self.update_issue(issue_id, labels=labels)
 
     @cached('filters')
     def get_filters(self):

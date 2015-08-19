@@ -72,12 +72,14 @@ class JiraRestBridge(JiraBridge):
     def ping(self):
         return False
 
-    def create_issue(self, project, type='bug', summary="", description="", priority="minor", parent=None, assignee="", reporter=""):
+    def create_issue(self, project, type='bug', summary="", description="",
+                     priority="minor", parent=None, assignee="", reporter="", labels=[]):
         issue = {
             "project": {'key':project.upper()},
             "summary": summary,
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
+            "labels": labels
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary
@@ -139,6 +141,15 @@ class JiraRestBridge(JiraBridge):
     def change_reporter(self, issue_id, reporter):
         return self.update_issue(
             issue_id, reporter={"name": reporter}
+        )
+
+    def add_labels(self, issue_id, labels, merge=False):
+        old_labels = []
+        if merge:
+            issue = self.get_issue(issue_id)
+            old_labels = issue.get("labels", [])
+        return self.update_issue(
+            issue_id, labels=old_labels + labels
         )
 
     @cached('projects')

@@ -122,6 +122,11 @@ Update the assignee of an issue::
     ali@home ~ $ jira-cli update TP-20 --assign ali
     ali assigned to TP-20
 
+Add a label to an issue
+
+    ali@home ~ $ jira-cli update TP-20 --label moo
+    TP-20 labelled with moo
+
 transition the issue to a new state::
 
     ali@home ~ $  jira-cli update TP-20 --transition='Done'
