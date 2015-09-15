@@ -109,7 +109,7 @@ def build_parser():
                         help='password for jira instance', default=None)
     base.add_argument('--protocol', dest='protocol',
                         choices = ['soap','rest'], help='the protocol to use to communicate with jira',
-                        default='soap')
+                        )
 
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
