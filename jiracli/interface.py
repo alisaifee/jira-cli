@@ -233,7 +233,7 @@ def cli(args=sys.argv[1:]):
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
                 persist=not (post_args.username or post_args.jira_url),
-                protocol=post_args.protocol or config.protocol
+                protocol=post_args.protocol or config.protocol or 'soap'
             )
             return post_args.cmd(jira, post_args).execute()
         else:
