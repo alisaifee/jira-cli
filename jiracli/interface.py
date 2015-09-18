@@ -187,6 +187,18 @@ def build_parser():
     update.add_argument('--label', dest='labels',
                         nargs='?', action='append',
                         help='label to add to the ticket')
+    update.add_argument('--fix-version', dest='fix_version',
+                        nargs='?', action='append',
+                        help='add a version that this issue fixes')
+    update.add_argument('--remove-fix-version', dest='remove_fix_version',
+                        nargs='?', action='append',
+                        help='remove a version specified as being fixed by the issue')
+    update.add_argument('--affects-version', dest='affects_version',
+                        nargs='?', action='append',
+                        help='add a version that this issue affects')
+    update.add_argument('--remove-affects-version', dest='remove_affects_version',
+                        nargs='?', action='append',
+                        help='remove a version specified as being affected by the issue')
     update.add_argument('--extra', dest='extra_fields',
                         nargs='?', action='append',
                         help='extra fields to update in the ticket')

@@ -212,6 +212,14 @@ class JiraBridge(object):
     def change_reporter(self, issue, reporter):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def add_versions(self, issue, versions, type):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def remove_versions(self, issue, versions, type):
+        raise NotImplementedError
+
 from .rest import JiraRestBridge
 from .soap import JiraSoapBridge
 

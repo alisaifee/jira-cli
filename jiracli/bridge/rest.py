@@ -8,11 +8,12 @@ from requests import RequestException
 from jiracli.bridge import JiraBridge
 from jiracli.cache import cached
 from jiracli.errors import JiraCliError, JiraAuthenticationError, \
-    JiraInitializationError
+    JiraInitializationError, UsageError
 from jiracli.utils import rest_recursive_dict, map_rest_resource
 
 
 class JiraRestBridge(JiraBridge):
+
     def __init__(self, base_url, config, persist=False):
         super(JiraRestBridge, self).__init__(base_url, config, persist)
         self.jira = None
@@ -128,9 +129,9 @@ class JiraRestBridge(JiraBridge):
                 types['id'] = types['id'][0]
         return types
 
-    def update_issue(self, issue_id, **kwargs):
+    def update_issue(self, issue_id, update={}, **kwargs):
         issue =  self.jira.issue(issue_id)
-        issue.update(**kwargs)
+        issue.update(update=update, **kwargs)
         return self.jira.issue(issue_id)
 
     def assign_issue(self, issue_id, assignee):
@@ -176,3 +177,23 @@ class JiraRestBridge(JiraBridge):
             )
             for comment in self.jira.comments(issue)
         ]
+
+    def add_versions(self, issue, versions, type):
+        args = {}
+
+        if type == 'fix':
+            args = {'fixVersions': [{"add": {"name": v}} for v in versions]}
+        elif type == 'affects':
+            args = {'versions': [{"add": {"name": v}} for v in versions]}
+
+        return self.update_issue(issue, **args)
+
+    def remove_versions(self, issue, versions, type):
+        args = {}
+
+        if type == 'fix':
+            args = {'fixVersions': [{"remove": {"name": v}} for v in versions]}
+        elif type == 'affects':
+            args = {'versions': [{"remove": {"name": v}} for v in versions]}
+
+        return self.update_issue(issue, **args)

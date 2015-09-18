@@ -127,6 +127,22 @@ Add a label to an issue
     ali@home ~ $ jira-cli update TP-20 --label moo
     TP-20 labelled with moo
 
+Add an affected version to the issue
+
+    ali@home ~ $ jira-cli update TP-20 --affects-version=1.0
+    Added affected version(s) 1.0 to TP-20
+
+Add a fix version to the issue
+
+    ali@home ~ $ jira-cli update TP-20 --fix-version=1.0
+    Added fixed version(s) 1.0 to TP-20
+
+Remove versions from issues
+
+    ali@home ~ $ jira-cli update TP-20 --remove-fix-version=1.0 --remove-affects-version=1.0
+    Removed fixed version(s) 1.0 from TP-20
+    Removed affected version(s) 1.0 from TP-20
+
 transition the issue to a new state::
 
     ali@home ~ $  jira-cli update TP-20 --transition='Done'

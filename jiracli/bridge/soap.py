@@ -184,3 +184,39 @@ class JiraSoapBridge(JiraBridge):
     def get_resolutions(self):
         resolutions = [soap_recursive_dict(k) for k in self.service.getResolutions(self.token)]
         return dict((item['name'], item) for item in resolutions)
+
+    def get_versions(self, issue):
+        project_key = issue.split("-")[0]
+        versions = [soap_recursive_dict(k) for k in self.service.getVersions(self.token, project_key)]
+        return dict((item['name'], item) for item in versions)
+
+    def add_versions(self, issue, versions, type):
+        project_versions = self.get_versions(issue)
+        ids = []
+        issue_obj = self.get_issue(issue)
+        for version in versions:
+            if version not in project_versions:
+                raise UsageError("%s is not a valid version for issue %s" % (version, issue))
+            ids.append(project_versions[version]['id'])
+        [ids.append(v['id']) for v in issue_obj.get('fixVersions' if type == 'fix' else 'affectsVersions', [])]
+        args = {}
+
+        if type == 'fix':
+            args = {'fixVersions': ids}
+        elif type == 'affects':
+            args = {'versions': ids}
+        return self.update_issue(issue, **args)
+
+    def remove_versions(self, issue, versions, type):
+        issue_obj = self.get_issue(issue)
+        current_versions = issue_obj.get('fixVersions' if type == 'fix' else 'affectsVersions', [])
+        ids = []
+        for version in list(current_versions):
+            if version['name'] not in versions:
+                ids.append(version['id'])
+        args = {}
+        if type == 'fix':
+            args = {'fixVersions': ids}
+        elif type == 'affects':
+            args = {'versions': ids}
+        self.update_issue(issue, **args)

@@ -159,6 +159,26 @@ class UpdateCommand(Command):
             print_output(colorfunc(
                 '%s labelled with %s' % (self.args.issue, ",".join(self.args.labels)), 'green'
             ))
+        if self.args.affects_version:
+            self.jira.add_versions(self.args.issue, self.args.affects_version,'affects')
+            print_output(colorfunc(
+                'Added affected version(s) %s to %s' % (",".join(self.args.affects_version), self.args.issue), 'green'
+            ))
+        if self.args.remove_affects_version:
+            self.jira.remove_versions(self.args.issue, self.args.remove_affects_version,'affects')
+            print_output(colorfunc(
+                'Removed affected version(s) %s from %s' % (",".join(self.args.remove_affects_version), self.args.issue), 'blue'
+            ))
+        if self.args.fix_version:
+            self.jira.add_versions(self.args.issue, self.args.fix_version,'fix')
+            print_output(colorfunc(
+                'Added fixed version(s) %s to %s' % (",".join(self.args.fix_version), self.args.issue), 'green'
+            ))
+        if self.args.remove_fix_version:
+            self.jira.remove_versions(self.args.issue, self.args.remove_fix_version,'fix')
+            print_output(colorfunc(
+                'Removed fixed version(s) %s from %s' % (",".join(self.args.remove_fix_version), self.args.issue), 'blue'
+            ))
 
 class AddCommand(Command):
     def eval(self):
