@@ -1,4 +1,8 @@
-from jira.utils import JIRAError
+try:
+    from jira.utils import JIRAError
+except:  # pragma: no cover
+    from jira.exceptions import JIRAError
+
 from suds import WebFault
 
 

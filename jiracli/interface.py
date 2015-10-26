@@ -3,13 +3,13 @@
 """
 import argparse
 import keyring
-from jira.utils import JIRAError
 
 from suds import WebFault
 import sys
 from jiracli import __version__
 from jiracli.bridge import get_bridge
 from jiracli.cache import clear_cache
+from jiracli.errors import JIRAError
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.errors import  UsageWarning, JiraCliError, UsageError
 from jiracli.processor import ViewCommand, AddCommand, UpdateCommand

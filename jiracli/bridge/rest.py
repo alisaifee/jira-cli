@@ -2,13 +2,15 @@
 
 """
 from jira.client import JIRA
-from jira.utils import JIRAError
 from jira.resources import Resource
 from requests import RequestException
 from jiracli.bridge import JiraBridge
 from jiracli.cache import cached
-from jiracli.errors import JiraCliError, JiraAuthenticationError, \
-    JiraInitializationError, UsageError
+from jiracli.errors import JIRAError
+from jiracli.errors import (
+    JiraCliError, JiraAuthenticationError,
+    JiraInitializationError
+)
 from jiracli.utils import rest_recursive_dict, map_rest_resource
 
 
