@@ -217,6 +217,7 @@ def fake_parse(args):
             raise StopIteration()
     optparser = FakeParser()
     optparser.add_option("", "--v2", action='store_true', default=False)
+    optparser.add_option("", "--protocol", dest='protocol', default='soap')
     optparser.add_option("", "--version", action='store_true', default=False)
     opts, args = optparser.parse_args(args)
     return opts, args
@@ -251,7 +252,10 @@ def cli(args=sys.argv[1:]):
         else:
             if "configure" in pre_args:
                 config.reset()
-                initialize(config, "", "", "", True)
+                initialize(
+                    config, "", "", "", True,
+                    protocol=pre_opts.protocol or config.protocol or 'soap'
+                )
             elif "clear_cache" in pre_args:
                 clear_cache()
                 print_output(colorfunc("jira-cli cache cleared", "green"))
