@@ -70,7 +70,11 @@ class JiraBridge(object):
             fields["reporter"] = issue.setdefault("reporter","")
             fields["assignee"] = issue.setdefault("assignee","")
             fields["summary"] = issue.setdefault("summary","")
-            fields["link"] = colorfunc( parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white",attrs=["underline"])
+            fields["link"] = colorfunc(
+                "%s/browse/%s" % (
+                    self.base_url, issue["key"]
+                ), "white", attrs=["underline"]
+            )
         if mode == 1 or comments_only:
             fields["description"] = issue.setdefault("description","") or ""
             if not issue.get("priority", ""):
