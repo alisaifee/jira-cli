@@ -60,14 +60,15 @@ class JiraSoapBridge(JiraBridge):
 
     def create_issue(self, project, type='bug', summary="", description="",
                      priority="minor", parent=None, assignee="", reporter="",
-                     labels=[]):
+                     labels=[], components=[]):
         issue = {
             "project": project.upper(),
             "summary": summary,
             "description": description,
             "priority": self.get_priorities()[priority.lower()]["id"],
             "assignee": assignee,
-            "reporter": reporter
+            "reporter": reporter,
+            "components": [{"name": k, "id": components[k]} for k in components]
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary

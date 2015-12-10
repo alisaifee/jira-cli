@@ -198,11 +198,26 @@ class AddCommand(Command):
                 raise UsageError(
                     "issues created with parents must be one of {%s}" % ",".join(self.jira.get_subtask_issue_types())
                 )
+        components = {}
+        if self.args.issue_components:
+            valid_components = dict(
+                (k["name"], k["id"]) for k in self.jira.get_components(
+                    self.args.issue_project
+                )
+            )
+            if not set(self.args.issue_components).issubset(valid_components):
+                raise UsageError(
+                    "components for project %s should be one of {%s}" % (
+                        self.args.issue_project, ",".join(valid_components)
+                    )
+                )
+            else:
+                components = {k: valid_components[k] for k in self.args.issue_components}
         description = self.args.issue_description or get_text_from_editor()
         print_output(self.jira.format_issue(
             self.jira.create_issue(self.args.issue_project, self.args.issue_type, self.args.title, description,
                                self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee,
-                               self.args.issue_reporter, self.args.labels)
+                               self.args.issue_reporter, self.args.labels, components)
         ))
 
 

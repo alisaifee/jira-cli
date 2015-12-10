@@ -161,6 +161,9 @@ def build_parser():
                         help='label to add to the ticket')
     add.add_argument('--assignee', dest='issue_assignee', help='new issue assignee')
     add.add_argument('--reporter', dest='issue_reporter', help='new issue reporter')
+    add.add_argument('--component', dest='issue_components',
+                        action='append', help='components(s) for the new issue'
+                                              ' (use list components to view available components)')
 
     update.add_argument('issue', help='the jira issue to act on')
 

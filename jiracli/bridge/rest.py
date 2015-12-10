@@ -76,13 +76,15 @@ class JiraRestBridge(JiraBridge):
         return False
 
     def create_issue(self, project, type='bug', summary="", description="",
-                     priority="minor", parent=None, assignee="", reporter="", labels=[]):
+                     priority="minor", parent=None, assignee="", reporter="",
+                     labels=[], components=[]):
         issue = {
             "project": {'key':project.upper()},
             "summary": summary,
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
-            "labels": labels
+            "labels": labels,
+            "components": [{"name": k} for k in components.keys()]
         }
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary
@@ -165,7 +167,7 @@ class JiraRestBridge(JiraBridge):
 
     @cached('components')
     def get_components(self, project):
-        return dict((k.name.lower(), dict(k.raw)) for k in self.jira.project_components(project))
+        return [k.raw for k in self.jira.project_components(project)]
 
     @cached('statuses')
     def get_statuses(self):
