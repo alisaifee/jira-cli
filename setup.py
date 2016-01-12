@@ -21,7 +21,7 @@ versioneer.parentdir_prefix = "jiracli-"
 
 this_dir = os.path.abspath(os.path.dirname(__file__))
 REQUIREMENTS = [k for k in open(
-    os.path.join(this_dir, 'requirements.txt')
+    os.path.join(this_dir, 'requirements/main.txt')
                 ).read().splitlines() if k
 ]
 if sys.version < (2,7):

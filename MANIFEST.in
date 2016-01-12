@@ -1,5 +1,5 @@
 include CLASSIFIERS
 include README.rst
-include requirements.txt
+recursive-include requirements *
 include versioneer.py
 recursive-include tests *
