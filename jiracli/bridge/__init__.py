@@ -53,14 +53,14 @@ class JiraBridge(object):
 
         if formatter:
             groups = re.compile("(%([\w]+))").findall(formatter)
-            ret_str = formatter
+            ret_str = formatter.encode('utf-8')
             for k, v in groups:
                 if v.lower() in special_fields.keys():
                     key=issue[v.lower()]
                     data = "" or JiraBridge.object_from_key(key, special_fields[v.lower()])["name"]
                     ret_str = ret_str.replace(k, data)
                 else:
-                    ret_str = ret_str.replace(k, str(issue.setdefault(v.lower(),"")))
+                    ret_str = ret_str.replace(k, issue.setdefault(v.lower(),"")).encode('utf-8')
             return ret_str
 
         if mode >= 0:
