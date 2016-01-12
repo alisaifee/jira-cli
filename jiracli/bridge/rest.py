@@ -77,7 +77,7 @@ class JiraRestBridge(JiraBridge):
 
     def create_issue(self, project, type='bug', summary="", description="",
                      priority="minor", parent=None, assignee="", reporter="",
-                     labels=[], components=[]):
+                     labels=[], components={}):
         issue = {
             "project": {'key':project.upper()},
             "summary": summary,
