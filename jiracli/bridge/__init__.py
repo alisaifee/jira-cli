@@ -38,11 +38,11 @@ class JiraBridge(object):
         status_string = JiraBridge.object_from_key(
             issue.setdefault('status', '1'),
             self.get_statuses
-        )["name"].lower()
+        )["name"]
 
-        if status_string in ["resolved", "closed", "done"]:
+        if status_string.lower() in ["resolved", "closed", "done"]:
             status_color = "green"
-        elif status_string in ["open", "unassigned", "reopened", "to do"]:
+        elif status_string.lower() in ["open", "unassigned", "reopened", "to do"]:
             status_color = "red"
 
         special_fields = {
@@ -109,7 +109,7 @@ class JiraBridge(object):
             url_str = colorfunc(parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white", attrs=["underline"])
             ret_str = colorfunc(issue["key"], status_color) + " " + issue.setdefault("summary", "") + " " + url_str
             if not COLOR:
-                ret_str += " [%s] " % self.get_statuses()[issue["status"]]
+                ret_str += " [%s] " % status_string
             return ret_str
         for k, v in fields.items():
             if not v:
