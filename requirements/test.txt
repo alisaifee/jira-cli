@@ -1,4 +1,4 @@
--r requirements.txt
+-r main.txt
 mock
 coverage
 hiro
