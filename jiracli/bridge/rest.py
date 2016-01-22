@@ -86,6 +86,8 @@ class JiraRestBridge(JiraBridge):
             "labels": labels,
             "components": [{"name": k} for k in components.keys()]
         }
+        if not issue["components"]:
+            issue.pop("components")
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary
         if parent:

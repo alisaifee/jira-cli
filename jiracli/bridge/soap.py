@@ -70,6 +70,8 @@ class JiraSoapBridge(JiraBridge):
             "reporter": reporter,
             "components": [{"name": k, "id": components[k]} for k in components]
         }
+        if not issue["components"]:
+            issue.pop("components")
         if type.lower() == 'epic':
             issue['customfield_11401'] = summary
         try:
