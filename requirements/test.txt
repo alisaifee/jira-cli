@@ -1,6 +1,6 @@
 -r main.txt
-mock
-coverage
+mock==1.0.0
+coverage==4.0.3
 hiro
-nose-cov
-vcrpy
+nose-cov==1.6
+vcrpy==1.7.4
