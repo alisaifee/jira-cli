@@ -7,6 +7,5 @@ Operating System :: MacOS
 Operating System :: POSIX :: Linux
 Operating System :: OS Independent
 Topic :: Software Development :: Bug Tracking
-Programming Language :: Python :: 2.6
 Programming Language :: Python :: 2.7
 

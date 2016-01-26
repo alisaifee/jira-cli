@@ -35,7 +35,7 @@ Project resources
 
 .. note::
 
-    jira-cli is tested on pythons version 2.6 & 2.7
+    jira-cli is tested on python version 2.7
 
 
 .. _rewrite:
