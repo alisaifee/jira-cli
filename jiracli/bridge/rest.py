@@ -136,7 +136,7 @@ class JiraRestBridge(JiraBridge):
         return types
 
     def update_issue(self, issue_id, update={}, **kwargs):
-        issue =  self.jira.issue(issue_id)
+        issue = self.jira.issue(issue_id)
         issue.update(update=update, **kwargs)
         return self.jira.issue(issue_id)
 
@@ -151,13 +151,9 @@ class JiraRestBridge(JiraBridge):
         )
 
     def add_labels(self, issue_id, labels, merge=False):
-        old_labels = []
-        if merge:
-            issue = self.get_issue(issue_id)
-            old_labels = issue.get("labels", [])
-        return self.update_issue(
-            issue_id, labels=old_labels + labels
-        )
+        issue = self.jira.issue(issue_id)
+        issue.fields.labels.extend(labels)
+        return issue.update(fields={"labels": issue.fields.labels})
 
     @cached('projects')
     def get_projects(self):
