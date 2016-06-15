@@ -1,6 +1,6 @@
 Introduction
 ============
-Simple command line utility to interact with your jira instance. 
+Command line utility to interact with your jira instance. 
 
 .. |travis-ci| image:: https://img.shields.io/travis/alisaifee/jira-cli/master.svg?style=flat-square
    :alt: build status
