@@ -6,3 +6,4 @@ requests
 argparse
 suds-jurko
 keyring
+keyrings.alt
