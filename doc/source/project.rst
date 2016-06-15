@@ -9,7 +9,7 @@ Project resources
     - Source : `Github`_
     - Continuous Integration: |travis|
     - Test coverage: |coveralls|
-    - PyPi: |crate| / `pypi <https://pypi.python.org/pypi/jira-cli>`_
+    - PyPi: |pypi|
 
 .. only:: latex
 
@@ -21,16 +21,16 @@ Project resources
 
 .. _Github: http://github.com/alisaifee/jira-cli
 
-.. |travis| image:: https://travis-ci.org/alisaifee/jira-cli.png?branch=rewrite
+.. |travis| image:: https://travis-ci.org/alisaifee/jira-cli.png?branch=master
     :target: https://travis-ci.org/alisaifee/jira-cli
     :alt: Travis-CI
 
-.. |coveralls| image:: https://coveralls.io/repos/alisaifee/jira-cli/badge.png?branch=rewrite
-    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=rewrite
+.. |coveralls| image:: https://coveralls.io/repos/alisaifee/jira-cli/badge.png?branch=master
+    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=master
     :alt: Coveralls
 
-.. |crate| image:: https://pypip.in/v/jira-cli/badge.png
-    :target: https://crate.io/packages/jira-cli/
+.. |pypi| image:: https://badge.fury.io/py/jira-cli.svg
+    :target: https://pypi.python.org/pypi/jira-cli
     :alt: pypi
 
 .. note::
