@@ -37,7 +37,6 @@ Sample ``~/.jira-cli/config.cfg`` file::
     [jira]
     base_url = http://my.atlassian.net
     username = johndoe
-    password = mysekret
     protocol = rest    # either rest or soap
 
 

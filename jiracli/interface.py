@@ -83,8 +83,10 @@ def build_parser():
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='jira sub commands')
+    parser.add_argument('--v1', dest='v1', action='store_true',
+                        help='use jira-cli v1')
     parser.add_argument('--v2', dest='v2', action='store_true',
-                        help='use jira-cli v2')
+                        help='use jira-cli v2', default=True)
 
 
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
@@ -219,8 +221,8 @@ def fake_parse(args):
         def print_help(self, file=None):
             raise StopIteration()
     optparser = FakeParser()
-    optparser.add_option("", "--v2", action='store_true', default=False)
-    optparser.add_option("", "--protocol", dest='protocol', default='soap')
+    optparser.add_option("", "--v1", action='store_true', default=False)
+    optparser.add_option("", "--protocol", dest='protocol', default='rest')
     optparser.add_option("", "--version", action='store_true', default=False)
     opts, args = optparser.parse_args(args)
     return opts, args
@@ -234,7 +236,13 @@ def cli(args=sys.argv[1:]):
             pre_opts, pre_args = fake_parse(args)
         except StopIteration:
             pre_opts, pre_args = None, None
-            if not ("--v2" in args or config.v2):
+            if "--v1" in args or config.v1:
+                if '--v1' in sys.argv:
+                    print_error(
+                        "Use of the v1 interface is no longer supported. Please refer to jiracli.readthedocs.io",
+                        WARNING
+                    )
+                    sys.argv.remove("--v1")
                 return old_main()
         except SystemExit:
             pass
@@ -242,14 +250,14 @@ def cli(args=sys.argv[1:]):
             print(__version__)
             return
         if (
-            not (pre_opts or pre_args) or (pre_opts and (pre_opts.v2 or config.v2))
+            not (pre_opts or pre_args) or (pre_opts and not (pre_opts.v1 or config.v1))
             and not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
         ):
             post_args = parser.parse_args(args)
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
                 persist=not (post_args.username or post_args.jira_url),
-                protocol=post_args.protocol or config.protocol or 'soap'
+                protocol=post_args.protocol or config.protocol or 'rest'
             )
             return post_args.cmd(jira, post_args).execute()
         else:

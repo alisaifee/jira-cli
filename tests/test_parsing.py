@@ -31,7 +31,7 @@ class CliParsingTests(unittest.TestCase):
         with mock.patch("jiracli.interface.print_output"):
             with mock.patch("jiracli.interface.prompt") as prompt:
                 with mock.patch("jiracli.interface.initialize") as init:
-                    cli(["--v2", "configure"])
+                    cli(["--v1", "configure"])
                     cli(["configure"])
                     self.assertEqual(init.call_count, 2)
 
@@ -39,7 +39,7 @@ class CliParsingTests(unittest.TestCase):
         with mock.patch("jiracli.interface.print_output"):
             with mock.patch("jiracli.interface.prompt") as prompt:
                 with mock.patch("jiracli.interface.clear_cache") as clear_cache:
-                    cli(["--v2" , "clear_cache"])
+                    cli(["--v1" , "clear_cache"])
                     cli(["clear_cache"])
                     self.assertEqual(clear_cache.call_count, 2)
 
@@ -157,25 +157,20 @@ class BackwardCompatibilityTests(unittest.TestCase):
 
     def test_jira_cli_v1_invoked(self):
         with mock.patch("jiracli.interface.old_main") as old_main:
+            self.cfg.v1 = "1"
+            self.cfg.save()
             cli(['--help'])
             self.assertTrue(old_main.call_count==1)
-            self.cfg.v2 = "0"
+            self.cfg.v1 = "True"
             self.cfg.save()
             cli(['--help'])
             self.assertTrue(old_main.call_count==2)
-            self.cfg.v2 = "False"
-            self.cfg.save()
-            cli(['--help'])
-            self.assertTrue(old_main.call_count==3)
 
     def test_jira_cli_v2_invoked(self):
         with mock.patch("sys.stdout") as stdout:
             with mock.patch("jiracli.interface.old_main") as old_main:
                 with mock.patch("jiracli.processor.Command.execute") as execute:
                     self.assertRaises(SystemExit, cli, ['--help', '--v2'])
-                    self.cfg.v2 = "True"
-                    self.cfg.save()
                     self.assertRaises(SystemExit, cli, ['--help'])
-                    self.cfg.v2 = "1"
                     self.assertRaises(SystemExit, cli, ['--help'])
 
