@@ -27,7 +27,10 @@ class JiraCliError(Exception):
             msg = ":".join(exc.fault.faultstring.split(":")[1:]).strip()
             super(JiraCliError, self).__init__(msg)
         elif isinstance(exc, JIRAError):
-            super(JiraCliError, self).__init__(exc.text)
+            if exc.status_code == 401:
+                super(JiraCliError, self).__init__("invalid username/password")
+            else:
+                super(JiraCliError, self).__init__(exc.text)
         else:
             super(JiraCliError, self).__init__(exc)
 
