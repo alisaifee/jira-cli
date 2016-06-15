@@ -24,8 +24,6 @@ REQUIREMENTS = [k for k in open(
     os.path.join(this_dir, 'requirements/main.txt')
                 ).read().splitlines() if k
 ]
-if sys.version < (2,7):
-    REQUIREMENTS.append('argparse')
 
 extra = {}
 if sys.version_info >= (3,):
