@@ -48,7 +48,7 @@ class JiraBridge(object):
         special_fields = {
             "status": self.get_statuses,
             "priority": self.get_priorities,
-            "type": self.get_issue_types
+            "type": lambda: dict(self.get_issue_types().items() + self.get_subtask_issue_types().items())
         }
 
         if formatter:
