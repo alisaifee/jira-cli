@@ -77,7 +77,7 @@ class JiraRestBridge(JiraBridge):
 
     def create_issue(self, project, type='bug', summary="", description="",
                      priority="minor", parent=None, assignee="", reporter="",
-                     labels=[], components={}):
+                     labels=[], components={}, **extras):
         issue = {
             "project": {'key':project.upper()},
             "summary": summary,
@@ -95,6 +95,8 @@ class JiraRestBridge(JiraBridge):
             issue['parent'] = {'key':parent}
         else:
             issue['issuetype'] = {'id':self.get_issue_types()[type.lower()]['id']}
+        if extras:
+            issue.update(extras)
         issue = self.jira.create_issue(issue)
         if not (assignee or reporter):
             return self.clean_issue(issue)

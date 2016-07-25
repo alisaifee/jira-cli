@@ -22,6 +22,23 @@ class Command(object):
     def execute(self):
         return self.eval()
 
+    def extract_extras(self):
+        try:
+            extras = {}
+            for item in self.args.extra_fields:
+                key, value = item.split("=")
+                if key in extras:
+                    if not isinstance(extras[key], list):
+                        v = [extras[key]]
+                        extras[key] = v
+                    extras[key].append(value)
+                else:
+                    extras[key] = value
+            return extras
+        except Exception:
+            raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
+
+
 class ViewCommand(Command):
     def eval(self):
         if self.args.oneline:
@@ -96,20 +113,8 @@ class ListCommand(Command):
 
 class UpdateCommand(Command):
     def eval(self):
-        extras = {}
         if self.args.extra_fields:
-            try:
-                for item in self.args.extra_fields:
-                    key, value = item.split("=")
-                    if key in extras:
-                        if not isinstance(extras[key], list):
-                            v = [extras[key]]
-                            extras[key] = v
-                        extras[key].append(value)
-                    else:
-                        extras[key] = value
-            except Exception:
-                raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
+            extras = self.extract_extras()
             self.jira.update_issue(
                 self.args.issue,
                 **extras
@@ -180,8 +185,12 @@ class UpdateCommand(Command):
                 'Removed fixed version(s) %s from %s' % (",".join(self.args.remove_fix_version), self.args.issue), 'blue'
             ))
 
+
 class AddCommand(Command):
     def eval(self):
+        extras = {}
+        if self.args.extra_fields:
+            extras = self.extract_extras()
         if not self.args.issue_project:
             raise UsageError('project must be specified when creating an issue')
         if not (self.args.issue_parent or self.args.issue_type):
@@ -217,7 +226,7 @@ class AddCommand(Command):
         print_output(self.jira.format_issue(
             self.jira.create_issue(self.args.issue_project, self.args.issue_type, self.args.title, description,
                                self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee,
-                               self.args.issue_reporter, self.args.labels, components)
+                               self.args.issue_reporter, self.args.labels, components, **extras)
         ))
 
 

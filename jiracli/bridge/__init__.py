@@ -197,7 +197,9 @@ class JiraBridge(object):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create_issue(self, project, type=0, summary="", description="", priority="minor", parent=None):
+    def create_issue(
+        self, project, type=0, summary="", description="", priority="minor", parent=None, components={}, **extras
+    ):
         raise NotImplementedError
 
     @abc.abstractmethod

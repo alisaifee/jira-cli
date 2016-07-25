@@ -60,7 +60,7 @@ class JiraSoapBridge(JiraBridge):
 
     def create_issue(self, project, type='bug', summary="", description="",
                      priority="minor", parent=None, assignee="", reporter="",
-                     labels=[], components={}):
+                     labels=[], components={}, **extras):
         issue = {
             "project": project.upper(),
             "summary": summary,

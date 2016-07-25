@@ -116,6 +116,9 @@ def build_parser():
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
     add = subparsers.add_parser('new', parents=[base], help='create a new issue')
+    add.add_argument('--extra', dest='extra_fields',
+                        nargs='?', action='append',
+                        help='extra fields for the new ticket')
     add.set_defaults(cmd=AddCommand)
     update = subparsers.add_parser('update', parents=[base], help='update existing issues')
     update.set_defaults(cmd=UpdateCommand)
