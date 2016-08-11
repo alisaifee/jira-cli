@@ -195,6 +195,8 @@ def build_parser():
     update.add_argument('--label', dest='labels',
                         nargs='?', action='append',
                         help='label to add to the ticket')
+    update.add_argument('--resolution', dest='resolution',
+                        help='set the resolution for the issue')
     update.add_argument('--fix-version', dest='fix_version',
                         nargs='?', action='append',
                         help='add a version that this issue fixes')

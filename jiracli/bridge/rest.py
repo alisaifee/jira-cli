@@ -22,7 +22,7 @@ class JiraRestBridge(JiraBridge):
 
     @cached('resolutions')
     def get_resolutions(self):
-        return dict((r.name, rest_recursive_dict(r.raw)) for r in self.jira.resolutions())
+        return dict((r.name.lower(), rest_recursive_dict(r.raw)) for r in self.jira.resolutions())
 
     @cached('filters')
     def get_filters(self):
@@ -65,10 +65,13 @@ class JiraRestBridge(JiraBridge):
         self.jira.add_comment(issue, comment)
 
 
-    def transition_issue(self, issue, transition, comment=""):
+    def transition_issue(self, issue, transition, resolution):
         transitions = self.get_available_transitions(issue)
+        fields = {}
+        if resolution:
+            fields["resolution"] = self.get_resolutions()[resolution.lower()]
         try:
-            return self.jira.transition_issue(issue, transitions[transition]['id'])
+            return self.jira.transition_issue(issue, transitions[transition]['id'], fields=fields)
         except KeyError:
             raise JiraCliError("Invalid transition '%s'. Use one of [%s]" % (transition, ",".join(transitions)))
 

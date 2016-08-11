@@ -45,10 +45,15 @@ class JiraSoapBridge(JiraBridge):
             self.service = None
         self.token = config.token
 
-    def transition_issue(self, issue, transition, comment=""):
+    def transition_issue(self, issue, transition, resolution):
         transitions = self.get_available_transitions(issue)
         try:
-            return self.service.progressWorkflowAction(self.token, issue, transitions[transition]['id'])
+            fields = {}
+            if resolution:
+                fields.append({"resolution": self.get_resolutions()[resolution]["id"]})
+            return self.service.progressWorkflowAction(
+                self.token, issue, transitions[transition]['id'], fields
+            )
         except KeyError:
             raise JiraCliError("Invalid transition '%s'. Use one of [%s]" % (transition, ",".join(transitions)))
 

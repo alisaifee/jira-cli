@@ -147,6 +147,11 @@ transition the issue to a new state::
     ali@home ~ $  jira-cli update TP-20 --transition='Done'
     TP-20 transitioned to "Done"
 
+transition the issue and set a resolution:
+
+    ali@home ~ $  jira-cli update TP-20 --transition='Done' --resolution='Fixed'
+    TP-20 transitioned to "Done"
+
 provide your own formatting::
 
     ali@home ~ $ jira-cli view TP-20 --format="%reporter, %summary, %status"

@@ -150,7 +150,10 @@ class UpdateCommand(Command):
                     ",".join(self.args.issue_components), self.args.issue)
                 )
         elif self.args.issue_transition:
-            self.jira.transition_issue(self.args.issue, self.args.issue_transition.lower())
+            self.jira.transition_issue(
+                self.args.issue, self.args.issue_transition.lower(),
+                self.args.resolution
+            )
             print_output(colorfunc(
                 '%s transitioned to "%s"' % (self.args.issue, self.args.issue_transition), 'green'
             ))
