@@ -172,6 +172,11 @@ class JiraRestBridge(JiraBridge):
     def get_components(self, project):
         return [k.raw for k in self.jira.project_components(project)]
 
+    def list_versions(self, project):
+        versions = self.jira.project(project).versions
+        versions.sort(cmp=lambda l, r: cmp(l.id, l.id))
+        return [k.raw for k in versions]
+
     @cached('statuses')
     def get_statuses(self):
         return dict((k.name.lower(), dict(k.raw)) for k in self.jira.statuses())

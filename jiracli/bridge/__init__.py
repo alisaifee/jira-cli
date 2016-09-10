@@ -62,7 +62,6 @@ class JiraBridge(object):
                 else:
                     ret_str = ret_str.replace(k, issue.setdefault(v.lower(),"")).encode('utf-8')
             return ret_str
-
         if mode >= 0:
             # minimal
             fields["issue"] = issue["key"]
@@ -146,6 +145,10 @@ class JiraBridge(object):
 
     @abc.abstractmethod
     def get_components(self, project):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def list_versions(self, project):
         raise NotImplementedError
 
     @abc.abstractmethod

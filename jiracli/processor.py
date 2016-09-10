@@ -8,7 +8,10 @@ import six
 from jiracli.cli import colorfunc
 from jiracli.errors import UsageError, UsageWarning
 from jiracli.utils import get_text_from_editor, print_output
-
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 @six.add_metaclass(ABCMeta)
 class Command(object):
@@ -74,6 +77,7 @@ class ListCommand(Command):
             'statuses': (self.jira.get_statuses,),
             'resolutions': (self.jira.get_resolutions,),
             'components': (self.jira.get_components, 'project'),
+            'versions': (self.jira.list_versions, 'project'),
             'transitions': (self.jira.get_available_transitions, 'issue'),
             'filters': (self.jira.get_filters,)
         }
@@ -92,7 +96,7 @@ class ListCommand(Command):
                 _.append(getattr(self.args, earg))
         found = False
         data = func(*_, **_k)
-        data_dict = {}
+        data_dict = OrderedDict()
         if type(data) == type([]):
             for item in data:
                 data_dict[item['name']] = item

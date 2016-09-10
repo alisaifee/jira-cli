@@ -142,7 +142,7 @@ def build_parser():
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',
-                                       'statuses', 'components', 'resolutions',
+                                       'statuses', 'components', 'versions', 'resolutions',
                                        'transitions'])
     list.add_argument('--project', help='the jira project to use when listing components',
                       dest='project')

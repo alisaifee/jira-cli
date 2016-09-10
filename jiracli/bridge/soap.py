@@ -144,6 +144,9 @@ class JiraSoapBridge(JiraBridge):
     def get_components(self, project):
         return [soap_recursive_dict(k) for k in self.service.getComponents(self.token, project)]
 
+    def list_versions(self, project):
+        return [soap_recursive_dict(k) for k in self.service.getVersions(self.token, project)]
+
     def login(self, username, password):
         if type(self.service) == type(None):
             raise JiraInitializationError()
