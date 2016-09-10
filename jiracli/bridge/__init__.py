@@ -9,7 +9,10 @@ import six
 from six.moves.urllib import parse
 from jiracli.cli import colorfunc
 from jiracli.utils import COLOR
-
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 
 @six.add_metaclass(abc.ABCMeta)
 class JiraBridge(object):
@@ -33,7 +36,7 @@ class JiraBridge(object):
         return "%s(%s)" % (self.__class__.__name__, self.base_url)
 
     def format_issue(self, issue, mode=0, formatter=None, comments_only=False):
-        fields = {}
+        fields = OrderedDict()
         status_color = "blue"
         status_string = JiraBridge.object_from_key(
             issue.setdefault('status', '1'),
@@ -75,8 +78,16 @@ class JiraBridge(object):
                     self.base_url, issue["key"]
                 ), "white", attrs=["underline"]
             )
-        if mode == 1 or comments_only:
-            fields["description"] = issue.setdefault("description","") or ""
+        if comments_only:
+            fields["comments"] = "\n"
+            comments = self.get_issue_comments(issue["key"])
+            for comment in comments:
+                comment_str =  comment["body"].strip()
+                fields["comments"] += "%s %s : %s\n" % ( colorfunc(comment["created"], "blue"), colorfunc(comment["author"], "green"), comment_str )
+            return fields["comments"].strip()
+        description = (issue.setdefault("description", "") or "").split("\n")
+        if mode >= 1 and not comments_only:
+            fields["description"] = "\n".join([description[0]] + [" "*23 + k for k in description[1:] if k.strip()])
             if not issue.get("priority", ""):
                 self.fields["priority"] = ""
             else:
@@ -85,17 +96,13 @@ class JiraBridge(object):
                 issue["type"],
                 self.get_issue_types if 'parent' not in issue else self.get_subtask_issue_types
             )["name"]
-            fields["comments"] = "\n"
-            comments = self.get_issue_comments(issue["key"])
-            for comment in comments:
-                comment_str =  comment["body"].strip()
-                fields["comments"] += "%s %s : %s\n" % ( colorfunc(comment["created"], "blue"), colorfunc(comment["author"], "green"), comment_str )
+            fields["resolution"] = issue["resolution"].name
+            fields["labels"] = ",".join(issue["labels"] or ["N/A"])
+            fields["components"] = ", ".join(issue["components"] or ["N/A"])
+            fields["fixed versions"] = ", ".join([version.name for version in issue["fixVersions"]])
+            fields["affects versions"] = ", ".join([version.name for version in issue["versions"]])
         children_string = ""
         if mode > 1:
-            description = (issue.setdefault("description", "") or "").split("\n")
-            fields["description"] = "\n".join([description[0]] + [" "*23 + k for k in description[1:]])
-
-
             for child in self.search_issues_jql("parent=%s" % issue["key"]):
                 child_type = JiraBridge.object_from_key(child["type"], self.get_subtask_issue_types)["name"].lower()
                 key = ("%s" % child_type).ljust(20)
@@ -103,8 +110,6 @@ class JiraBridge(object):
                     child["key"], child["summary"], colorfunc("%s/browse/%s" % (self.base_url, child["key"]), "white", attrs=['underline'])
                 )
                 children_string += "%s : %s\n" % (key, value)
-        if comments_only:
-            return fields["comments"].strip()
         elif mode < 0:
             url_str = colorfunc(parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white", attrs=["underline"])
             ret_str = colorfunc(issue["key"], status_color) + " " + issue.setdefault("summary", "") + " " + url_str

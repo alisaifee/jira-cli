@@ -43,7 +43,7 @@ class ViewCommand(Command):
     def eval(self):
         if self.args.oneline:
             mode = -1
-        elif self.args.verbosity > 1:
+        elif self.args.verbosity >= 1:
             mode = self.args.verbosity
         else:
             mode = 0
