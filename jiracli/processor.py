@@ -30,6 +30,10 @@ class Command(object):
             extras = {}
             for item in self.args.extra_fields:
                 key, value = item.split("=")
+                try:
+                    value = json.loads(value)
+                except ValueError:
+                    pass
                 if key in extras:
                     if not isinstance(extras[key], list):
                         v = [extras[key]]
