@@ -77,7 +77,7 @@ class JiraBridge(object):
         if mode == 1 or comments_only:
             fields["description"] = issue.setdefault("description","") or ""
             if not issue.get("priority", ""):
-                self.fields["priority"] = ""
+                fields["priority"] = ""
             else:
                 fields["priority"] = JiraBridge.object_from_key(issue["priority"], self.get_priorities)["name"]
             fields["type"] = JiraBridge.object_from_key(
