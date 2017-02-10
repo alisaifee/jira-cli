@@ -3,6 +3,7 @@
 """
 from abc import ABCMeta, abstractmethod
 
+import json
 import six
 
 from jiracli.cli import colorfunc
