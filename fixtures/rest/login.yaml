@@ -4,7 +4,8 @@ interactions:
     headers:
       Accept: ['*/*']
       Accept-Encoding: ['gzip, deflate']
-      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
+      Connection: [keep-alive]
+      User-Agent: [python-requests/2.13.0]
     method: GET
     uri: https://indydevs.atlassian.net/
   response:
@@ -13,97 +14,113 @@ interactions:
       connection: [keep-alive]
       content-length: ['0']
       content-type: [text/html;charset=UTF-8]
-      date: ['Sat, 30 Aug 2014 03:25:10 GMT']
-      location: ['https://indydevs.atlassian.net/secure/MyJiraHome.jspa']
+      date: ['Sun, 26 Mar 2017 13:36:33 GMT']
+      location: [/login.jsp]
       server: [nginx]
-      set-cookie: [atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|3dc08cb0d0523f76dbe997fed444c835d890805b|lout;
-          Path=/; Secure]
-      strict-transport-security: [max-age=315360000;includeSubdomains]
-      x-arequestid: [1225x721x1]
-      x-asen: [SEN-3295567]
+      set-cookie: [atlassian.xsrf.token=BQ6L-UUSW-JJS7-D76Q|ddc3dabfb05682b5eece317e19625b21acf9272e|lout;
+          Path=/; Secure, JSESSIONID=E93558DDA86FA43CED5CD6BFBFE7529F; Path=/; Secure;
+          HttpOnly]
+      strict-transport-security: [max-age=315360000;includeSubDomains]
+      x-arequestid: [1296x86413x1]
+      x-atenant-id: [indydevs.atlassian.net]
       x-ausername: [anonymous]
       x-content-type-options: [nosniff]
-    status: {code: 302, message: Moved Temporarily}
-- request:
-    body: '{"username": "testuser", "password": "testpassword"}'
-    headers:
-      Accept: ['*/*']
-      Accept-Encoding: ['gzip, deflate']
-      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
-      Content-Length: ['47']
-      Content-type: [!!python/unicode application/json]
-      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
-    method: POST
-    uri: https://indydevs.atlassian.net/rest/auth/1/session
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAAA12OQQqDMBRE7/LXKkk0MWbXJAqW0i70AkK1BGxSGnUj3r1qhUKX85g3zAy+9d44
-        C2IG2zxbEHCu8qoqb9dSQwBT048b1CedaalUkeCcMc5lnOZaKYVYwmPJJCwB9O5hbGk7t411jenb
-        +2VDyo12AIGPxhEZ5Sto/FD8mrXZHxCEkxDxEKc15iIhAtGIZixEKULrp9e7nYwb/T7+p5CsJkgQ
-        KjCJaJx+lWX5ABoTtUfoAAAA
-    headers:
-      cache-control: ['no-cache, no-store, no-transform']
-      connection: [keep-alive]
-      content-encoding: [gzip]
-      content-type: [application/json;charset=UTF-8]
-      date: ['Sat, 30 Aug 2014 03:25:13 GMT']
-      server: [nginx]
-      set-cookie: [JSESSIONID=DAD9DBCCF41E6688B37EDCCC06483B6B; Path=/; Secure; HttpOnly,
-        'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu, 01-Jan-1970
-          00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=p4cmkAj4k8GzyVRAkpYiSw00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
-          Path=/; Secure, 'studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net;
-          Expires=Thu, 01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly']
-      strict-transport-security: [max-age=315360000;includeSubdomains]
-      transfer-encoding: [chunked]
-      vary: [Accept-Encoding]
-      x-arequestid: [1225x722x1]
-      x-asen: [SEN-3295567]
-      x-asessionid: [imgic6]
-      x-ausername: [ali]
-      x-content-type-options: [nosniff]
-      x-seraph-loginreason: [OUT, OK, OK]
-    status: {code: 200, message: OK}
+    status: {code: 302, message: Found}
 - request:
     body: null
     headers:
-      Accept: ['*/*']
+      Accept: [!!python/unicode 'application/json,*.*;q=0.9']
       Accept-Encoding: ['gzip, deflate']
-      Authorization: [!!python/unicode Basic YWxpOm1la3pleGJKNjk2OQ==]
-      Cache-Control: [!!python/unicode no-cache]
-      Cookie: [studio.crowd.tokenkey=p4cmkAj4k8GzyVRAkpYiSw00; atlassian.xsrf.token=BUT4-921B-W1UZ-B6NI|241b36dcd957724966fece35e77db69c440806a0|lin;
-          JSESSIONID=DAD9DBCCF41E6688B37EDCCC06483B6B]
-      User-Agent: [python-requests/2.3.0 CPython/2.7.6 Darwin/14.0.0]
-      X-Atlassian-Token: [!!python/unicode no-check]
+      Authorization: [Basic YWxpLmFrYmVyOm1la3pleGJKNjk2OQ==]
+      Cache-Control: [!!python/unicode 'no-cache']
+      Connection: [keep-alive]
+      Content-Type: [!!python/unicode 'application/json']
+      User-Agent: [python-requests/2.13.0]
+      X-Atlassian-Token: [!!python/unicode 'no-check']
     method: GET
-    uri: https://indydevs.atlassian.net/rest/api/2/serverInfo
+    uri: https://indydevs.atlassian.net/rest/api/2/field
   response:
     body:
       string: !!binary |
-        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
+        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
     headers:
       cache-control: ['no-cache, no-store, no-transform']
       connection: [keep-alive]
       content-encoding: [gzip]
       content-type: [application/json;charset=UTF-8]
-      date: ['Sat, 30 Aug 2014 03:25:15 GMT']
+      date: ['Sun, 26 Mar 2017 13:36:35 GMT']
       server: [nginx]
-      set-cookie: ['studio.crowd.tokenkey=""; Domain=.indydevs.atlassian.net; Expires=Thu,
-          01-Jan-1970 00:00:10 GMT; Path=/; Secure; HttpOnly', studio.crowd.tokenkey=pnFqLJHA84hdVnsPWQ2Jag00;
-          Domain=.indydevs.atlassian.net; Path=/; Secure; HttpOnly, JSESSIONID=E31D37137032A148E037C6F8944BFA93;
-          Path=/; Secure; HttpOnly]
-      strict-transport-security: [max-age=315360000;includeSubdomains]
-      transfer-encoding: [chunked]
+      set-cookie: [JSESSIONID=6468BF7757F3F6F14D1BB06098551963; Path=/; Secure; HttpOnly,
+        atlassian.xsrf.token=BQ6L-UUSW-JJS7-D76Q|c7ae2fbbaf70d00e0a7e0aafe26e4ea489fe073e|lin;
+          Path=/; Secure]
+      strict-transport-security: [max-age=315360000;includeSubDomains]
       vary: [Accept-Encoding]
-      x-arequestid: [1225x723x1]
-      x-asen: [SEN-3295567]
-      x-asessionid: [imgic6]
-      x-ausername: [ali]
+      x-arequestid: [1296x86414x1]
+      x-atenant-id: [indydevs.atlassian.net]
+      x-ausername: [testuser]
       x-content-type-options: [nosniff]
-      x-seraph-loginreason: [OUT, OK]
     status: {code: 200, message: OK}
 version: 1
