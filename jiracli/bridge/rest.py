@@ -86,9 +86,10 @@ class JiraRestBridge(JiraBridge):
             "summary": summary,
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
-            "labels": labels,
             "components": [{"name": k} for k in components.keys()]
         }
+        if labels:
+            issue['labels'] = labels
         if not issue["components"]:
             issue.pop("components")
         if type.lower() == 'epic':
