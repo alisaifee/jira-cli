@@ -121,22 +121,22 @@ Update the assignee of an issue::
     ali@home ~ $ jira-cli update TP-20 --assign ali
     ali assigned to TP-20
 
-Add a label to an issue
+Add a label to an issue::
 
     ali@home ~ $ jira-cli update TP-20 --label moo
     TP-20 labelled with moo
 
-Add an affected version to the issue
+Add an affected version to the issue::
 
     ali@home ~ $ jira-cli update TP-20 --affects-version=1.0
     Added affected version(s) 1.0 to TP-20
 
-Add a fix version to the issue
+Add a fix version to the issue::
 
     ali@home ~ $ jira-cli update TP-20 --fix-version=1.0
     Added fixed version(s) 1.0 to TP-20
 
-Remove versions from issues
+Remove versions from issues::
 
     ali@home ~ $ jira-cli update TP-20 --remove-fix-version=1.0 --remove-affects-version=1.0
     Removed fixed version(s) 1.0 from TP-20
@@ -147,7 +147,7 @@ transition the issue to a new state::
     ali@home ~ $  jira-cli update TP-20 --transition='Done'
     TP-20 transitioned to "Done"
 
-transition the issue and set a resolution:
+transition the issue and set a resolution::
 
     ali@home ~ $  jira-cli update TP-20 --transition='Done' --resolution='Fixed'
     TP-20 transitioned to "Done"
@@ -164,7 +164,6 @@ jql search for issues::
 
     ali@home ~ $ jira-cli view --search-jql 'reporter=ali and type=bug'
 
-
 list only the comments for an issue::
 
     ali@home ~ $ jira-cli view TP-20 --comments-only
@@ -172,7 +171,6 @@ list only the comments for an issue::
     Fri Dec 02 00:19:40 UTC 2011 ali : another comment
     Sat Mar 10 11:08:34 UTC 2012 ali : test comment
     Sat Mar 10 11:08:51 UTC 2012 ali : another test comment
-
 
 
 Listing types
