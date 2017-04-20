@@ -5,6 +5,7 @@ from abc import ABCMeta, abstractmethod
 
 import json
 import six
+#import json
 
 from jiracli.cli import colorfunc
 from jiracli.errors import UsageError, UsageWarning
@@ -34,7 +35,11 @@ class Command(object):
                 try:
                     value = json.loads(value)
                 except ValueError:
-                    pass
+                    print ValueError
+                    raise ValueError
+                except Exception as e:
+                    print e
+                    raise e
                 if key in extras:
                     if not isinstance(extras[key], list):
                         v = [extras[key]]
