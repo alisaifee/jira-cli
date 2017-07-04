@@ -150,7 +150,7 @@ def build_parser():
     add.add_argument('--project', dest='issue_project',
                      help='project to create new issue in')
     add.add_argument('--description', dest='issue_description',
-                     help='description of new issue')
+                     help='description of new issue', default=None)
     add.add_argument('--type', dest='issue_type', help='new issue priority')
     add.add_argument('--parent', dest='issue_parent',
                      help='parent of new issue')

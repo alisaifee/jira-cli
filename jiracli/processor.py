@@ -237,7 +237,10 @@ class AddCommand(Command):
                 )
             else:
                 components = {k: valid_components[k] for k in self.args.issue_components}
-        description = self.args.issue_description or get_text_from_editor()
+        if self.args.issue_description is not None:
+            description = self.args.issue_description
+        else:
+            description = get_text_from_editor()
         print_output(self.jira.format_issue(
             self.jira.create_issue(
                 self.args.issue_project, self.args.issue_type, self.args.title, description,
