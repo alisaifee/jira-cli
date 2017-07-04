@@ -14,11 +14,13 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
+
 @six.add_metaclass(ABCMeta)
 class Command(object):
     def __init__(self, jira, args):
         self.args = args
         self.jira = jira
+
     @abstractmethod
     def eval(self):
         raise NotImplementedError
@@ -56,13 +58,13 @@ class ViewCommand(Command):
         else:
             mode = 0
         if self.args.search_freetext:
-            issues = self.jira.search_issues(self.args.search_freetext, project = self.args.project)
+            issues = self.jira.search_issues(self.args.search_freetext, project=self.args.project)
         elif self.args.search_jql:
             issues = self.jira.search_issues_jql(self.args.search_jql)
         elif self.args.filter:
             issues = self.jira.get_issues_by_filter(*self.args.filter)
         else:
-            issues = filter(lambda issue:issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids])
+            issues = filter(lambda issue: issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids])
 
         for issue in issues:
             print_output(self.jira.format_issue(
@@ -71,6 +73,7 @@ class ViewCommand(Command):
                 formatter=self.args.format,
                 comments_only=self.args.comments_only
             ))
+
 
 class ListCommand(Command):
     def eval(self):
@@ -177,22 +180,22 @@ class UpdateCommand(Command):
                 '%s labelled with %s' % (self.args.issue, ",".join(self.args.labels)), 'green'
             ))
         if self.args.affects_version:
-            self.jira.add_versions(self.args.issue, self.args.affects_version,'affects')
+            self.jira.add_versions(self.args.issue, self.args.affects_version, 'affects')
             print_output(colorfunc(
                 'Added affected version(s) %s to %s' % (",".join(self.args.affects_version), self.args.issue), 'green'
             ))
         if self.args.remove_affects_version:
-            self.jira.remove_versions(self.args.issue, self.args.remove_affects_version,'affects')
+            self.jira.remove_versions(self.args.issue, self.args.remove_affects_version, 'affects')
             print_output(colorfunc(
                 'Removed affected version(s) %s from %s' % (",".join(self.args.remove_affects_version), self.args.issue), 'blue'
             ))
         if self.args.fix_version:
-            self.jira.add_versions(self.args.issue, self.args.fix_version,'fix')
+            self.jira.add_versions(self.args.issue, self.args.fix_version, 'fix')
             print_output(colorfunc(
                 'Added fixed version(s) %s to %s' % (",".join(self.args.fix_version), self.args.issue), 'green'
             ))
         if self.args.remove_fix_version:
-            self.jira.remove_versions(self.args.issue, self.args.remove_fix_version,'fix')
+            self.jira.remove_versions(self.args.issue, self.args.remove_fix_version, 'fix')
             print_output(colorfunc(
                 'Removed fixed version(s) %s from %s' % (",".join(self.args.remove_fix_version), self.args.issue), 'blue'
             ))
@@ -215,7 +218,7 @@ class AddCommand(Command):
         if self.args.issue_parent:
             if not self.args.issue_type:
                 self.args.issue_type = 'sub-task'
-            if not self.args.issue_type in self.jira.get_subtask_issue_types():
+            if self.args.issue_type not in self.jira.get_subtask_issue_types():
                 raise UsageError(
                     "issues created with parents must be one of {%s}" % ",".join(self.jira.get_subtask_issue_types())
                 )
@@ -236,14 +239,9 @@ class AddCommand(Command):
                 components = {k: valid_components[k] for k in self.args.issue_components}
         description = self.args.issue_description or get_text_from_editor()
         print_output(self.jira.format_issue(
-            self.jira.create_issue(self.args.issue_project, self.args.issue_type, self.args.title, description,
-                               self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee,
-                               self.args.issue_reporter, self.args.labels, components, **extras)
+            self.jira.create_issue(
+                self.args.issue_project, self.args.issue_type, self.args.title, description,
+                self.args.issue_priority, self.args.issue_parent, self.args.issue_assignee,
+                self.args.issue_reporter, self.args.labels, components, **extras
+            )
         ))
-
-
-
-
-
-
-
