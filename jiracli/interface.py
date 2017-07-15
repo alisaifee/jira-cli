@@ -11,12 +11,13 @@ from jiracli.bridge import get_bridge
 from jiracli.cache import clear_cache
 from jiracli.errors import JIRAError
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
-from jiracli.errors import  UsageWarning, JiraCliError, UsageError
+from jiracli.errors import UsageWarning, JiraCliError, UsageError
 from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
 from jiracli.processor import ListCommand
 from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
     print_output
 from jiracli.cli import main as old_main
+
 
 def initialize(config, base_url=None, username=None, password=None,
                persist=True, error=False, protocol='soap'):
@@ -25,43 +26,38 @@ def initialize(config, base_url=None, username=None, password=None,
     if error or not (url and bridge and bridge.ping()):
         url = url or prompt("Base url for the jira instance: ")
         username = (
-            username
-            or (not error and config.username)
-            or prompt("username: ")
+            username or
+            (not error and config.username) or
+            prompt("username: ")
         )
         password = (
-            password
-            or (not error and keyring.get_password('jira-cli',username))
-            or prompt("password: ", True)
+            password or
+            (not error and keyring.get_password('jira-cli', username)) or
+            prompt("password: ", True)
         )
         jira = not error and bridge or get_bridge(protocol)(url, config, persist)
         persist_warning = "would you like to persist the credentials to the local keyring? [y/n]:"
 
         first_run = (
             not(
-                config.base_url
-                or config.username
-                or keyring.get_password('jira-cli',username)
+                config.base_url or
+                config.username or
+                keyring.get_password('jira-cli', username)
             )
         )
         if persist or first_run:
             config.base_url = url
             config.save()
-            keyring.set_password('jira-cli',username,password)
+            keyring.set_password('jira-cli', username, password)
         try:
             jira.login(username, password)
             if (
-                (persist or first_run)
-                 and (
-                    not (
-                        config.username == username
-                        or config.password == password
-                    )
-                )
-                and "y" == prompt(persist_warning)
+                (persist or first_run) and
+                (not (config.username == username or config.password == password)) and
+                "y" == prompt(persist_warning)
             ):
                 config.username = username
-                keyring.set_password('jira-cli',username,password)
+                keyring.set_password('jira-cli', username, password)
                 config.save()
             config.save()
             return jira
@@ -88,37 +84,35 @@ def build_parser():
     parser.add_argument('--v2', dest='v2', action='store_true',
                         help='use jira-cli v2', default=True)
 
-
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
     base.add_argument('--jira-url', dest='jira_url',
-                        help='the base url for the jira instance', default=None)
+                      help='the base url for the jira instance', default=None)
     base.add_argument("--format", dest="format", default=None,
-                        help=r'format for displaying ticket information. '
-                             r'allowed tokens: status,priority,updated,votes,'
-                             r'components,project,reporter,created,fixVersions,'
-                             r'summary,environment,assignee,key,'
-                             r'affectsVersions,type.'
-                             r'Use the %% character before each token '
-                             r'(example: issue id: %%key [%%priority])')
+                      help=r'format for displaying ticket information. '
+                           r'allowed tokens: status,priority,updated,votes,'
+                           r'components,project,reporter,created,fixVersions,'
+                           r'summary,environment,assignee,key,'
+                           r'affectsVersions,type.'
+                           r'Use the %% character before each token '
+                           r'(example: issue id: %%key [%%priority])')
     base.add_argument('--oneline', dest='oneline',
-                        help='built in format to display each ticket on one line',
-                        action='store_true')
+                      help='built in format to display each ticket on one line',
+                      action='store_true')
     base.add_argument('-v', dest='verbosity', help='amount of detail to show for issues',
-                        action='count')
+                      action='count')
     base.add_argument('-u', '--username', dest='username',
-                        help='username to login as', default=None)
+                      help='username to login as', default=None)
     base.add_argument('-p', '--password', dest='password',
-                        help='password for jira instance', default=None)
+                      help='password for jira instance', default=None)
     base.add_argument('--protocol', dest='protocol',
-                        choices = ['soap','rest'], help='the protocol to use to communicate with jira',
-                        )
+                      choices=['soap', 'rest'], help='the protocol to use to communicate with jira')
 
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
     add = subparsers.add_parser('new', parents=[base], help='create a new issue')
     add.add_argument('--extra', dest='extra_fields',
-                        nargs='?', action='append',
-                        help='extra fields for the new ticket')
+                     nargs='?', action='append',
+                     help='extra fields for the new ticket')
     add.set_defaults(cmd=AddCommand)
     update = subparsers.add_parser('update', parents=[base], help='update existing issues')
     update.set_defaults(cmd=UpdateCommand)
@@ -139,7 +133,6 @@ def build_parser():
                       action='store_true')
     view.add_argument('jira_ids', nargs='*', help='jira issue ids')
 
-
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',
                                        'statuses', 'components', 'versions', 'resolutions',
@@ -157,18 +150,18 @@ def build_parser():
     add.add_argument('--project', dest='issue_project',
                      help='project to create new issue in')
     add.add_argument('--description', dest='issue_description',
-                     help='description of new issue')
+                     help='description of new issue', default=None)
     add.add_argument('--type', dest='issue_type', help='new issue priority')
     add.add_argument('--parent', dest='issue_parent',
                      help='parent of new issue')
     add.add_argument('--label', dest='labels',
-                        nargs='?', action='append',
-                        help='label to add to the ticket')
+                     nargs='?', action='append',
+                     help='label to add to the ticket')
     add.add_argument('--assignee', dest='issue_assignee', help='new issue assignee')
     add.add_argument('--reporter', dest='issue_reporter', help='new issue reporter')
     add.add_argument('--component', dest='issue_components',
-                        action='append', help='components(s) for the new issue'
-                                              ' (use list components to view available components)')
+                     action='append', help='components(s) for the new issue'
+                                           ' (use list components to view available components)')
 
     update.add_argument('issue', help='the jira issue to act on')
 
@@ -218,19 +211,24 @@ def build_parser():
 
     return parser
 
+
 def fake_parse(args):
     import optparse
+
     class FakeParser(optparse.OptionParser):
         def print_usage(self, file=None):
             raise SystemExit()
+
         def print_help(self, file=None):
             raise StopIteration()
+
     optparser = FakeParser()
     optparser.add_option("", "--v1", action='store_true', default=False)
     optparser.add_option("", "--protocol", dest='protocol', default='rest')
     optparser.add_option("", "--version", action='store_true', default=False)
     opts, args = optparser.parse_args(args)
     return opts, args
+
 
 def cli(args=sys.argv[1:]):
     parser = build_parser()
@@ -255,8 +253,8 @@ def cli(args=sys.argv[1:]):
             print(__version__)
             return
         if (
-            not (pre_opts or pre_args) or (pre_opts and not (pre_opts.v1 or config.v1))
-            and not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
+            not (pre_opts or pre_args) or (pre_opts and not (pre_opts.v1 or config.v1)) and
+            not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
         ):
             post_args = parser.parse_args(args)
             jira = initialize(
@@ -289,6 +287,7 @@ def cli(args=sys.argv[1:]):
         print_error(JiraCliError(e))
     except NotImplementedError as e:
         print_error(e)
+
 
 if __name__ == "__main__":
     cli()

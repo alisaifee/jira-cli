@@ -72,6 +72,25 @@ class CliParsingTests(unittest.TestCase):
                 allowed
             )
 
+    def test_new_subcommand(self):
+        parser = build_parser()
+        args = parser.parse_args(['new', '--project=TP', '--type=Story',  'Issue title'])
+        self.assertEqual(args.title, 'Issue title')
+        self.assertEqual(args.issue_project, 'TP')
+        self.assertEqual(args.issue_type, 'Story')
+
+    def test_new_subcommand_description_is_none_by_default(self):
+        """ Test that the description is None if missing, when adding new issue. """
+        parser = build_parser()
+        args = parser.parse_args(['new', '--project=TP', '--type=Story',  'Issue title'])
+        self.assertEqual(args.issue_description, None)
+
+    def test_new_subcommand_description_can_be_a_blank_string(self):
+        """ Test that the description can be set to a blank string explicitly, when adding new issue. """
+        parser = build_parser()
+        args = parser.parse_args(['new', '--project=TP', '--type=Story', '--description=', 'Issue title'])
+        self.assertEqual(args.issue_description, '')
+
 
 class CliInitParsing(unittest.TestCase):
 
