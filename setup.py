@@ -25,10 +25,6 @@ REQUIREMENTS = [k for k in open(
                 ).read().splitlines() if k
 ]
 
-extra = {}
-if sys.version_info >= (3,):
-    extra['use_2to3'] = True
-
 setup(name='jira-cli',
      author=__author__,
      author_email=__email__,
@@ -48,6 +44,5 @@ setup(name='jira-cli',
              'jira-cli = jiracli.interface:cli',
              ]
         },
-    **extra
      )
 

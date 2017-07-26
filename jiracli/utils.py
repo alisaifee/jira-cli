@@ -157,7 +157,16 @@ def print_error(msg, severity=CRITICAL):
     sys.stderr.write(colorfunc(msg, color) + "\n")
 
 def print_output(msg):
-    print(msg.encode('utf-8'))
+    print(msg)
 
 def prompt(msg, masked=False):
-    return input(msg) if not masked else getpass.getpass(msg)
+    if not masked:
+        ret = input(msg)
+        if ret in ["True", "true"]:
+            return True
+        elif ret in ["False", "false"]:
+            return False
+        else:
+            return ret
+    else:
+        return getpass.getpass(msg)
