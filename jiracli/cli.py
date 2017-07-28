@@ -7,7 +7,7 @@ import tempfile
 import socket
 import pickle
 import sys
-from six.moves import urllib
+from six.moves import urllib, input
 
 from suds.client import Client
 from suds import WebFault
@@ -120,7 +120,7 @@ def check_auth(username, password):
     def _validate_jira_url(url=None):
         global jiraobj, token, jirabase
         if not url:
-            jirabase = raw_input("base url for your jira instance (e.g http://issues.apache.org/jira):")
+            jirabase = input("base url for your jira instance (e.g http://issues.apache.org/jira):")
         else:
             jirabase = url
         try:

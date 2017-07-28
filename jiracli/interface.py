@@ -99,7 +99,7 @@ def build_parser():
                       help='built in format to display each ticket on one line',
                       action='store_true')
     base.add_argument('-v', dest='verbosity', help='amount of detail to show for issues',
-                      action='count')
+                      action='count', default=0)
     base.add_argument('-u', '--username', dest='username',
                       help='username to login as', default=None)
     base.add_argument('-p', '--password', dest='password',
