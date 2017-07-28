@@ -2,6 +2,7 @@
 
 """
 import argparse
+import shlex
 import keyring
 
 from suds import WebFault
@@ -231,6 +232,12 @@ def fake_parse(args):
 
 
 def cli(args=sys.argv[1:]):
+    alias_config = Config(section='alias')
+    if set(alias_config.items().keys()).intersection(sys.argv):
+        for alias, target in alias_config.items().items():
+            if sys.argv[1] == alias:
+                args = shlex.split(target) + args[1:]
+                break
     parser = build_parser()
     try:
         config = Config()
