@@ -45,6 +45,8 @@ class JiraBridge(object):
         elif status_string.lower() in ["open", "unassigned", "reopened", "to do"]:
             status_color = "red"
 
+        list_fields = set(['versions', 'fixversions'])
+
         special_fields = {
             "status": self.get_statuses,
             "priority": self.get_priorities,
@@ -59,6 +61,9 @@ class JiraBridge(object):
                     key=issue[v.lower()]
                     data = "" or JiraBridge.object_from_key(key, special_fields[v.lower()])["name"]
                     ret_str = ret_str.replace(k, data)
+                elif v.lower() in list_fields:
+                    fix_versions = ", ".join(v.name for v in issue.get('fixVersions', []))
+                    ret_str = ret_str.replace(k, fix_versions.encode('utf-8'))
                 else:
                     ret_str = ret_str.replace(k, issue.setdefault(v.lower(),"")).encode('utf-8')
             return ret_str
