@@ -22,12 +22,12 @@ DEFAULT_EDITOR_TEXT = """-- enter your text here
 
 
 class Config(object):
-    def __init__(self, path=None):
+    def __init__(self, path=None, section='jira'):
         """
         manages a the .cfg file
         """
         object.__setattr__(self, 'cfg', configparser.ConfigParser())
-        object.__setattr__(self, 'section', 'jira')
+        object.__setattr__(self, 'section', section)
         object.__setattr__(self, 'cfg_path', path or CONFIG_FILE)
         if os.path.isfile(self.cfg_path):
             self.cfg.read(self.cfg_path)
@@ -41,6 +41,11 @@ class Config(object):
         for section in self.cfg.sections():
             self.cfg.remove_section(section)
         self.save()
+
+    def items(self):
+        cfg = super(Config, self).__getattribute__('cfg')
+        section = super(Config, self).__getattribute__('section')
+        return dict(cfg.items(section) if cfg.has_section(section) else [])
 
     def __setattr__(self, key, value):
         try:

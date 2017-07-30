@@ -2,6 +2,7 @@
 
 """
 import argparse
+import shlex
 import keyring
 
 from suds import WebFault
@@ -136,7 +137,7 @@ def build_parser():
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',
                                        'statuses', 'components', 'versions', 'resolutions',
-                                       'transitions'])
+                                       'transitions', 'aliases'])
     list.add_argument('--project', help='the jira project to use when listing components',
                       dest='project')
     list.add_argument('--issue', help='the jira issue to use when listing transitions',
@@ -231,6 +232,12 @@ def fake_parse(args):
 
 
 def cli(args=sys.argv[1:]):
+    alias_config = Config(section='alias')
+    if set(alias_config.items().keys()).intersection(args):
+        for alias, target in alias_config.items().items():
+            if args[0] == alias:
+                args = shlex.split(target) + args[1:]
+                break
     parser = build_parser()
     try:
         config = Config()

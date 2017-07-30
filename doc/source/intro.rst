@@ -56,6 +56,20 @@ the protocol::
 
     jira-cli view TP-01 --protocol=soap
 
+
+You can additionally add aliases for frequently used sub commands::
+
+    [alias]
+    myissues = view --search-jql='assignee=me'
+    ...
+
+And then use as::
+
+    jira-cli myissues
+    jira-cli myissues --oneline
+    ...
+
+
 Usage
 =====
 
@@ -217,3 +231,7 @@ project components::
 Possible transitions for an issue::
 
     jira-cli list transitions --issue=TP-20
+
+your own configured aliases::
+
+    jira-cli list aliases

@@ -79,6 +79,24 @@ class CliParsingTests(unittest.TestCase):
         self.assertEqual(args.issue_project, 'TP')
         self.assertEqual(args.issue_type, 'Story')
 
+    def test_aliases(self):
+        tmp_config = tempfile.mktemp()
+        open(tmp_config, 'w').write("""
+[jira]
+username = testuser
+base = http://foo.bar
+
+[alias]
+test_alias = view TEST-123
+        """)
+        config = Config(tmp_config)
+        jiracli.utils.CONFIG_FILE = tmp_config
+        config.save()
+        with mock.patch("jiracli.interface.prompt"):
+            with mock.patch("jiracli.interface.initialize") as initialize:
+                cli(["test_alias"])
+                self.assertEqual(initialize.return_value.get_issue.call_count, 1)
+
     def test_new_subcommand_description_is_none_by_default(self):
         """ Test that the description is None if missing, when adding new issue. """
         parser = build_parser()
