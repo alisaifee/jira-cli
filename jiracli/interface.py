@@ -233,9 +233,9 @@ def fake_parse(args):
 
 def cli(args=sys.argv[1:]):
     alias_config = Config(section='alias')
-    if set(alias_config.items().keys()).intersection(sys.argv):
+    if set(alias_config.items().keys()).intersection(args):
         for alias, target in alias_config.items().items():
-            if sys.argv[1] == alias:
+            if args[0] == alias:
                 args = shlex.split(target) + args[1:]
                 break
     parser = build_parser()
