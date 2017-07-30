@@ -6,7 +6,7 @@ import vcr
 
 jiravcr = vcr.VCR(
     record_mode = 'once',
-    match_on = ['uri', 'method'],
+    match_on=['path', 'method'],
 )
 
 class BridgeTests:
