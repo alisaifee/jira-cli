@@ -8,7 +8,8 @@ import six
 
 from jiracli.cli import colorfunc
 from jiracli.errors import UsageError, UsageWarning
-from jiracli.utils import get_text_from_editor, print_output
+from jiracli.utils import get_text_from_editor, print_output, Config
+
 try:
     from collections import OrderedDict
 except ImportError:
@@ -87,7 +88,8 @@ class ListCommand(Command):
             'components': (self.jira.get_components, 'project'),
             'versions': (self.jira.list_versions, 'project'),
             'transitions': (self.jira.get_available_transitions, 'issue'),
-            'filters': (self.jira.get_filters,)
+            'filters': (self.jira.get_filters,),
+            'aliases': (lambda: [{"name": k, "description": v} for k, v in Config(section='alias').items().items()],)
         }
         func, arguments = mappers[self.args.type][0], mappers[self.args.type][1:]
         _ = []
