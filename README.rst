@@ -5,8 +5,8 @@ Command line utility to interact with your jira instance.
 .. |travis-ci| image:: https://img.shields.io/travis/alisaifee/jira-cli/master.svg?style=flat-square
    :alt: build status
    :target: https://travis-ci.org/#!/alisaifee/jira-cli
-.. |coveralls| image:: https://img.shields.io/coveralls/alisaifee/jira-cli/master.svg?style=flat-square
-    :target: https://coveralls.io/r/alisaifee/jira-cli?branch=master
+.. |codecov| image:: https://img.shields.io/codecov/c/github/alisaifee/jira-cli/master.svg?style=flat-square
+    :target: https://codecov.io/gh/alisaifee/jira-cli
 .. |license| image:: https://img.shields.io/pypi/l/jira-cli.svg?style=flat-square
     :target: https://pypi.python.org/pypi/jira-cli
 .. |pypi| image:: https://img.shields.io/pypi/v/jira-cli.svg?style=flat-square
@@ -15,7 +15,7 @@ Command line utility to interact with your jira instance.
 .. _read the docs: https://jira-cli.readthedocs.org
 
 
-|travis-ci| |coveralls| |pypi| |license|
+|travis-ci| |codecov| |pypi| |license|
 
 Documentation at `read the docs`_
 
