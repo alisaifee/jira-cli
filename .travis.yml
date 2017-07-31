@@ -7,4 +7,4 @@ install:
 
 script: nosetests --with-cov
 after_success:
-    - coveralls
+    - codecov
