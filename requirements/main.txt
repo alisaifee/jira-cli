@@ -1,7 +1,7 @@
 termcolor==1.1.0
 six==1.10.0
 ordereddict==1.1
-jira
+jira==1.0.10
 requests
 argparse
 suds-jurko
