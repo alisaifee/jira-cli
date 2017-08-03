@@ -4,6 +4,6 @@ ordereddict==1.1
 jira==1.0.10
 requests==2.18.3
 argparse==1.4.0
-suds-jurko
+suds-jurko==0.6
 keyring
 keyrings.alt
