@@ -6,4 +6,4 @@ requests==2.18.3
 argparse==1.4.0
 suds-jurko==0.6
 keyring==10.4.0
-keyrings.alt
+keyrings.alt==2.2
