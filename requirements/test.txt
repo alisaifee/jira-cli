@@ -1,6 +1,6 @@
 -r main.txt
 mock==2.0.0
 coverage==4.4.1
-hiro
+hiro==0.5
 nose-cov==1.6
 vcrpy==1.11.1
