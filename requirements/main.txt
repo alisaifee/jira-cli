@@ -1,6 +1,6 @@
 termcolor==1.1.0
 six==1.10.0
-ordereddict
+ordereddict==1.1
 jira
 requests
 argparse
