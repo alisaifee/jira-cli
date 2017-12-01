@@ -3,6 +3,8 @@
 """
 from abc import ABCMeta, abstractmethod
 
+import sys
+
 import json
 import six
 
@@ -212,7 +214,12 @@ class AddCommand(Command):
             raise UsageError('project must be specified when creating an issue')
         if not (self.args.issue_parent or self.args.issue_type):
             self.args.issue_type = 'bug'
-        if self.args.issue_type and not self.args.issue_type.lower() in list(self.jira.get_issue_types().keys()) + list(self.jira.get_subtask_issue_types().keys()):
+        issue_types = []
+        if sys.version_info >= (3,0):
+            issue_types = list(self.jira.get_issue_types().keys()) + list(self.jira.get_subtask_issue_types().keys())
+        else:
+            issue_types = self.jira.get_issue_types().keys() + self.jira.get_subtask_issue_types().keys()
+        if self.args.issue_type and not self.args.issue_type.lower() in issue_types):
             raise UsageError(
                 "invalid issue type: %s (try using jira-cli "
                 "list issue_types or jira-cli list subtask_types)" % self.args.issue_type
