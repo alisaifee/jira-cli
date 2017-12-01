@@ -219,7 +219,7 @@ class AddCommand(Command):
             issue_types = list(self.jira.get_issue_types().keys()) + list(self.jira.get_subtask_issue_types().keys())
         else:
             issue_types = self.jira.get_issue_types().keys() + self.jira.get_subtask_issue_types().keys()
-        if self.args.issue_type and not self.args.issue_type.lower() in issue_types):
+        if self.args.issue_type and not self.args.issue_type.lower() in issue_types:
             raise UsageError(
                 "invalid issue type: %s (try using jira-cli "
                 "list issue_types or jira-cli list subtask_types)" % self.args.issue_type
