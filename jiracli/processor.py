@@ -176,6 +176,11 @@ class UpdateCommand(Command):
             print_output(colorfunc(
                 '%s assigned to %s' % (self.args.issue, self.args.issue_assignee), 'green'
             ))
+        elif self.args.issue_unassign:
+            self.jira.assign_issue(self.args.issue, None)
+            print_output(colorfunc(
+                '%s unassigned' % (self.args.issue), 'green'
+            ))
         elif self.args.labels:
             self.jira.add_labels(self.args.issue, self.args.labels, True)
             print_output(colorfunc(

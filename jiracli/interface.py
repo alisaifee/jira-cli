@@ -183,6 +183,9 @@ def build_parser():
                                               ' (use list components to view available components)')
     update.add_argument('--assign', dest='issue_assignee',
                         help='assign the issue to a user')
+    update.add_argument('--unassign', dest='issue_unassign',
+                        help='unassign the issue to a user',
+                        action='store_true')
     update.add_argument('--transition', dest='issue_transition',
                         help='transition the issue to a new state'
                              ' (use list transitions to view available transitions for an issue)')
