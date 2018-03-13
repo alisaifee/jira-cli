@@ -11,7 +11,8 @@ from jiracli import __version__
 from jiracli.bridge import get_bridge
 from jiracli.cache import clear_cache
 from jiracli.errors import JIRAError
-from jiracli.errors import JiraAuthenticationError, JiraInitializationError
+from jiracli.errors import JiraAuthenticationError, JiraInitializationError, \
+    JiraSLLError
 from jiracli.errors import UsageWarning, JiraCliError, UsageError
 from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
 from jiracli.processor import ListCommand
@@ -23,7 +24,15 @@ from jiracli.cli import main as old_main
 def initialize(config, base_url=None, username=None, password=None,
                persist=True, error=False, protocol='soap'):
     url = base_url or config.base_url
-    bridge = get_bridge(protocol)(url, config, persist) if (url and not error) else None
+    if url and not error:
+        bridge = get_bridge(protocol)(url, config, persist)
+
+    elif url and error:
+        config.ca_cert = prompt("path to root certificate:")
+        config.save()
+        bridge = get_bridge(protocol)(url, config, persist)
+        return bridge
+
     if error or not (url and bridge and bridge.ping()):
         url = url or prompt("Base url for the jira instance: ")
         username = (
@@ -65,10 +74,14 @@ def initialize(config, base_url=None, username=None, password=None,
         except JiraAuthenticationError:
             print_error("invalid username/password", severity=WARNING)
             return initialize(config, base_url=url, error=True, protocol=protocol, persist=persist)
+        except JiraSLLError:
+            print_error("invalid SSL certificate", severity=WARNING)
+            return initialize(config, base_url=config.base_url, error=True, protocol=protocol, persist=False)
         except JiraInitializationError:
             print_error("invalid jira location", severity=WARNING)
             config.base_url = ""
             return initialize(config, error=True, protocol=protocol, persist=persist)
+
     else:
         return bridge
 

@@ -13,6 +13,8 @@ class JiraInitializationError(Exception):
 class JiraAuthenticationError(Exception):
     pass
 
+class JiraSLLError(Exception):
+    pass
 
 class UsageError(Exception):
     pass
