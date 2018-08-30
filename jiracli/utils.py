@@ -162,7 +162,7 @@ def print_error(msg, severity=CRITICAL):
     sys.stderr.write(colorfunc(msg, color) + "\n")
 
 def print_output(msg):
-    print(msg)
+    print(msg.encode('utf-8'))
 
 def prompt(msg, masked=False):
     if not masked:
