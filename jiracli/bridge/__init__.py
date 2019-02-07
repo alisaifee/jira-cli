@@ -234,14 +234,14 @@ class JiraBridge(object):
     def remove_versions(self, issue, versions, type):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def worklogs(self, issue):
+        raise NotImplementedError
+
 from .rest import JiraRestBridge
-from .soap import JiraSoapBridge
 
 def get_bridge(protocol):
     """
     simple factory to get the jira bridge based on the protocol
     """
-    return {
-        'soap': JiraSoapBridge,
-        'rest': JiraRestBridge
-    }[protocol]
+    return JiraRestBridge
