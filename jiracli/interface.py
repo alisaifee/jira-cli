@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 
 """
@@ -13,7 +14,7 @@ from jiracli.cache import clear_cache
 from jiracli.errors import JIRAError
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.errors import UsageWarning, JiraCliError, UsageError
-from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
+from jiracli.processor import ViewCommand, AddCommand, UpdateCommand, WorkLogCommand
 from jiracli.processor import ListCommand
 from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
     print_output
@@ -110,6 +111,8 @@ def build_parser():
 
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
+    work_log = subparsers.add_parser("work-log", parents=[base], help="show work log/log work")
+    work_log.set_defaults(cmd=WorkLogCommand)
     add = subparsers.add_parser('new', parents=[base], help='create a new issue')
     add.add_argument('--extra', dest='extra_fields',
                      nargs='?', action='append',
@@ -133,6 +136,8 @@ def build_parser():
                       help='displays only the comments assosciated with each issue',
                       action='store_true')
     view.add_argument('jira_ids', nargs='*', help='jira issue ids')
+
+    work_log.add_argument("jira_id", help="jira issue id")
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',

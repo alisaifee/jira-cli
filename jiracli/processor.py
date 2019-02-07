@@ -50,6 +50,17 @@ class Command(object):
             raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
 
 
+class WorkLogCommand(Command):
+    def eval(self):
+        worklogs = self.jira.worklogs(self.args.jira_id)
+        for worklog in worklogs:
+            print_output(self.format_worklog(worklog))
+
+    def format_worklog(self, worklog):
+        return "%s %s : %s %s" % (
+            colorfunc(worklog.created, "blue"), colorfunc(worklog.author, "white"), worklog.comment, colorfunc("[" + worklog.timeSpent + "]", "green"))
+
+
 class ViewCommand(Command):
     def eval(self):
         if self.args.oneline:

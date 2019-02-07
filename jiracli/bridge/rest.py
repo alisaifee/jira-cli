@@ -64,7 +64,6 @@ class JiraRestBridge(JiraBridge):
     def add_comment(self, issue, comment):
         self.jira.add_comment(issue, comment)
 
-
     def transition_issue(self, issue, transition, resolution):
         transitions = self.get_available_transitions(issue)
         fields = {}
@@ -210,3 +209,6 @@ class JiraRestBridge(JiraBridge):
             args = {'versions': [{"remove": {"name": v}} for v in versions]}
 
         return self.update_issue(issue, **args)
+
+    def worklogs(self, issue):
+        return self.jira.worklogs(issue)
