@@ -7,8 +7,7 @@ import requests
 from requests import RequestException
 import six
 from six.moves.urllib import parse
-from jiracli.cli import colorfunc
-from jiracli.utils import COLOR
+from jiracli.utils import COLOR, colorfunc
 
 
 @six.add_metaclass(abc.ABCMeta)

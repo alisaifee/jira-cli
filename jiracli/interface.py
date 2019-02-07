@@ -18,7 +18,6 @@ from jiracli.processor import ViewCommand, AddCommand, UpdateCommand, WorkLogCom
 from jiracli.processor import ListCommand
 from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
     print_output
-from jiracli.cli import main as old_main
 
 
 def initialize(config, base_url=None, username=None, password=None,
@@ -218,25 +217,8 @@ def build_parser():
     return parser
 
 
-def fake_parse(args):
-    import optparse
-
-    class FakeParser(optparse.OptionParser):
-        def print_usage(self, file=None):
-            raise SystemExit()
-
-        def print_help(self, file=None):
-            raise StopIteration()
-
-    optparser = FakeParser()
-    optparser.add_option("", "--v1", action='store_true', default=False)
-    optparser.add_option("", "--protocol", dest='protocol', default='rest')
-    optparser.add_option("", "--version", action='store_true', default=False)
-    opts, args = optparser.parse_args(args)
-    return opts, args
-
-
 def cli(args=sys.argv[1:]):
+    import optparse
     alias_config = Config(section='alias')
     if set(alias_config.items().keys()).intersection(args):
         for alias, target in alias_config.items().items():
@@ -248,31 +230,20 @@ def cli(args=sys.argv[1:]):
         config = Config()
         pre_opts, pre_args = None, None
         try:
-            pre_opts, pre_args = fake_parse(args)
-        except StopIteration:
-            pre_opts, pre_args = None, None
-            if "--v1" in args or config.v1:
-                if '--v1' in sys.argv:
-                    print_error(
-                        "Use of the v1 interface is no longer supported. Please refer to jiracli.readthedocs.io",
-                        WARNING
-                    )
-                    sys.argv.remove("--v1")
-                return old_main()
+            optparser = optparse.OptionParser()
+            optparser.add_option("", "--version", action='store_true', default=False)
+            pre_opts, pre_args = optparser.parse_args(args)
         except SystemExit:
             pass
         if pre_opts and pre_opts.version:
             print(__version__)
             return
-        if (
-            not (pre_opts or pre_args) or (pre_opts and not (pre_opts.v1 or config.v1)) and
-            not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
-        ):
+        if not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args)):
             post_args = parser.parse_args(args)
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
                 persist=not (post_args.username or post_args.jira_url),
-                protocol=post_args.protocol or config.protocol or 'rest'
+                protocol='rest'
             )
             return post_args.cmd(jira, post_args).execute()
         else:
@@ -280,7 +251,7 @@ def cli(args=sys.argv[1:]):
                 config.reset()
                 initialize(
                     config, "", "", "", True,
-                    protocol=pre_opts.protocol or config.protocol or 'soap'
+                    protocol='rest'
                 )
             elif "clear_cache" in pre_args:
                 clear_cache()
