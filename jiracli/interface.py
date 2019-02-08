@@ -21,7 +21,7 @@ from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
 
 
 def initialize(config, base_url=None, username=None, password=None,
-               persist=True, error=False, protocol='soap'):
+               persist=True, error=False, protocol='rest'):
     url = base_url or config.base_url
     bridge = get_bridge(protocol)(url, config, persist) if (url and not error) else None
     if error or not (url and bridge and bridge.ping()):
@@ -80,11 +80,6 @@ def build_parser():
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='jira sub commands')
-    parser.add_argument('--v1', dest='v1', action='store_true',
-                        help='use jira-cli v1')
-    parser.add_argument('--v2', dest='v2', action='store_true',
-                        help='use jira-cli v2', default=True)
-
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
     base.add_argument('--jira-url', dest='jira_url',
                       help='the base url for the jira instance', default=None)
@@ -105,8 +100,6 @@ def build_parser():
                       help='username to login as', default=None)
     base.add_argument('-p', '--password', dest='password',
                       help='password for jira instance', default=None)
-    base.add_argument('--protocol', dest='protocol',
-                      choices=['soap', 'rest'], help='the protocol to use to communicate with jira')
 
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
@@ -137,6 +130,10 @@ def build_parser():
     view.add_argument('jira_ids', nargs='*', help='jira issue ids')
 
     work_log.add_argument("jira_id", help="jira issue id")
+    work_log.add_argument("--comment", dest="comment", help="work log description", nargs=1)
+    time_arg = work_log.add_mutually_exclusive_group(required=False)
+    time_arg.add_argument("--spent", dest="spent", help="the time spent working", nargs=1)
+    time_arg.add_argument("--remaining", dest="remaining", help="set remaining estimate to new value", nargs=1)
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',

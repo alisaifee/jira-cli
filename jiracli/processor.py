@@ -52,14 +52,28 @@ class Command(object):
 class WorkLogCommand(Command):
     def eval(self):
         # TODO: evaluate the user and show worklog only for the selected user
+        if self.args.spent:
+            self.log_work()
+        elif self.args.remaining:
+            self.adjust_remaining()
+        else:
+            self.show_work_log()
+
+    def log_work(self):
+        self.jira.log_work(issue=self.args.jira_id, spent=self.args.spent, comment=self.args.comment)
+
+    def adjust_remaining(self):
+        self.jira.adjust_remaining(issue=self.args.jira_id, remaining=self.args.remaining)
+
+    def show_work_log(self):
         issue = self.jira.get_issue(self.args.jira_id)
         if not issue:
             return
 
-        if "timetracking" in issue:
+        if "timetracking" in issue and hasattr(issue["timetracking"], "timeSpent"):
             print_output("{}: {}".format(
                 colorfunc("Estimated", "white"),
-                colorfunc(issue["timetracking"].timeSpent, "blue")))
+                colorfunc(issue["timetracking"].originalEstimate, "blue")))
 
             print_output("{}: {}".format(
                 colorfunc("Remaining", "white"),

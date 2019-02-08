@@ -234,7 +234,11 @@ class JiraBridge(object):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def worklogs(self, issue):
+    def log_work(self, issue, spent, comment=None):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def adjust_remaining(self, issue, remaining):
         raise NotImplementedError
 
 from .rest import JiraRestBridge

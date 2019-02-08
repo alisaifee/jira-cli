@@ -210,5 +210,8 @@ class JiraRestBridge(JiraBridge):
 
         return self.update_issue(issue, **args)
 
-    def worklogs(self, issue):
-        return self.jira.worklogs(issue)
+    def log_work(self, issue, spent, comment=""):
+        self.jira.add_worklog(issue=issue, timeSpent=spent, comment=comment, adjustEstimate="auto")
+
+    def adjust_remaining(self, issue, remaining):
+        self.jira.add_worklog(issue=issue, newEstimate=remaining)
