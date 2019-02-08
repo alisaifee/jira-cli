@@ -231,6 +231,9 @@ def cli(args=sys.argv[1:]):
         pre_opts, pre_args = None, None
         try:
             optparser = optparse.OptionParser()
+            def void(*args):
+                raise SystemExit()
+            optparser.print_usage = void
             optparser.add_option("", "--version", action='store_true', default=False)
             pre_opts, pre_args = optparser.parse_args(args)
         except SystemExit:

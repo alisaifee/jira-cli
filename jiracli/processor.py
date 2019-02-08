@@ -51,13 +51,39 @@ class Command(object):
 
 class WorkLogCommand(Command):
     def eval(self):
-        worklogs = self.jira.worklogs(self.args.jira_id)
+        # TODO: evaluate the user and show worklog only for the selected user
+        issue = self.jira.get_issue(self.args.jira_id)
+        if not issue:
+            return
+
+        if "timetracking" in issue:
+            print_output("{}: {}".format(
+                colorfunc("Estimated", "white"),
+                colorfunc(issue["timetracking"].timeSpent, "blue")))
+
+            print_output("{}: {}".format(
+                colorfunc("Remaining", "white"),
+                colorfunc(issue["timetracking"].remainingEstimate, "blue")))
+
+            if issue["timetracking"].timeSpentSeconds <= issue["timetracking"].originalEstimateSeconds:
+                color = "green"
+            else:
+                color = "red"
+
+            print_output("{}: {}".format(
+                colorfunc("Logged   ", "white"),
+                colorfunc(issue["timetracking"].timeSpent, color)))
+        print_output("")
+
+        worklogs = issue["worklog"].worklogs
         for worklog in worklogs:
             print_output(self.format_worklog(worklog))
 
     def format_worklog(self, worklog):
         return "%s %s : %s %s" % (
-            colorfunc(worklog.created, "blue"), colorfunc(worklog.author, "white"), worklog.comment, colorfunc("[" + worklog.timeSpent + "]", "green"))
+            colorfunc(worklog.created, "blue"),
+            colorfunc(worklog.author, "white"),
+            worklog.comment, colorfunc("[" + worklog.timeSpent + "]", "green"))
 
 
 class ViewCommand(Command):
@@ -134,6 +160,7 @@ class ListCommand(Command):
             print_output(colorfunc(val, 'white'))
         if not found:
             raise UsageWarning("No %s found." % self.args.type)
+
 
 class UpdateCommand(Command):
     def eval(self):
