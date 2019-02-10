@@ -210,8 +210,11 @@ class JiraRestBridge(JiraBridge):
 
         return self.update_issue(issue, **args)
 
-    def log_work(self, issue, spent, comment=""):
-        self.jira.add_worklog(issue=issue, timeSpent=spent, comment=comment, adjustEstimate="auto")
+    def log_work(self, issue, spent, remaining=None, comment=""):
+        if remaining is None:
+            adjust = "auto"
+        else:
+            adjust = "new"
+        self.jira.add_worklog(issue=issue, timeSpent=spent, comment=comment, newEstimate=remaining, adjustEstimate=adjust)
 
-    def adjust_remaining(self, issue, remaining):
-        self.jira.add_worklog(issue=issue, newEstimate=remaining)
+

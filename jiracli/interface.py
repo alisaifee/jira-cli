@@ -131,9 +131,8 @@ def build_parser():
 
     work_log.add_argument("jira_id", help="jira issue id")
     work_log.add_argument("--comment", dest="comment", help="work log description", nargs=1)
-    time_arg = work_log.add_mutually_exclusive_group(required=False)
-    time_arg.add_argument("--spent", dest="spent", help="the time spent working", nargs=1)
-    time_arg.add_argument("--remaining", dest="remaining", help="set remaining estimate to new value", nargs=1)
+    work_log.add_argument("--spent", dest="spent", help="the time spent working", nargs=1)
+    work_log.add_argument("--remaining", dest="remaining", help="set remaining estimate to new value", nargs=1)
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',

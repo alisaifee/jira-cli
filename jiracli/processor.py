@@ -54,23 +54,26 @@ class WorkLogCommand(Command):
         # TODO: evaluate the user and show worklog only for the selected user
         if self.args.spent:
             self.log_work()
-        elif self.args.remaining:
-            self.adjust_remaining()
-        else:
-            self.show_work_log()
+        self.show_work_log()
 
     def log_work(self):
-        self.jira.log_work(issue=self.args.jira_id, spent=self.args.spent, comment=self.args.comment)
-
-    def adjust_remaining(self):
-        self.jira.adjust_remaining(issue=self.args.jira_id, remaining=self.args.remaining)
+        if self.args.comment:
+            comment = self.args.comment[0]
+        else:
+            comment = ""
+        if self.args.remaining:
+            remaining = self.args.remaining[0]
+        else:
+            remaining = None
+        self.jira.log_work(issue=self.args.jira_id, spent=self.args.spent[0],
+                           comment=comment, remaining=remaining)
 
     def show_work_log(self):
         issue = self.jira.get_issue(self.args.jira_id)
         if not issue:
             return
 
-        if "timetracking" in issue and hasattr(issue["timetracking"], "timeSpent"):
+        if "timetracking" in issue and hasattr(issue["timetracking"], "originalEstimate"):
             print_output("{}: {}".format(
                 colorfunc("Estimated", "white"),
                 colorfunc(issue["timetracking"].originalEstimate, "blue")))
@@ -79,14 +82,16 @@ class WorkLogCommand(Command):
                 colorfunc("Remaining", "white"),
                 colorfunc(issue["timetracking"].remainingEstimate, "blue")))
 
-            if issue["timetracking"].timeSpentSeconds <= issue["timetracking"].originalEstimateSeconds:
+            time_spent_seconds = getattr(issue["timetracking"], "timeSpentSeconds", 0)
+
+            if time_spent_seconds <= issue["timetracking"].originalEstimateSeconds:
                 color = "green"
             else:
                 color = "red"
 
             print_output("{}: {}".format(
                 colorfunc("Logged   ", "white"),
-                colorfunc(issue["timetracking"].timeSpent, color)))
+                colorfunc(getattr(issue["timetracking"], "timeSpent", str(time_spent_seconds) + "m"), color)))
         print_output("")
 
         worklogs = issue["worklog"].worklogs
