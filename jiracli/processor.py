@@ -6,9 +6,8 @@ from abc import ABCMeta, abstractmethod
 import json
 import six
 
-from jiracli.cli import colorfunc
 from jiracli.errors import UsageError, UsageWarning
-from jiracli.utils import get_text_from_editor, print_output, Config
+from jiracli.utils import get_text_from_editor, print_output, Config, colorfunc
 
 try:
     from collections import OrderedDict
@@ -48,6 +47,62 @@ class Command(object):
             return extras
         except Exception:
             raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
+
+
+class WorkLogCommand(Command):
+    def eval(self):
+        # TODO: evaluate the user and show worklog only for the selected user
+        if self.args.spent:
+            self.log_work()
+        self.show_work_log()
+
+    def log_work(self):
+        if self.args.comment:
+            comment = self.args.comment[0]
+        else:
+            comment = ""
+        if self.args.remaining:
+            remaining = self.args.remaining[0]
+        else:
+            remaining = None
+        self.jira.log_work(issue=self.args.jira_id, spent=self.args.spent[0],
+                           comment=comment, remaining=remaining)
+
+    def show_work_log(self):
+        issue = self.jira.get_issue(self.args.jira_id)
+        if not issue:
+            return
+
+        if "timetracking" in issue and hasattr(issue["timetracking"], "originalEstimate"):
+            print_output("{}: {}".format(
+                colorfunc("Estimated", "white"),
+                colorfunc(issue["timetracking"].originalEstimate, "blue")))
+
+            print_output("{}: {}".format(
+                colorfunc("Remaining", "white"),
+                colorfunc(issue["timetracking"].remainingEstimate, "blue")))
+
+            time_spent_seconds = getattr(issue["timetracking"], "timeSpentSeconds", 0)
+
+            if time_spent_seconds <= issue["timetracking"].originalEstimateSeconds:
+                color = "green"
+            else:
+                color = "red"
+
+            print_output("{}: {}".format(
+                colorfunc("Logged   ", "white"),
+                colorfunc(getattr(issue["timetracking"], "timeSpent", str(time_spent_seconds) + "m"), color)))
+        print_output("")
+
+        worklogs = issue["worklog"].worklogs
+        for worklog in worklogs:
+            print_output(self.format_worklog(worklog))
+
+    def format_worklog(self, worklog):
+        return "%s %s : %s %s" % (
+            colorfunc(worklog.created, "blue"),
+            colorfunc(worklog.author, "white"),
+            worklog.comment, colorfunc("[" + worklog.timeSpent + "]", "green"))
 
 
 class ViewCommand(Command):
@@ -124,6 +179,7 @@ class ListCommand(Command):
             print_output(colorfunc(val, 'white'))
         if not found:
             raise UsageWarning("No %s found." % self.args.type)
+
 
 class UpdateCommand(Command):
     def eval(self):

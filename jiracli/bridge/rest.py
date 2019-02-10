@@ -64,7 +64,6 @@ class JiraRestBridge(JiraBridge):
     def add_comment(self, issue, comment):
         self.jira.add_comment(issue, comment)
 
-
     def transition_issue(self, issue, transition, resolution):
         transitions = self.get_available_transitions(issue)
         fields = {}
@@ -210,3 +209,12 @@ class JiraRestBridge(JiraBridge):
             args = {'versions': [{"remove": {"name": v}} for v in versions]}
 
         return self.update_issue(issue, **args)
+
+    def log_work(self, issue, spent, remaining=None, comment=""):
+        if remaining is None:
+            adjust = "auto"
+        else:
+            adjust = "new"
+        self.jira.add_worklog(issue=issue, timeSpent=spent, comment=comment, newEstimate=remaining, adjustEstimate=adjust)
+
+

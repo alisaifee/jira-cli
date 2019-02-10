@@ -7,8 +7,7 @@ import requests
 from requests import RequestException
 import six
 from six.moves.urllib import parse
-from jiracli.cli import colorfunc
-from jiracli.utils import COLOR
+from jiracli.utils import COLOR, colorfunc
 
 
 @six.add_metaclass(abc.ABCMeta)
@@ -234,14 +233,14 @@ class JiraBridge(object):
     def remove_versions(self, issue, versions, type):
         raise NotImplementedError
 
+    @abc.abstractmethod
+    def log_work(self, issue, spent, remaining=None, comment=None):
+        raise NotImplementedError
+
 from .rest import JiraRestBridge
-from .soap import JiraSoapBridge
 
 def get_bridge(protocol):
     """
     simple factory to get the jira bridge based on the protocol
     """
-    return {
-        'soap': JiraSoapBridge,
-        'rest': JiraRestBridge
-    }[protocol]
+    return JiraRestBridge

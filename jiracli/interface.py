@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 
 """
@@ -13,15 +14,14 @@ from jiracli.cache import clear_cache
 from jiracli.errors import JIRAError
 from jiracli.errors import JiraAuthenticationError, JiraInitializationError
 from jiracli.errors import UsageWarning, JiraCliError, UsageError
-from jiracli.processor import ViewCommand, AddCommand, UpdateCommand
+from jiracli.processor import ViewCommand, AddCommand, UpdateCommand, WorkLogCommand
 from jiracli.processor import ListCommand
 from jiracli.utils import print_error, WARNING, Config, colorfunc, prompt, \
     print_output
-from jiracli.cli import main as old_main
 
 
 def initialize(config, base_url=None, username=None, password=None,
-               persist=True, error=False, protocol='soap'):
+               persist=True, error=False, protocol='rest'):
     url = base_url or config.base_url
     bridge = get_bridge(protocol)(url, config, persist) if (url and not error) else None
     if error or not (url and bridge and bridge.ping()):
@@ -80,11 +80,6 @@ def build_parser():
     subparsers = parser.add_subparsers(title='subcommands',
                                        description='valid subcommands',
                                        help='jira sub commands')
-    parser.add_argument('--v1', dest='v1', action='store_true',
-                        help='use jira-cli v1')
-    parser.add_argument('--v2', dest='v2', action='store_true',
-                        help='use jira-cli v2', default=True)
-
     base = argparse.ArgumentParser(description='jira-cli-base', add_help=False)
     base.add_argument('--jira-url', dest='jira_url',
                       help='the base url for the jira instance', default=None)
@@ -105,11 +100,11 @@ def build_parser():
                       help='username to login as', default=None)
     base.add_argument('-p', '--password', dest='password',
                       help='password for jira instance', default=None)
-    base.add_argument('--protocol', dest='protocol',
-                      choices=['soap', 'rest'], help='the protocol to use to communicate with jira')
 
     view = subparsers.add_parser('view', parents=[base], help='view/list/search for issues')
     view.set_defaults(cmd=ViewCommand)
+    work_log = subparsers.add_parser("work-log", parents=[base], help="show work log/log work")
+    work_log.set_defaults(cmd=WorkLogCommand)
     add = subparsers.add_parser('new', parents=[base], help='create a new issue')
     add.add_argument('--extra', dest='extra_fields',
                      nargs='?', action='append',
@@ -133,6 +128,11 @@ def build_parser():
                       help='displays only the comments assosciated with each issue',
                       action='store_true')
     view.add_argument('jira_ids', nargs='*', help='jira issue ids')
+
+    work_log.add_argument("jira_id", help="jira issue id")
+    work_log.add_argument("--comment", dest="comment", help="work log description", nargs=1)
+    work_log.add_argument("--spent", dest="spent", help="the time spent working", nargs=1)
+    work_log.add_argument("--remaining", dest="remaining", help="set remaining estimate to new value", nargs=1)
 
     list.add_argument('type', choices=['filters', 'projects', 'issue_types',
                                        'subtask_types', 'priorities',
@@ -213,25 +213,8 @@ def build_parser():
     return parser
 
 
-def fake_parse(args):
-    import optparse
-
-    class FakeParser(optparse.OptionParser):
-        def print_usage(self, file=None):
-            raise SystemExit()
-
-        def print_help(self, file=None):
-            raise StopIteration()
-
-    optparser = FakeParser()
-    optparser.add_option("", "--v1", action='store_true', default=False)
-    optparser.add_option("", "--protocol", dest='protocol', default='rest')
-    optparser.add_option("", "--version", action='store_true', default=False)
-    opts, args = optparser.parse_args(args)
-    return opts, args
-
-
 def cli(args=sys.argv[1:]):
+    import optparse
     alias_config = Config(section='alias')
     if set(alias_config.items().keys()).intersection(args):
         for alias, target in alias_config.items().items():
@@ -243,31 +226,23 @@ def cli(args=sys.argv[1:]):
         config = Config()
         pre_opts, pre_args = None, None
         try:
-            pre_opts, pre_args = fake_parse(args)
-        except StopIteration:
-            pre_opts, pre_args = None, None
-            if "--v1" in args or config.v1:
-                if '--v1' in sys.argv:
-                    print_error(
-                        "Use of the v1 interface is no longer supported. Please refer to jiracli.readthedocs.io",
-                        WARNING
-                    )
-                    sys.argv.remove("--v1")
-                return old_main()
+            optparser = optparse.OptionParser()
+            def void(*args):
+                raise SystemExit()
+            optparser.print_usage = void
+            optparser.add_option("", "--version", action='store_true', default=False)
+            pre_opts, pre_args = optparser.parse_args(args)
         except SystemExit:
             pass
         if pre_opts and pre_opts.version:
             print(__version__)
             return
-        if (
-            not (pre_opts or pre_args) or (pre_opts and not (pre_opts.v1 or config.v1)) and
-            not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args))
-        ):
+        if not (pre_opts and ("configure" in pre_args or "clear_cache" in pre_args)):
             post_args = parser.parse_args(args)
             jira = initialize(
                 config, post_args.jira_url, post_args.username, post_args.password,
                 persist=not (post_args.username or post_args.jira_url),
-                protocol=post_args.protocol or config.protocol or 'rest'
+                protocol='rest'
             )
             return post_args.cmd(jira, post_args).execute()
         else:
@@ -275,7 +250,7 @@ def cli(args=sys.argv[1:]):
                 config.reset()
                 initialize(
                     config, "", "", "", True,
-                    protocol=pre_opts.protocol or config.protocol or 'soap'
+                    protocol='rest'
                 )
             elif "clear_cache" in pre_args:
                 clear_cache()
