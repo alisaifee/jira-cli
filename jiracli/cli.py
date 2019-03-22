@@ -22,7 +22,7 @@ type_dict = {}
 jirabase=None
 color = True
 if not sys.stdout.isatty():
-    colorfunc = lambda *a,**k:str(a[0]).encode('utf-8')
+    colorfunc = lambda *a,**k: str(a[0])
     color = False
 default_editor_text = """-- enter the text for the %s
 -- all lines starting with '--' will be removed"""
