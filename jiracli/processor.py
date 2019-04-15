@@ -134,9 +134,11 @@ class UpdateCommand(Command):
                 **extras
             )
         if self.args.issue_comment:
-            self.jira.add_comment(
-                self.args.issue, self.args.issue_comment if isinstance(self.args.issue_comment, basestring) else get_text_from_editor()
-            )
+            if isinstance(self.args.issue_comment, str):
+                text = self.args.issue_comment
+            else:
+                text = get_text_from_editor()
+            self.jira.add_comment(self.args.issue, text)
             print_output(self.jira.format_issue(self.jira.get_issue(self.args.issue), comments_only=True))
         elif self.args.issue_priority:
             self.jira.update_issue(
