@@ -52,16 +52,6 @@ def initialize(config, base_url=None, username=None, password=None,
             keyring.set_password('jira-cli', username, password)
         try:
             jira.login(username, password)
-            if (
-                (persist or first_run) and
-                (not (config.username == username or config.password == password)) and
-                "y" == prompt(persist_warning)
-            ):
-                config.username = username
-                keyring.set_password('jira-cli', username, password)
-                config.save()
-            config.save()
-            return jira
         except JiraAuthenticationError:
             print_error("invalid username/password", severity=WARNING)
             return initialize(config, base_url=url, error=True, protocol=protocol, persist=persist)
@@ -69,6 +59,16 @@ def initialize(config, base_url=None, username=None, password=None,
             print_error("invalid jira location", severity=WARNING)
             config.base_url = ""
             return initialize(config, error=True, protocol=protocol, persist=persist)
+        if (
+            (persist or first_run) and
+            (not (config.username == username or config.password == password)) and
+            "y" == prompt(persist_warning)
+        ):
+            config.username = username
+            keyring.set_password('jira-cli', username, password)
+            config.save()
+        config.save()
+        return jira
     else:
         return bridge
 
