@@ -23,35 +23,84 @@ from jiracli.cli import main as old_main
 def initialize(config, base_url=None, username=None, password=None,
                persist=True, error=False, protocol='soap'):
     url = base_url or config.base_url
+    auth_method = config.auth_method
     bridge = get_bridge(protocol)(url, config, persist) if (url and not error) else None
     if error or not (url and bridge and bridge.ping()):
         url = url or prompt("Base url for the jira instance: ")
-        username = (
-            username or
-            (not error and config.username) or
-            prompt("username: ")
-        )
-        password = (
-            password or
-            (not error and keyring.get_password('jira-cli', username)) or
-            prompt("password: ", True)
-        )
+        auth_method = auth_method or prompt("Auth method for jira(auth, basic_auth, oauth). More details: https://jira.readthedocs.io/en/master/examples.html#authentication: ")
+        if auth_method in ("auth", "basic_auth"):
+            username = (
+                username or
+                (not error and config.username) or
+                prompt("username: ")
+            )
+            password = (
+                password or
+                (not error and keyring.get_password('jira-cli', username)) or
+                prompt("password: ", True)
+            )
+            auth_kwargs = {auth_method: (username, password)}
+        elif auth_method == "oauth":
+            access_token = (
+                (not error and config.oauth_access_token) or
+                prompt("OAuth access token: ")
+            )
+            access_token_secret = (
+                (not error and keyring.get_password('jira-cli', access_token)) or
+                prompt("OAuth access token secret: ", True)
+            )
+            consumer_key = (
+                (not error and config.oauth_consumer_key) or
+                prompt("OAuth consumer key: ")
+            )
+            key_cert_file = (
+                (not error and config.oauth_key_cert_file) or
+                prompt("OAuth key/cert filename: ")
+            )
+            with open(key_cert_file, 'r') as f:
+                key_cert_data = f.read()
+            auth_kwargs = {
+                auth_method: {
+                    'access_token': access_token,
+                    'access_token_secret': access_token_secret,
+                    'consumer_key': consumer_key,
+                    'key_cert': key_cert_data,
+                }
+            }
+        else:
+            raise NotImplementedError("Unknown auth method: %s" % auth_method)
+
         jira = not error and bridge or get_bridge(protocol)(url, config, persist)
         persist_warning = "would you like to persist the credentials to the local keyring? [y/n]:"
 
-        first_run = (
-            not(
-                config.base_url or
-                config.username or
-                keyring.get_password('jira-cli', username)
+        if auth_method in ("auth", "basic_auth"):
+            first_run = (
+                not(
+                    config.base_url or
+                    config.username or
+                    keyring.get_password('jira-cli', username)
+                )
             )
-        )
-        if persist or first_run:
-            config.base_url = url
-            config.save()
-            keyring.set_password('jira-cli', username, password)
+            if persist or first_run:
+                config.base_url = url
+                config.save()
+                keyring.set_password('jira-cli', username, password)
+        elif auth_method == "oauth":
+            first_run = (
+                not(
+                    config.base_url or
+                    config.access_token or
+                    keyring.get_password('jira-cli', access_token)
+                )
+            )
+            if persist or first_run:
+                config.base_url = url
+                config.save()
+                keyring.set_password('jira-cli', access_token, access_token_secret)
+        else:
+            raise NotImplementedError("Unknown auth method: %s" % auth_method)
         try:
-            jira.login(username, password)
+            jira.login(**auth_kwargs)
         except JiraAuthenticationError:
             print_error("invalid username/password", severity=WARNING)
             return initialize(config, base_url=url, error=True, protocol=protocol, persist=persist)
@@ -60,12 +109,24 @@ def initialize(config, base_url=None, username=None, password=None,
             config.base_url = ""
             return initialize(config, error=True, protocol=protocol, persist=persist)
         if (
+            auth_method in ("auth", "basic_auth") and
             (persist or first_run) and
             (not (config.username == username or config.password == password)) and
             "y" == prompt(persist_warning)
         ):
             config.username = username
             keyring.set_password('jira-cli', username, password)
+            config.save()
+        elif (
+            auth_method == "oauth" and
+            (persist or first_run) and
+            (not config.oauth_access_token == access_token) and
+            "y" == prompt(persist_warning)
+        ):
+            config.oauth_access_token = access_token
+            config.oauth_consumer_key = consumer_key
+            config.oauth_key_cert_file = key_cert_file
+            keyring.set_password('jira-cli', access_token, access_token_secret)
             config.save()
         config.save()
         return jira
