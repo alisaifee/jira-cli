@@ -40,9 +40,12 @@ class JiraRestBridge(JiraBridge):
         _issue['type'] = map_rest_resource(_issue['issuetype'])
         return _issue
 
-    def get_issue(self, issue_id):
+    def get_issue(self, issue_id, raw=False):
         try:
-            return self.clean_issue(self.jira.issue(issue_id))
+            if not raw:
+                return self.clean_issue(self.jira.issue(issue_id))
+            else:
+                return self.jira.issue(issue_id)
         except:
             return None
 

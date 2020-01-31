@@ -1,13 +1,14 @@
 """
 
 """
+import json
 from abc import ABCMeta, abstractmethod
 
-import json
 import six
 
 from jiracli.errors import UsageError, UsageWarning
-from jiracli.utils import get_text_from_editor, print_output, Config, colorfunc
+from jiracli.utils import get_text_from_editor, print_output, Config, colorfunc, print_error, \
+    WARNING
 
 try:
     from collections import OrderedDict
@@ -47,6 +48,131 @@ class Command(object):
             return extras
         except Exception:
             raise UsageWarning("Unknown extra fields %s" % (self.args.extra_fields))
+
+
+class AdjustParentEstimateCommand(Command):
+    def eval(self):
+        if self.args.search_freetext:
+            issues = self.jira.search_issues(self.args.search_freetext, project=self.args.project)
+        elif self.args.search_jql:
+            issues = self.jira.search_issues_jql(self.args.search_jql)
+        elif self.args.filter:
+            issues = self.jira.get_issues_by_filter(*self.args.filter)
+        else:
+            issues = filter(lambda issue: issue is not None,
+                            [self.jira.get_issue(jira) for jira in self.args.jira_ids])
+
+        for issue in issues:
+            # get the time estimate values
+            estimate = self.time_estimates(issue)
+            if estimate is None:
+                print_error("{} has no time estimate\n".format(issue["key"]), severity=WARNING)
+                continue
+
+            # get the epic of this issue (warning if none)
+            epic = self.get_epic(issue)
+            if epic is None:
+                print_error("{} has no epic assigned to it\n".format(issue["key"]),
+                            severity=WARNING)
+                continue
+
+            # from the epic get the corresponding story
+            bookkeeping_story = self.get_story_clone(epic)
+            if bookkeeping_story is None:
+                print_error("The epic {} doesn't have a corresponding book keeping story\n".format(
+                    epic["key"]), severity=WARNING)
+
+            # check if the issue in question was already mentioned in the comments
+            if self.issue_already_substracted(issue, bookkeeping_story):
+                print_output("{} already mentioned in the comments of {}\n".format(issue["key"],
+                                                                                   bookkeeping_story[
+                                                                                       "key"]))
+            else:
+                self.adjust_story_timetracking(bookkeeping_story, issue, dry=self.args.dry,
+                                               verbose=(self.args.verbosity > 0))
+
+    def time_estimates(self, issue):
+        """returns  [orininal, remaning]"""
+        if "timeoriginalestimate" in issue and issue["timeoriginalestimate"] != 0:
+            return issue["timeoriginalestimate"]
+        return None
+
+    def get_epic(self, issue):
+        """Get the epic of the issue"""
+        try:
+            return self.jira.get_issue(issue["customfield_10609"])
+        except:
+            return None
+
+    def get_story_clone(self, epic):
+        """Get the epic of the issue"""
+        try:
+            links = epic["issuelinks"]
+            clones = filter(lambda link: link.type.name == "Cloners", links)
+            return self.jira.get_issue(clones[0].inwardIssue.key)
+        except:
+            return None
+
+    def issue_already_substracted(self, issue, story):
+        return bool(filter(lambda comment: issue["key"] in comment,
+                           [_.body for _ in story["comment"].comments]))
+
+    def adjust_story_timetracking(self, story, issue, dry=True, verbose=True):
+        timetracking = story["timetracking"]
+        estimate = self.time_estimates(issue)
+        estimate_human_readable = self.secs_to_human_readable(estimate)
+        issue = self.jira.get_issue(issue["key"], raw=True)
+        message = str("{}: {}: reduced by {}".format(issue.fields.assignee.displayName, issue.key,
+                                                     estimate_human_readable))
+
+        new_original = self.secs_to_human_readable(timetracking.originalEstimateSeconds - estimate)
+        new_remaining = self.secs_to_human_readable(
+            timetracking.remainingEstimateSeconds - estimate)
+
+        if verbose:
+            print_output(
+                colorfunc(
+                    "Adjusting estimate of story {} by {}:".format(story["key"], issue.key),
+                    "blue"))
+            print_output("{}: {} - {} = {}".format(colorfunc("Original Estimate", "white"),
+                                                   timetracking.originalEstimate,
+                                                   estimate_human_readable,
+                                                   new_original))
+            print_output("{}: {} - {} = {}".format(colorfunc("Remaning Estimate", "white"),
+                                                   timetracking.remainingEstimate,
+                                                   estimate_human_readable,
+                                                   new_remaining))
+            print_output("comment: {}".format(colorfunc(message, "white")))
+            print("")
+
+        if new_remaining < 0 or new_original < 0:
+            print_error("Estimate would become negative, skipping\n", severity=WARNING)
+            return
+
+        if not dry:
+            # fields = {
+            #    "timetracking": {"originalEstimate": "3w 2d 1h", "remainingEstimate": "3w 2d 1h"}}
+            story = self.jira.get_issue(story["key"], raw=True)
+            story.update(fields={"timetracking": {
+                "originalEstimate": new_original,
+                "remainingEstimate": new_remaining
+            }})
+            self.jira.add_comment(story, message)
+
+    def secs_to_human_readable(self, estimate):
+        estimate_human_readable = ""
+        wdhm = OrderedDict()
+        wdhm["w"] = 60 * 60 * 8 * 5
+        wdhm["d"] = 60 * 60 * 8
+        wdhm["h"] = 60 * 60
+        wdhm["m"] = 60
+        for unit, quot in wdhm.iteritems():
+            if estimate / quot != 0:
+                estimate_human_readable += " {}{}".format(estimate / quot, unit)
+                estimate = estimate % quot
+        if estimate:
+            estimate_human_readable += " {}{}".format(estimate, "s")
+        return estimate_human_readable.strip()
 
 
 class WorkLogCommand(Command):
@@ -91,7 +217,9 @@ class WorkLogCommand(Command):
 
             print_output("{}: {}".format(
                 colorfunc("Logged   ", "white"),
-                colorfunc(getattr(issue["timetracking"], "timeSpent", str(time_spent_seconds) + "m"), color)))
+                colorfunc(
+                    getattr(issue["timetracking"], "timeSpent", str(time_spent_seconds) + "m"),
+                    color)))
         print_output("")
 
         worklogs = issue["worklog"].worklogs
@@ -120,7 +248,8 @@ class ViewCommand(Command):
         elif self.args.filter:
             issues = self.jira.get_issues_by_filter(*self.args.filter)
         else:
-            issues = filter(lambda issue: issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids])
+            issues = filter(lambda issue: issue is not None,
+                            [self.jira.get_issue(jira) for jira in self.args.jira_ids])
 
         for issue in issues:
             print_output(self.jira.format_issue(
@@ -144,7 +273,8 @@ class ListCommand(Command):
             'versions': (self.jira.list_versions, 'project'),
             'transitions': (self.jira.get_available_transitions, 'issue'),
             'filters': (self.jira.get_filters,),
-            'aliases': (lambda: [{"name": k, "description": v} for k, v in Config(section='alias').items().items()],)
+            'aliases': (lambda: [{"name": k, "description": v} for k, v in
+                                 Config(section='alias').items().items()],)
         }
         func, arguments = mappers[self.args.type][0], mappers[self.args.type][1:]
         _ = []
@@ -191,9 +321,11 @@ class UpdateCommand(Command):
             )
         if self.args.issue_comment:
             self.jira.add_comment(
-                self.args.issue, self.args.issue_comment if isinstance(self.args.issue_comment, basestring) else get_text_from_editor()
+                self.args.issue, self.args.issue_comment if isinstance(self.args.issue_comment,
+                                                                       basestring) else get_text_from_editor()
             )
-            print_output(self.jira.format_issue(self.jira.get_issue(self.args.issue), comments_only=True))
+            print_output(
+                self.jira.format_issue(self.jira.get_issue(self.args.issue), comments_only=True))
         elif self.args.issue_priority:
             self.jira.update_issue(
                 self.args.issue,
@@ -205,12 +337,13 @@ class UpdateCommand(Command):
                     self.args.issue.split("-")[0]
                 )
             )
-            current_components = set(k["name"] for k in self.jira.get_issue(self.args.issue)["components"])
+            current_components = set(
+                k["name"] for k in self.jira.get_issue(self.args.issue)["components"])
             if not set(self.args.issue_components).issubset(current_components):
                 new_components = current_components.union(self.args.issue_components)
                 self.jira.update_issue(self.args.issue,
                                        components=[components[k] for k in new_components]
-                )
+                                       )
                 print_output(colorfunc(
                     'component(s): %s added to %s' % (
                         ",".join(self.args.issue_components), self.args.issue), 'green'
@@ -218,7 +351,7 @@ class UpdateCommand(Command):
             else:
                 raise UsageWarning("component(s):[%s] already exist in %s" % (
                     ",".join(self.args.issue_components), self.args.issue)
-                )
+                                   )
         elif self.args.issue_transition:
             self.jira.transition_issue(
                 self.args.issue, self.args.issue_transition.lower(),
@@ -240,22 +373,26 @@ class UpdateCommand(Command):
         if self.args.affects_version:
             self.jira.add_versions(self.args.issue, self.args.affects_version, 'affects')
             print_output(colorfunc(
-                'Added affected version(s) %s to %s' % (",".join(self.args.affects_version), self.args.issue), 'green'
+                'Added affected version(s) %s to %s' % (
+                    ",".join(self.args.affects_version), self.args.issue), 'green'
             ))
         if self.args.remove_affects_version:
             self.jira.remove_versions(self.args.issue, self.args.remove_affects_version, 'affects')
             print_output(colorfunc(
-                'Removed affected version(s) %s from %s' % (",".join(self.args.remove_affects_version), self.args.issue), 'blue'
+                'Removed affected version(s) %s from %s' % (
+                    ",".join(self.args.remove_affects_version), self.args.issue), 'blue'
             ))
         if self.args.fix_version:
             self.jira.add_versions(self.args.issue, self.args.fix_version, 'fix')
             print_output(colorfunc(
-                'Added fixed version(s) %s to %s' % (",".join(self.args.fix_version), self.args.issue), 'green'
+                'Added fixed version(s) %s to %s' % (
+                    ",".join(self.args.fix_version), self.args.issue), 'green'
             ))
         if self.args.remove_fix_version:
             self.jira.remove_versions(self.args.issue, self.args.remove_fix_version, 'fix')
             print_output(colorfunc(
-                'Removed fixed version(s) %s from %s' % (",".join(self.args.remove_fix_version), self.args.issue), 'blue'
+                'Removed fixed version(s) %s from %s' % (
+                    ",".join(self.args.remove_fix_version), self.args.issue), 'blue'
             ))
 
 
@@ -278,7 +415,8 @@ class AddCommand(Command):
                 self.args.issue_type = 'sub-task'
             if self.args.issue_type not in self.jira.get_subtask_issue_types():
                 raise UsageError(
-                    "issues created with parents must be one of {%s}" % ",".join(self.jira.get_subtask_issue_types())
+                    "issues created with parents must be one of {%s}" % ",".join(
+                        self.jira.get_subtask_issue_types())
                 )
         components = {}
         if self.args.issue_components:
