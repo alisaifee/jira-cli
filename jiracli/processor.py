@@ -64,6 +64,11 @@ class AdjustParentEstimateCommand(Command):
 
         for issue in issues:
             # get the time estimate values
+
+            if "student" in issue["labels"]:
+                print_output("{} is a student task, skipping...\n".format(issue["key"]))
+                continue
+
             estimate = self.time_estimates(issue)
             if estimate is None:
                 print_error("{} has no time estimate\n".format(issue["key"]), severity=WARNING)
@@ -125,9 +130,17 @@ class AdjustParentEstimateCommand(Command):
         message = str("{}: {}: reduced by {}".format(issue.fields.assignee.displayName, issue.key,
                                                      estimate_human_readable))
 
-        new_original = self.secs_to_human_readable(timetracking.originalEstimateSeconds - estimate)
-        new_remaining = self.secs_to_human_readable(
-            timetracking.remainingEstimateSeconds - estimate)
+        new_original_raw = timetracking.originalEstimateSeconds - estimate
+        new_remaining_raw = timetracking.remainingEstimateSeconds - estimate
+
+        if new_original_raw < 0 or new_remaining_raw < 0:
+            print_error(
+                "Story {} full. Estimate would become negative, skipping\n".format(story["key"]),
+                severity=WARNING)
+            return
+
+        new_original = self.secs_to_human_readable(new_original_raw)
+        new_remaining = self.secs_to_human_readable(new_remaining_raw)
 
         if verbose:
             print_output(
@@ -144,10 +157,6 @@ class AdjustParentEstimateCommand(Command):
                                                    new_remaining))
             print_output("comment: {}".format(colorfunc(message, "white")))
             print("")
-
-        if new_remaining < 0 or new_original < 0:
-            print_error("Estimate would become negative, skipping\n", severity=WARNING)
-            return
 
         if not dry:
             # fields = {
