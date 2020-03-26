@@ -131,7 +131,7 @@ def map_rest_resource(resource):
 from termcolor import colored as colorfunc
 
 if not sys.stdout.isatty():
-    colorfunc = lambda *a, **k: str(a[0])
+    colorfunc = lambda *a, **k: unicode(a[0])
     COLOR = False
 
 
@@ -162,7 +162,10 @@ def print_error(msg, severity=CRITICAL):
     sys.stderr.write(colorfunc(msg, color) + "\n")
 
 def print_output(msg):
-    print(msg)
+    if sys.stdout.isatty():
+        print(msg)
+    else:
+        print(unicode(msg).encode("ascii", "ignore"))
 
 def prompt(msg, masked=False):
     if not masked:

@@ -66,35 +66,44 @@ class AdjustParentEstimateCommand(Command):
             # get the time estimate values
 
             if "student" in issue["labels"]:
-                print_output("{} is a student task, skipping...\n".format(issue["key"]))
+                print_output(u"{} is a student task, skipping...\n".format(issue["key"]))
                 continue
 
             estimate = self.time_estimates(issue)
             if estimate is None:
-                print_error("{} has no time estimate\n".format(issue["key"]), severity=WARNING)
+                print_error(u"{} has no time estimate\n".format(issue["key"]), severity=WARNING)
                 continue
 
             # get the epic of this issue (warning if none)
-            epic = self.get_epic(issue)
-            if epic is None:
-                print_error("{} has no epic assigned to it\n".format(issue["key"]),
+            bookkeeping_story = self.get_parent_story(issue)
+            if bookkeeping_story is None:
+                print_error(u"{} has no parent story. Assignee: {}\n".format(issue["key"],
+                                                                             issue["assignee"]),
                             severity=WARNING)
                 continue
 
-            # from the epic get the corresponding story
-            bookkeeping_story = self.get_story_clone(epic)
-            if bookkeeping_story is None:
-                print_error("The epic {} doesn't have a corresponding book keeping story\n".format(
-                    epic["key"]), severity=WARNING)
-
             # check if the issue in question was already mentioned in the comments
             if self.issue_already_substracted(issue, bookkeeping_story):
-                print_output("{} already mentioned in the comments of {}\n".format(issue["key"],
-                                                                                   bookkeeping_story[
-                                                                                       "key"]))
+                print_output(u"{} already mentioned in the comments of {}\n".format(issue["key"],
+                                                                                    bookkeeping_story[
+                                                                                        "key"]))
             else:
                 self.adjust_story_timetracking(bookkeeping_story, issue, dry=self.args.dry,
                                                verbose=(self.args.verbosity > 0))
+
+    def get_parent_story(self, issue):
+        """:returns: issue of type story linked as 'has parent' to the given issue"""
+        try:
+            links = issue["issuelinks"]
+            parents = filter(
+                lambda
+                    link: link.type.name == "Refinement" \
+                          and link.type.outward == "has parent" \
+                          and link.outwardIssue.fields.issuetype.name == "Story",
+                links)
+            return self.jira.get_issue(parents[0].outwardIssue.key)
+        except:
+            return None
 
     def time_estimates(self, issue):
         """returns  [orininal, remaning]"""
@@ -127,15 +136,15 @@ class AdjustParentEstimateCommand(Command):
         estimate = self.time_estimates(issue)
         estimate_human_readable = self.secs_to_human_readable(estimate)
         issue = self.jira.get_issue(issue["key"], raw=True)
-        message = str("{}: {}: reduced by {}".format(issue.fields.assignee.displayName, issue.key,
-                                                     estimate_human_readable))
+        message = str(u"{}: {}: reduced by {}".format(issue.fields.assignee.displayName, issue.key,
+                                                      estimate_human_readable))
 
         new_original_raw = timetracking.originalEstimateSeconds - estimate
         new_remaining_raw = timetracking.remainingEstimateSeconds - estimate
 
         if new_original_raw < 0 or new_remaining_raw < 0:
             print_error(
-                "Story {} full. Estimate would become negative, skipping\n".format(story["key"]),
+                u"Story {} full. Estimate would become negative, skipping\n".format(story["key"]),
                 severity=WARNING)
             return
 
@@ -143,18 +152,17 @@ class AdjustParentEstimateCommand(Command):
         new_remaining = self.secs_to_human_readable(new_remaining_raw)
 
         if verbose:
-            print_output(
-                colorfunc(
-                    "Adjusting estimate of story {} by {}:".format(story["key"], issue.key),
-                    "blue"))
-            print_output("{}: {} - {} = {}".format(colorfunc("Original Estimate", "white"),
-                                                   timetracking.originalEstimate,
-                                                   estimate_human_readable,
-                                                   new_original))
-            print_output("{}: {} - {} = {}".format(colorfunc("Remaning Estimate", "white"),
-                                                   timetracking.remainingEstimate,
-                                                   estimate_human_readable,
-                                                   new_remaining))
+            msg = u"Adjusting estimate of story [{}]: {}".format(story["key"], story["summary"])
+            msg += u"\nby issue [{}]: {}".format(issue.key, issue.fields.summary)
+            print_output(colorfunc(msg, "blue"))
+            print_output(u"{}: {} - {} = {}".format(colorfunc("Original Estimate", "white"),
+                                                    timetracking.originalEstimate,
+                                                    estimate_human_readable,
+                                                    new_original))
+            print_output(u"{}: {} - {} = {}".format(colorfunc("Remaning Estimate", "white"),
+                                                    timetracking.remainingEstimate,
+                                                    estimate_human_readable,
+                                                    new_remaining))
             print_output("comment: {}".format(colorfunc(message, "white")))
             print("")
 
