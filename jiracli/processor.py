@@ -206,13 +206,15 @@ class UpdateCommand(Command):
 class AddCommand(Command):
     def eval(self):
         extras = {}
+        issue_keys = {}
         if self.args.extra_fields:
             extras = self.extract_extras()
         if not self.args.issue_project:
             raise UsageError('project must be specified when creating an issue')
         if not (self.args.issue_parent or self.args.issue_type):
             self.args.issue_type = 'bug'
-        if self.args.issue_type and not self.args.issue_type.lower() in self.jira.get_issue_types().keys() + self.jira.get_subtask_issue_types().keys():
+        issue_keys = list(self.jira.get_issue_types().keys()) + list(self.jira.get_subtask_issue_types().keys())
+        if self.args.issue_type and not self.args.issue_type.lower() in issue_keys:
             raise UsageError(
                 "invalid issue type: %s (try using jira-cli "
                 "list issue_types or jira-cli list subtask_types)" % self.args.issue_type
