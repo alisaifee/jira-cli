@@ -4,12 +4,14 @@
 from jira.client import JIRA
 from jira.resources import Resource
 from requests import RequestException
+import requests
+from requests.exceptions import SSLError, ConnectionError
 from jiracli.bridge import JiraBridge
 from jiracli.cache import cached
 from jiracli.errors import JIRAError
 from jiracli.errors import (
     JiraCliError, JiraAuthenticationError,
-    JiraInitializationError
+    JiraInitializationError, JiraSLLError
 )
 from jiracli.utils import rest_recursive_dict, map_rest_resource
 
@@ -113,14 +115,20 @@ class JiraRestBridge(JiraBridge):
             return issue
 
     def login(self, username, password):
+        options = {'server': self.base_url, 'check_update': False}
+        if self.config.ca_cert:
+            options['verify'] = self.config.ca_cert
         try:
-            self.jira = JIRA(options={'server': self.base_url, 'check_update': False},
-                         basic_auth=(username, password), get_server_info=False, validate=False
-            )
+            self.jira = JIRA(options=options, basic_auth=(username, password),
+                             get_server_info=False, validate=False)
+
+        except requests.exceptions.ConnectionError:
+            raise JiraSLLError('Invalid SSL certificate')
         except JIRAError:
             raise JiraAuthenticationError('failure to authenticate')
         except RequestException:
             raise JiraInitializationError('failure to communicate with jira')
+
 
     def get_available_transitions(self, issue):
         return dict((t['name'].lower(), t) for t in self.jira.transitions(issue))
