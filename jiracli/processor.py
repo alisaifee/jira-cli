@@ -74,7 +74,7 @@ class AdjustParentEstimateCommand(Command):
                 print_output(u"{} is a student task, skipping...\n".format(issue["key"]))
                 continue
 
-            estimate = self.time_estimates(issue)
+            estimate = self.spent_time_or_estimate(issue, quiet=True)
             if estimate is None:
                 print_error(u"{} has no time estimate\n".format(issue["key"]), severity=WARNING)
                 continue
@@ -107,11 +107,32 @@ class AdjustParentEstimateCommand(Command):
         except:
             return None
 
-    def time_estimates(self, issue):
-        """returns  [orininal, remaning]"""
-        if "timeoriginalestimate" in issue and issue["timeoriginalestimate"] != 0:
-            return issue["timeoriginalestimate"]
-        return None
+    def spent_time_or_estimate(self, issue, quiet=False):
+        """This function will return the time spent on an issue, when the time is less or equal
+        to the original estimate, otherwise the original estimate is returned.
+
+        We now want to run this function after the sprint has ended, thus an issue without a
+        timelog will issue a warning.
+
+        returns  [orininal, remaning]"""
+        if "aggregatetimespent" not in issue or issue["aggregatetimespent"] == 0:
+            if not quiet:
+                print_error(u"No time was logged on {}\n".format(issue["key"]))
+            return None
+
+        if "timeoriginalestimate" not in issue or issue["timeoriginalestimate"] == 0:
+            if not quiet:
+                print_error(u"Missing time estimate for {}\n".format(issue["key"]))
+            return None
+
+        estimate = issue["timeoriginalestimate"]
+        logged = issue["aggregatetimespent"]
+
+        if not quiet and logged > estimate:
+            print_error(u"Attention: {} was overbooked by {}\n".format(
+                issue["key"], self.secs_to_human_readable(logged - estimate)), severity=WARNING)
+
+        return min(estimate, logged)
 
     def get_epic(self, issue):
         """Get the epic of the issue"""
@@ -134,7 +155,7 @@ class AdjustParentEstimateCommand(Command):
 
     def adjust_story_timetracking(self, story, issue, dry=True, verbose=True):
         timetracking = story["timetracking"]
-        estimate = self.time_estimates(issue)
+        estimate = self.spent_time_or_estimate(issue)
         estimate_human_readable = self.secs_to_human_readable(estimate)
         issue = self.jira.get_issue(issue["key"], raw=True)
         message = str(u"{}: {}: reduced by {}".format(issue.fields.assignee.displayName, issue.key,
