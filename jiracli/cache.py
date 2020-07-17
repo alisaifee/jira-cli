@@ -1,6 +1,8 @@
 """
 
 """
+from builtins import str
+from builtins import object
 from contextlib import closing
 from functools import wraps
 import hashlib
@@ -18,7 +20,7 @@ def cached(name):
         @wraps(fn)
         def _inner(*args, **kwargs):
             token = hashlib.md5(
-                "".join([str(k) for k in args] + [str(k) for k in kwargs.values()]).encode('utf-8')
+                "".join([str(k) for k in args] + [str(k) for k in list(kwargs.values())]).encode('utf-8')
             ).hexdigest()
             cached = CachedData(name + token)
             if not cached.get():

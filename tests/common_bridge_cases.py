@@ -1,6 +1,7 @@
 """
 
 """
+from builtins import object
 import os
 import vcr
 
@@ -9,7 +10,7 @@ jiravcr = vcr.VCR(
     match_on=['path', 'method'],
 )
 
-class BridgeTests:
+class BridgeTests(object):
     def test_get_issue(self):
         with jiravcr.use_cassette(os.path.join(self.vcr_directory, "issue.yaml")):
             self.assertIsNotNone(self.bridge.get_issue("TP-9"))

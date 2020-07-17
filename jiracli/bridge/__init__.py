@@ -1,6 +1,7 @@
 """
 
 """
+from builtins import object
 import abc
 import re
 import requests
@@ -49,14 +50,14 @@ class JiraBridge(object):
         special_fields = {
             "status": self.get_statuses,
             "priority": self.get_priorities,
-            "type": lambda: dict(self.get_issue_types().items() + self.get_subtask_issue_types().items())
+            "type": lambda: dict(list(self.get_issue_types().items()) + list(self.get_subtask_issue_types().items()))
         }
 
         if formatter:
             groups = re.compile("(%([\w]+))").findall(formatter)
             ret_str = formatter.encode('utf-8')
             for k, v in groups:
-                if v.lower() in special_fields.keys():
+                if v.lower() in list(special_fields.keys()):
                     key=issue[v.lower()]
                     data = "" or JiraBridge.object_from_key(key, special_fields[v.lower()])["name"]
                     ret_str = ret_str.replace(k, data)
@@ -114,10 +115,10 @@ class JiraBridge(object):
             if not COLOR:
                 ret_str += " [%s] " % status_string
             return ret_str
-        for k, v in fields.items():
+        for k, v in list(fields.items()):
             if not v:
                 fields[k] = ""
-        formatted = "\n".join(" : ".join((k.ljust(20), v)) for k, v in fields.items() if not k == 'comments') + "\n"
+        formatted = "\n".join(" : ".join((k.ljust(20), v)) for k, v in list(fields.items()) if not k == 'comments') + "\n"
         formatted += children_string
         if "comments" in fields:
             formatted += fields["comments"]
@@ -126,7 +127,7 @@ class JiraBridge(object):
     @staticmethod
     def object_from_key(value, callable, key='id'):
         map = callable()
-        for k,v in map.items():
+        for k,v in list(map.items()):
             if v[key] == value:
                 return v
         return None

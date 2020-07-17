@@ -1,7 +1,11 @@
 """
 utility functions
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import input
+from builtins import object
 import getpass
 import os
 import tempfile
@@ -82,7 +86,7 @@ def soap_recursive_dict(d):
     a pure python dictionary.
     """
     out = {}
-    for k, v in asdict(d).items():
+    for k, v in list(asdict(d).items()):
         if hasattr(v, '__keylist__'):
             out[k] = soap_recursive_dict(v)
         elif isinstance(v, list):
@@ -102,7 +106,7 @@ def rest_recursive_dict(d):
     a pure python dictionary.
     """
     out = {}
-    for k, v in d.items():
+    for k, v in list(d.items()):
         if v.__class__.__name__ == 'PropertyHolder':
             out[k] = v.__dict__
         else:
@@ -131,7 +135,7 @@ def map_rest_resource(resource):
 from termcolor import colored as colorfunc
 
 if not sys.stdout.isatty():
-    colorfunc = lambda *a, **k: unicode(a[0])
+    colorfunc = lambda *a, **k: str(a[0])
     COLOR = False
 
 
@@ -165,11 +169,11 @@ def print_output(msg):
     if sys.stdout.isatty():
         print(msg)
     else:
-        print(unicode(msg).encode("ascii", "ignore"))
+        print(str(msg).encode("ascii", "ignore"))
 
 def prompt(msg, masked=False):
     if not masked:
-        ret = input(msg)
+        ret = eval(input(msg))
         if ret in ["True", "true"]:
             return True
         elif ret in ["False", "false"]:

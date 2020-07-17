@@ -1,7 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 
 """
+from __future__ import print_function
+from builtins import str
 import argparse
 import keyring
 import shlex
@@ -233,8 +235,8 @@ def build_parser():
 def cli(args=sys.argv[1:]):
     import optparse
     alias_config = Config(section='alias')
-    if set(alias_config.items().keys()).intersection(args):
-        for alias, target in alias_config.items().items():
+    if set(list(alias_config.items().keys())).intersection(args):
+        for alias, target in list(alias_config.items()).items():
             if args[0] == alias:
                 args = shlex.split(target) + args[1:]
                 break

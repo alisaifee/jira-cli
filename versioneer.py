@@ -79,6 +79,7 @@ To use it:
  5: modify your MANIFEST.in to include versioneer.py
  6: add both versioneer.py and the generated _version.py to your VCS
 """
+from __future__ import print_function
 
 import os, sys, re
 from setuptools import Command

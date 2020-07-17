@@ -1,6 +1,7 @@
 """
 
 """
+from past.builtins import cmp
 from jira.client import JIRA
 from jira.resources import Resource
 from requests import RequestException
@@ -31,7 +32,7 @@ class JiraRestBridge(JiraBridge):
 
     def clean_issue(self, issue):
         _issue = {}
-        for k,v in issue.fields.__dict__.items():
+        for k,v in list(issue.fields.__dict__.items()):
             if isinstance(v, Resource):
                 _issue[k] = map_rest_resource(v)
             elif v is not None:
@@ -88,7 +89,7 @@ class JiraRestBridge(JiraBridge):
             "summary": summary,
             "description": description,
             "priority": {'id':self.get_priorities()[priority.lower()]["id"]},
-            "components": [{"name": k} for k in components.keys()]
+            "components": [{"name": k} for k in list(components.keys())]
         }
         if labels:
             issue['labels'] = labels

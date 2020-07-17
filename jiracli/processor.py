@@ -1,6 +1,12 @@
 """
 
 """
+from __future__ import division
+from __future__ import print_function
+from builtins import str
+from past.builtins import basestring
+from past.utils import old_div
+from builtins import object
 import json
 from abc import ABCMeta, abstractmethod
 
@@ -59,8 +65,7 @@ class AdjustParentEstimateCommand(Command):
         elif self.args.filter:
             issues = self.jira.get_issues_by_filter(*self.args.filter)
         else:
-            issues = filter(lambda issue: issue is not None,
-                            [self.jira.get_issue(jira) for jira in self.args.jira_ids])
+            issues = [issue for issue in [self.jira.get_issue(jira) for jira in self.args.jira_ids] if issue is not None]
 
         for issue in issues:
             # get the time estimate values
@@ -95,12 +100,9 @@ class AdjustParentEstimateCommand(Command):
         """:returns: issue of type story linked as 'has parent' to the given issue"""
         try:
             links = issue["issuelinks"]
-            parents = filter(
-                lambda
-                    link: link.type.name == "Refinement" \
+            parents = [link for link in links if link.type.name == "Refinement" \
                           and link.type.outward == "has parent" \
-                          and link.outwardIssue.fields.issuetype.name == "Story",
-                links)
+                          and link.outwardIssue.fields.issuetype.name == "Story"]
             return self.jira.get_issue(parents[0].outwardIssue.key)
         except:
             return None
@@ -122,14 +124,13 @@ class AdjustParentEstimateCommand(Command):
         """Get the epic of the issue"""
         try:
             links = epic["issuelinks"]
-            clones = filter(lambda link: link.type.name == "Cloners", links)
+            clones = [link for link in links if link.type.name == "Cloners"]
             return self.jira.get_issue(clones[0].inwardIssue.key)
         except:
             return None
 
     def issue_already_substracted(self, issue, story):
-        return bool(filter(lambda comment: issue["key"] in comment,
-                           [_.body for _ in story["comment"].comments]))
+        return bool([comment for comment in [_.body for _ in story["comment"].comments] if issue["key"] in comment])
 
     def adjust_story_timetracking(self, story, issue, dry=True, verbose=True):
         timetracking = story["timetracking"]
@@ -183,9 +184,9 @@ class AdjustParentEstimateCommand(Command):
         wdhm["d"] = 60 * 60 * 8
         wdhm["h"] = 60 * 60
         wdhm["m"] = 60
-        for unit, quot in wdhm.iteritems():
-            if estimate / quot != 0:
-                estimate_human_readable += " {}{}".format(estimate / quot, unit)
+        for unit, quot in wdhm.items():
+            if old_div(estimate, quot) != 0:
+                estimate_human_readable += " {}{}".format(old_div(estimate, quot), unit)
                 estimate = estimate % quot
         if estimate:
             estimate_human_readable += " {}{}".format(estimate, "s")
@@ -265,8 +266,7 @@ class ViewCommand(Command):
         elif self.args.filter:
             issues = self.jira.get_issues_by_filter(*self.args.filter)
         else:
-            issues = filter(lambda issue: issue is not None,
-                            [self.jira.get_issue(jira) for jira in self.args.jira_ids])
+            issues = [issue for issue in [self.jira.get_issue(jira) for jira in self.args.jira_ids] if issue is not None]
 
         for issue in issues:
             print_output(self.jira.format_issue(
@@ -291,7 +291,7 @@ class ListCommand(Command):
             'transitions': (self.jira.get_available_transitions, 'issue'),
             'filters': (self.jira.get_filters,),
             'aliases': (lambda: [{"name": k, "description": v} for k, v in
-                                 Config(section='alias').items().items()],)
+                                 list(Config(section='alias').items()).items()],)
         }
         func, arguments = mappers[self.args.type][0], mappers[self.args.type][1:]
         _ = []
@@ -314,7 +314,7 @@ class ListCommand(Command):
                 data_dict[item['name']] = item
         else:
             data_dict = data
-        for item in data_dict.values():
+        for item in list(data_dict.values()):
             found = True
             val = item
             if type(item) == type({}):
@@ -422,7 +422,7 @@ class AddCommand(Command):
             raise UsageError('project must be specified when creating an issue')
         if not (self.args.issue_parent or self.args.issue_type):
             self.args.issue_type = 'bug'
-        if self.args.issue_type and not self.args.issue_type.lower() in self.jira.get_issue_types().keys() + self.jira.get_subtask_issue_types().keys():
+        if self.args.issue_type and not self.args.issue_type.lower() in list(self.jira.get_issue_types().keys()) + list(self.jira.get_subtask_issue_types().keys()):
             raise UsageError(
                 "invalid issue type: %s (try using jira-cli "
                 "list issue_types or jira-cli list subtask_types)" % self.args.issue_type

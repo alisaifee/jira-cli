@@ -1,3 +1,4 @@
+from __future__ import print_function
 # pylint: skip-file
 # This file helps to compute a version number in source trees obtained from
 # git-archive tarball (such as those provided by githubs download-from-tag
@@ -9,6 +10,7 @@
 # versioneer-0.8+ (https://github.com/warner/python-versioneer)
 
 # these strings will be replaced by git during git-archive
+from builtins import range
 git_refnames = "$Format:%d$"
 git_full = "$Format:%H$"
 
