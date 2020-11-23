@@ -11,6 +11,7 @@ from jira import resources
 from suds.sudsobject import asdict
 
 import logging
+
 requests_log = logging.getLogger("requests")
 requests_log.setLevel(logging.WARNING)
 
@@ -56,7 +57,6 @@ class Config(object):
                 self.cfg.add_section(self.section)
             self.cfg.set(self.section, key, value)
 
-
     def __getattribute__(self, item):
         cfg = super(Config, self).__getattribute__('cfg')
         section = super(Config, self).__getattribute__('section')
@@ -95,6 +95,7 @@ def soap_recursive_dict(d):
         else:
             out[k] = v
     return out
+
 
 def rest_recursive_dict(d):
     """
@@ -161,8 +162,10 @@ def print_error(msg, severity=CRITICAL):
     color = 'red' if severity == CRITICAL else 'yellow'
     sys.stderr.write(colorfunc(msg, color) + "\n")
 
+
 def print_output(msg):
-    print(msg.encode('utf-8'))
+    print(msg)
+
 
 def prompt(msg, masked=False):
     if not masked:
