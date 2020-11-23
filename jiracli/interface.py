@@ -21,13 +21,19 @@ from jiracli.cli import main as old_main
 
 
 def initialize(config, base_url=None, username=None, password=None,
-               persist=True, error=False, protocol='soap'):
+               persist=True, error=False, protocol='soap', reset=False):
     url = base_url or config.base_url
     auth_method = config.auth_method
     bridge = get_bridge(protocol)(url, config, persist) if (url and not error) else None
     if error or not (url and bridge and bridge.ping()):
         url = url or prompt("Base url for the jira instance: ")
-        auth_method = auth_method or prompt("Auth method for jira(auth, basic_auth, oauth). More details: https://jira.readthedocs.io/en/master/examples.html#authentication: ")
+        if not auth_method:
+            auth_method = prompt(
+                "Auth method for jira(auth, basic_auth, oauth). More details: https://jira.readthedocs.io/en/master/examples.html#authentication: "
+            )
+            config.auth_method = auth_method
+            config.save()
+
         if auth_method in ("auth", "basic_auth"):
             username = (
                 username or
@@ -36,7 +42,7 @@ def initialize(config, base_url=None, username=None, password=None,
             )
             password = (
                 password or
-                (not error and keyring.get_password('jira-cli', username)) or
+                (not error and (not reset and keyring.get_password('jira-cli', username))) or
                 prompt("password: ", True)
             )
             auth_kwargs = {auth_method: (username, password)}
@@ -46,7 +52,7 @@ def initialize(config, base_url=None, username=None, password=None,
                 prompt("OAuth access token: ")
             )
             access_token_secret = (
-                (not error and keyring.get_password('jira-cli', access_token)) or
+                (not error and (not reset and keyring.get_password('jira-cli', access_token))) or
                 prompt("OAuth access token secret: ", True)
             )
             consumer_key = (
@@ -69,7 +75,6 @@ def initialize(config, base_url=None, username=None, password=None,
             }
         else:
             raise NotImplementedError("Unknown auth method: %s" % auth_method)
-
         jira = not error and bridge or get_bridge(protocol)(url, config, persist)
         persist_warning = "would you like to persist the credentials to the local keyring? [y/n]:"
 
@@ -162,6 +167,8 @@ def build_parser():
                       action='store_true')
     base.add_argument('-v', dest='verbosity', help='amount of detail to show for issues',
                       action='count', default=0)
+    base.add_argument('-d', dest='debug', help='output debug information',
+                      action='store_true', default=False)
     base.add_argument('-u', '--username', dest='username',
                       help='username to login as', default=None)
     base.add_argument('-p', '--password', dest='password',
@@ -336,7 +343,8 @@ def cli(args=sys.argv[1:]):
                 config.reset()
                 initialize(
                     config, "", "", "", True,
-                    protocol=pre_opts.protocol or config.protocol or 'soap'
+                    protocol=pre_opts.protocol or config.protocol or 'soap',
+                    reset=True
                 )
             elif "clear_cache" in pre_args:
                 clear_cache()

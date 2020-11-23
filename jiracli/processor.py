@@ -1,9 +1,11 @@
 """
 
 """
+import sys
 from abc import ABCMeta, abstractmethod
 
 import json
+import pprint
 import six
 
 from jiracli.cli import colorfunc
@@ -68,6 +70,8 @@ class ViewCommand(Command):
             issues = filter(lambda issue: issue is not None, [self.jira.get_issue(jira) for jira in self.args.jira_ids])
 
         for issue in issues:
+            if self.args.debug:
+                pprint.pprint(issue, stream=sys.stderr)
             print_output(self.jira.format_issue(
                 issue,
                 mode=mode,
@@ -115,15 +119,21 @@ class ListCommand(Command):
         for item in data_dict.values():
             found = True
             val = item
+            if self.args.debug:
+                pprint.pprint(item, stream=sys.stderr)
+
             if type(item) == type({}):
                 val = colorfunc(item['name'], 'white')
                 if 'key' in item and item['key']:
                     val += " [" + colorfunc(item['key'], 'magenta') + "]"
+                if 'id' in item and item['id']:
+                    val += " [" + colorfunc(item['id'], 'yellow') + "]"
                 if 'description' in item and item['description']:
                     val += " [" + colorfunc(item['description'], 'green') + "]"
             print_output(colorfunc(val, 'white'))
         if not found:
             raise UsageWarning("No %s found." % self.args.type)
+
 
 class UpdateCommand(Command):
     def eval(self):

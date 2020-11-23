@@ -133,6 +133,10 @@ class JiraRestBridge(JiraBridge):
                 types['id'] = types['id'][0]
         return types
 
+    @cached("issue_type")
+    def get_issue_type(self, issue_type_id):
+        return self.jira.issue_type(issue_type_id).raw
+
     @cached('subtask_types')
     def get_subtask_issue_types(self):
         types = dict((k.name.lower(), k.raw) for k in self.jira.issue_types() if k.subtask)
@@ -182,9 +186,13 @@ class JiraRestBridge(JiraBridge):
     def get_statuses(self):
         return dict((k.name.lower(), dict(k.raw)) for k in self.jira.statuses())
 
+    @cached('status')
+    def get_status(self, status_id):
+        return self.jira.status(status_id).raw
+
     def get_issue_comments(self, issue):
         return [
-            dict(author=comment.author.name
+            dict(author=str(comment.author)
                  , body=comment.body
                  , created=comment.created
             )

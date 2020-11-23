@@ -4,6 +4,7 @@
 import abc
 import re
 import requests
+import termcolor
 from requests import RequestException
 import six
 from six.moves.urllib import parse
@@ -35,42 +36,65 @@ class JiraBridge(object):
     def format_issue(self, issue, mode=0, formatter=None, comments_only=False):
         fields = {}
         status_color = "blue"
-        status_string = JiraBridge.object_from_key(
+        status_from_id = JiraBridge.object_from_key(
             issue.setdefault('status', '1'),
             self.get_statuses
-        )["name"]
+        )
+        if not status_from_id:
+            status_from_id = self.get_status(issue.setdefault('status', '1'))
 
-        if status_string.lower() in ["resolved", "closed", "done"]:
-            status_color = "green"
-        elif status_string.lower() in ["open", "unassigned", "reopened", "to do"]:
-            status_color = "red"
+        status_string = (status_from_id and status_from_id['name']) or 'unknown'
 
+        status_category = status_from_id.get('statusCategory', {})
+        if status_category:
+            status_color = status_category.get('colorName')
+            if status_color:
+                status_color = status_color.split("-")[0]
+            if status_color not in termcolor.COLORS:
+                status_color = None
+        if not status_color:
+            if status_string.lower() in ["resolved", "closed", "done"]:
+                status_color = "green"
+            elif status_string.lower() in ["open", "unassigned", "reopened", "to do"]:
+                status_color = "red"
         list_fields = set(['versions', 'fixversions'])
 
         special_fields = {
             "status": self.get_statuses,
             "priority": self.get_priorities,
-            "type": lambda: dict(self.get_issue_types().items() + self.get_subtask_issue_types().items())
+            "type": lambda: dict(list(self.get_issue_types().items()) + list(self.get_subtask_issue_types().items()))
         }
-
+        special_field_fallback = {
+            "status": self.get_status,
+            "type": self.get_issue_type
+        }
         if formatter:
             groups = re.compile("(%([\w]+))").findall(formatter)
-            ret_str = formatter.encode('utf-8')
+            ret_str = formatter
             for k, v in groups:
                 if v.lower() in special_fields.keys():
-                    key=issue[v.lower()]
-                    data = "" or JiraBridge.object_from_key(key, special_fields[v.lower()])["name"]
+                    key = issue[v.lower()]
+                    data = "" or JiraBridge.object_from_key(key, special_fields[v.lower()]).get("name")
+                    if not data and v.lower() in special_field_fallback:
+                        data = special_field_fallback[v.lower()](key).get("name")
                     ret_str = ret_str.replace(k, data)
                 elif v.lower() in list_fields:
                     fix_versions = ", ".join(v.name for v in issue.get('fixVersions', []))
-                    ret_str = ret_str.replace(k, fix_versions.encode('utf-8'))
+                    ret_str = ret_str.replace(k, fix_versions)
                 else:
-                    ret_str = ret_str.replace(k, issue.setdefault(v.lower(),"")).encode('utf-8')
+                    ret_str = ret_str.replace(k, str(issue.setdefault(v.lower(), "")))
             return ret_str
+
         if mode >= 0:
             # minimal
             fields["issue"] = issue["key"]
-            fields["status"] = colorfunc(JiraBridge.object_from_key(issue["status"], self.get_statuses)["name"], status_color)
+            fields["status"] = colorfunc(
+                JiraBridge.object_from_key(
+                    issue["status"],
+                    self.get_statuses
+                ).get("name", self.get_status(issue["status"])['name'])
+                , status_color
+            )
             fields["reporter"] = issue.setdefault("reporter","")
             fields["assignee"] = issue.setdefault("assignee","")
             fields["summary"] = issue.setdefault("summary","")
@@ -88,7 +112,7 @@ class JiraBridge(object):
             fields["type"] = JiraBridge.object_from_key(
                 issue["type"],
                 self.get_issue_types if 'parent' not in issue else self.get_subtask_issue_types
-            )["name"]
+            ).get("name",  self.get_issue_type(issue["type"]))
             fields["comments"] = "\n"
             comments = self.get_issue_comments(issue["key"])
             for comment in comments:
@@ -98,7 +122,6 @@ class JiraBridge(object):
         if mode > 1:
             description = (issue.setdefault("description", "") or "").split("\n")
             fields["description"] = "\n".join([description[0]] + [" "*23 + k for k in description[1:]])
-
 
             for child in self.search_issues_jql("parent=%s" % issue["key"]):
                 child_type = JiraBridge.object_from_key(child["type"], self.get_subtask_issue_types)["name"].lower()
@@ -129,11 +152,11 @@ class JiraBridge(object):
 
     @staticmethod
     def object_from_key(value, callable, key='id'):
-        map = callable()
-        for k,v in map.items():
+        mapping = callable()
+        for k, v in mapping.items():
             if v[key] == value:
                 return v
-        return None
+        return {}
 
     @abc.abstractmethod
     def login(self, username, password):
@@ -168,11 +191,19 @@ class JiraBridge(object):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_issue_type(self, issue_type_id):
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_subtask_issue_types(self):
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_statuses(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_status(self, status_id):
         raise NotImplementedError
 
     @abc.abstractmethod
