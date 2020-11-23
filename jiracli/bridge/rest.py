@@ -112,10 +112,10 @@ class JiraRestBridge(JiraBridge):
                 issue = self.clean_issue(self.change_reporter(key, reporter))
             return issue
 
-    def login(self, username, password):
+    def login(self, **auth_kwargs):
         try:
             self.jira = JIRA(options={'server': self.base_url, 'check_update': False},
-                         basic_auth=(username, password), get_server_info=False, validate=False
+                         get_server_info=False, validate=False, **auth_kwargs
             )
         except JIRAError:
             raise JiraAuthenticationError('failure to authenticate')
