@@ -118,7 +118,10 @@ class JiraBridge(object):
         for k, v in fields.items():
             if not v:
                 fields[k] = ""
-        formatted = "\n".join(" : ".join((k.ljust(20), v)) for k, v in fields.items() if not k == 'comments') + "\n"
+        formatted = ""
+        for k, v in fields.items():
+            if not k == 'comments':
+                formatted += ' : '.join((k.ljust(20), str(v))) + '\n'
         formatted += children_string
         if "comments" in fields:
             formatted += fields["comments"]
