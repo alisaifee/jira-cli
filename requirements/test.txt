@@ -1,5 +1,5 @@
 -r main.txt
-mock==1.0.0
+mock==4.0.2
 coverage==4.0.3
 hiro
 nose-cov==1.6
