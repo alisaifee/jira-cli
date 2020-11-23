@@ -4,6 +4,6 @@ ordereddict
 jira
 requests
 argparse
-suds-jurko
+suds-jurko==0.6
 keyring
 keyrings.alt
