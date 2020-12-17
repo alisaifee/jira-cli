@@ -1,2 +1,2 @@
 -r test.txt
-codecov
+codecov==2.1.11
