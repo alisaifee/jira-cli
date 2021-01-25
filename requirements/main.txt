@@ -5,5 +5,5 @@ jira
 requests
 argparse
 suds-jurko
-keyring
+keyring==22.0.0
 keyrings.alt
