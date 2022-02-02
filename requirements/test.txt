@@ -5,4 +5,4 @@ hiro
 nose-cov==1.6
 vcrpy==1.11.1
 wheel
-twine
+twine==3.8.0
