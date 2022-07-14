@@ -6,4 +6,4 @@ requests
 argparse
 suds-jurko
 keyring
-keyrings.alt
+keyrings.alt==4.1.1
