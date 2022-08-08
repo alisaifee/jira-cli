@@ -1,7 +1,7 @@
 termcolor
 six
 ordereddict
-jira
+jira==3.3.2
 requests
 argparse
 suds-jurko
