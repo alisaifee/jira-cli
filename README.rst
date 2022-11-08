@@ -1,3 +1,14 @@
+
+----
+
+THIS PROJECT NEEDS A NEW OWNER
+==============================
+
+I no longer have the bandwidth or capability to maintain this project. Please open an issue or ping
+me directly if you'd like to take it over.
+
+----
+
 Introduction
 ============
 Command line utility to interact with your jira instance. 
