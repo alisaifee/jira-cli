@@ -133,7 +133,7 @@ class JiraBridge(object):
         if comments_only:
             return fields["comments"].strip()
         elif mode < 0:
-            url_str = colorfunc(parse.urljoin(self.base_url, "/browse/%s" % (issue["key"])), "white", attrs=["underline"])
+            url_str = colorfunc("%s/browse/%s" % (self.base_url, issue["key"]), "white", attrs=["underline"])
             ret_str = colorfunc(issue["key"], status_color) + " " + issue.setdefault("summary", "") + " " + url_str
             if not COLOR:
                 ret_str += " [%s] " % status_string
