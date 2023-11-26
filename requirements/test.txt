@@ -4,5 +4,5 @@ coverage==4.0.3
 hiro
 nose-cov==1.6
 vcrpy==1.11.1
-wheel
+wheel==0.42.0
 twine
