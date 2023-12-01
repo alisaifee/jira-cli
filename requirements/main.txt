@@ -1,4 +1,4 @@
-termcolor
+termcolor==2.4.0
 six
 ordereddict
 jira
