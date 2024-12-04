@@ -1,5 +1,5 @@
 termcolor
-six
+six==1.17.0
 ordereddict
 jira
 requests
