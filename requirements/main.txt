@@ -2,7 +2,7 @@ termcolor
 six
 ordereddict
 jira
-requests
+requests==2.32.5
 argparse
 suds-jurko
 keyring
